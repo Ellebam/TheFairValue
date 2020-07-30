@@ -6,9 +6,11 @@ import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 
-public class AlphavanatgeAPIClient{
+public class AlphavantageAPIClient {
 
-    private final String        apikey      =       "FYXHUWDH837CRF6W";
+
+
+    private         String        apikey;
     private final String        host        =       "https://www.alphavantage.co/";
     private       String        function;
     private       String        symbol;
@@ -16,11 +18,22 @@ public class AlphavanatgeAPIClient{
 
 
 
-    public AlphavanatgeAPIClient (String function, String symbol) throws Exception{
+    public AlphavantageAPIClient(String function, String symbol, String apikey) throws Exception{
         this.symbol = symbol;
         this.function = function;
+        this.apikey = apikey;
         establishConnectinToAPI();
     }
+
+
+    public String getApikey() {
+        return apikey;
+    }
+
+    public void setApikey(String apikey) {
+        this.apikey = apikey;
+    }
+
 
     public void establishConnectinToAPI() throws Exception{
         //Json response
@@ -40,6 +53,8 @@ public class AlphavanatgeAPIClient{
 
         return prettyJsonString;
     }
+
+
 
 
     public String getFunction() {

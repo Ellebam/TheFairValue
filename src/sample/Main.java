@@ -1,18 +1,6 @@
 package sample;
 
-import Controllers.AlphavanatgeAPIClient;
-import com.sun.istack.internal.NotNull;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import kong.unirest.HttpResponse;
-import kong.unirest.JsonNode;
-import kong.unirest.Unirest;
-
-import java.net.URLEncoder;
-
+import Controllers.AlphavantageAPIClient;
 
 
 public class Main /*extends Application */{
@@ -26,11 +14,11 @@ public class Main /*extends Application */{
     }*/
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) /*throws Exception */{
        // launch(args);
 
-        AlphavanatgeAPIClient oida = new AlphavanatgeAPIClient("OVERVIEW","MCD");
-        System.out.println(oida.getJSONResponseAsString());
+        //AlphavantageAPIClient oida = new AlphavantageAPIClient("OVERVIEW","MCD");
+        //System.out.println(oida.getJSONResponseAsString());
 
 
 
