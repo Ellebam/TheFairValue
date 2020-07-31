@@ -19,7 +19,7 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-            CompanyOverviewData data = new CompanyOverviewData("MCD", "FYXHUWDH837CRF6W");
+            CompanyOverviewData data = new CompanyOverviewData("MCD", "nahDude");
         }catch (Exception ex){ex.printStackTrace();}
 
 
