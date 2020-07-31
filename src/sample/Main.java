@@ -19,7 +19,8 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-            CompanyOverviewData data = new CompanyOverviewData("MCD", "nahDude");
+            CompanyOverviewData data = new CompanyOverviewData("SAP", "shit nibba");
+            System.out.println(data);
         }catch (Exception ex){ex.printStackTrace();}
 
 

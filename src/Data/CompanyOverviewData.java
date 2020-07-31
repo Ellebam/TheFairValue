@@ -2,6 +2,7 @@ package Data;
 
 import Controllers.AlphavantageAPIClient;
 import Controllers.DataExtractor;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class CompanyOverviewData {
     private String fiftytwoWeekHigh;
     private String fiftytwoWeekLow;
     private String bookValue;
-    private String sector;
+    private String Sector;
     private ArrayList<StockPrice> historicalStockPrice;
     private static final String apiFunction = "OVERVIEW";
 
@@ -37,8 +38,30 @@ public class CompanyOverviewData {
      */
     public CompanyOverviewData(String symbol, String apiKey) throws Exception{
         AlphavantageAPIClient client = new AlphavantageAPIClient(apiFunction,symbol,apiKey);
-        Name = DataExtractor.extractData2String(client,"Name");
-        System.out.println(Name);
+        Name = getData(client,"Name");
+        Country = getData(client,"Country");
+        Currency = getData(client,"Currency");
+        Description = getData(client,"Description");
+        MarketCap = getData(client, "MarketCapitalization");
+        EBITDA = getData(client, "EBITDA");
+        price2EarningsRatio = getData(client,"PERatio");
+        earningsPerShare = getData(client,"EPS");
+        dividendsPerShare = getData(client, "DividendPerShare");
+        dividendYield = getData(client,"DividendYield");
+        payoutRatio = getData(client, "PayoutRatio");
+        fiftytwoWeekHigh = getData(client, "52WeekHigh");
+        fiftytwoWeekLow = getData(client, "52WeekLow");
+        bookValue = getData(client, "BookValue");
+        Sector = getData(client, "Sector");
+
+
+
+        /*Name = DataExtractor.extractData2String(client,"Name");
+        Country = DataExtractor.extractData2String(client,"Country");
+        Currency = DataExtractor.extractData2String(client,"Currency");
+        Description = DataExtractor.extractData2String(client,"Description");
+        MarketCap = DataExtractor.extractData2String(client,"MarketCapitalization");
+        EBITDA = DataExtractor.extractData2String(client,"MarketCapitalization");*/
 
 
         /*Currency = client.getResponse().getBody().getObject().getString("Currency");
@@ -51,6 +74,10 @@ public class CompanyOverviewData {
 
 
 
+    public String getData(AlphavantageAPIClient client, String variableName){
+        String variable =DataExtractor.extractData2String(client,variableName);
+        return variable;
+    }
     public String getName() {
         return Name;
     }
@@ -147,4 +174,24 @@ public class CompanyOverviewData {
         this.bookValue = bookValue;
     }
 
+    @Override
+    public String toString() {
+        return "CompanyOverviewData{" +
+                "Name='" + Name + '\'' + "\n"+
+                ", Country='" + Country + '\'' +"\n"+
+                ", Currency='" + Currency + '\'' +"\n"+
+                ", Description='" + Description + '\'' +"\n"+
+                ", MarketCap='" + MarketCap + '\'' +"\n"+
+                ", EBITDA='" + EBITDA + '\'' +"\n"+
+                ", price2EarningsRatio='" + price2EarningsRatio + '\'' +"\n"+
+                ", earningsPerShare='" + earningsPerShare + '\'' +"\n"+
+                ", dividendsPerShare='" + dividendsPerShare + '\'' +"\n"+
+                ", dividendYield='" + dividendYield + '\'' +"\n"+
+                ", payoutRatio='" + payoutRatio + '\'' +"\n"+
+                ", fiftytwoWeekHigh='" + fiftytwoWeekHigh + '\'' +"\n"+
+                ", fiftytwoWeekLow='" + fiftytwoWeekLow + '\'' +"\n"+
+                ", bookValue='" + bookValue + '\'' +"\n"+
+                ", Sector='" + Sector + '\'' +"\n"+
+                '}';
+    }
 }
