@@ -1,6 +1,7 @@
 package sample;
 
 import Controllers.AlphavantageAPIClient;
+import Data.CompanyOverviewData;
 
 
 public class Main /*extends Application */{
@@ -17,8 +18,9 @@ public class Main /*extends Application */{
     public static void main(String[] args) /*throws Exception */{
        // launch(args);
 
-        //AlphavantageAPIClient oida = new AlphavantageAPIClient("OVERVIEW","MCD");
-        //System.out.println(oida.getJSONResponseAsString());
+        try {
+            CompanyOverviewData data = new CompanyOverviewData("MCD", "FYXHUWDH837CRF6W");
+        }catch (Exception ex){ex.printStackTrace();}
 
 
 

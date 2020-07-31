@@ -1,12 +1,18 @@
 package Data;
 
 import Controllers.AlphavantageAPIClient;
+import Controllers.DataExtractor;
 
 import java.util.ArrayList;
 
+/**
+ * This Class contains all Data on a Companies overview for the OverviewPanel
+ */
 public class CompanyOverviewData {
 
     private String Name;
+    private String Country;
+    private String Currency;
     private String Description;
     private String MarketCap;
     private String EBITDA;
@@ -18,13 +24,29 @@ public class CompanyOverviewData {
     private String fiftytwoWeekHigh;
     private String fiftytwoWeekLow;
     private String bookValue;
+    private String sector;
     private ArrayList<StockPrice> historicalStockPrice;
     private static final String apiFunction = "OVERVIEW";
 
-
+    /**
+     * The Constructor will repeatedly call the extractData2String() method from DataExtractor to
+     * update all its instance variables with the values found in the given API Function
+     * @param symbol ticker symbol for desired company
+     * @param apiKey user apiKey
+     * @throws Exception
+     */
     public CompanyOverviewData(String symbol, String apiKey) throws Exception{
         AlphavantageAPIClient client = new AlphavantageAPIClient(apiFunction,symbol,apiKey);
-        //unit Testing!!
+        Name = DataExtractor.extractData2String(client,"Name");
+        System.out.println(Name);
+
+
+        /*Currency = client.getResponse().getBody().getObject().getString("Currency");
+        Country = client.getResponse().getBody().getObject().getString("Country");
+        sector = client.getResponse().getBody().getObject().getString("Sector");*/
+
+
+
     }
 
 
