@@ -37,7 +37,7 @@ public class CompanyOverviewData {
      * @throws Exception
      */
     public CompanyOverviewData(String symbol, String apiKey) throws Exception{
-        /*AlphavantageAPIClient OverviewFunctionClient = new AlphavantageAPIClient(apiFunctionOVERVIEW,symbol,apiKey);
+        AlphavantageAPIClient OverviewFunctionClient = new AlphavantageAPIClient(apiFunctionOVERVIEW,symbol,apiKey);
         Name = getData(OverviewFunctionClient,"Name");
         Country = getData(OverviewFunctionClient,"Country");
         Currency = getData(OverviewFunctionClient,"Currency");
@@ -52,18 +52,11 @@ public class CompanyOverviewData {
         fiftytwoWeekHigh = getData(OverviewFunctionClient, "52WeekHigh");
         fiftytwoWeekLow = getData(OverviewFunctionClient, "52WeekLow");
         bookValue = getData(OverviewFunctionClient, "BookValue");
-        Sector = getData(OverviewFunctionClient, "Sector");*/
+        Sector = getData(OverviewFunctionClient, "Sector");
 
-        AlphavantageAPIClient daylyTimeSeriesClient = new AlphavantageAPIClient(apiFunctionTIME_SERIES_DAILY_ADJUSTED
+        AlphavantageAPIClient dailyTimeSeriesClient = new AlphavantageAPIClient(apiFunctionTIME_SERIES_DAILY_ADJUSTED
         , symbol,apiKey);
-
-        String test = getData(daylyTimeSeriesClient,"2020-07-31");
-
-
-
-
-
-
+        historicalStockPrice = DataExtractor.extractHistoricalStockPrices(dailyTimeSeriesClient);
 
     }
 

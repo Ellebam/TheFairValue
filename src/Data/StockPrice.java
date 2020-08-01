@@ -1,15 +1,15 @@
 package Data;
 
 public class StockPrice {
-    private int value;
+    private double value;
     private String date;
 
-    public StockPrice(int value, String date){
+    public StockPrice(double value, String date){
         this.value = value;
         this.date = date;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 
@@ -23,5 +23,13 @@ public class StockPrice {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "StockPrice{" +
+                "value=" + value +
+                ", date='" + date + '\'' +
+                '}'+ "\n" ;
     }
 }

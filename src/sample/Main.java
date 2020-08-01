@@ -1,7 +1,7 @@
 package sample;
 
 import Controllers.AlphavantageAPIClient;
-import Data.CompanyOverviewData;
+import Controllers.DataExtractor;
 
 
 public class Main /*extends Application */{
@@ -19,8 +19,8 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-            CompanyOverviewData data = new CompanyOverviewData("MCD", "oida");
-            System.out.println(data);
+            AlphavantageAPIClient client = new AlphavantageAPIClient("TIME_SERIES_DAILY_ADJUSTED","MCD","oida");
+            System.out.println(DataExtractor.extractHistoricalStockPrices(client));
         }catch (Exception ex){ex.printStackTrace();}
 
 

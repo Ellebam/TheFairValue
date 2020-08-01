@@ -17,6 +17,7 @@ public class AlphavantageAPIClient {
 
     private             String                      apikey;
     private final       String                      host        =       "https://www.alphavantage.co/";
+    private final       String                      outputSize  =       "full";
     private             String                      function;
     private             String                      symbol;
     private             HttpResponse<JsonNode>      response;
@@ -53,7 +54,7 @@ public class AlphavantageAPIClient {
     public void establishConnectinToAPI() throws Exception{
         //Json response
         response = Unirest.get(host+"query?").
-                queryString("function",function).queryString("symbol",symbol).
+                queryString("function",function).queryString("symbol",symbol).queryString("outputsize",outputSize).
                 queryString("apikey",apikey).asJson();
 
     }
