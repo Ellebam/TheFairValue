@@ -2,6 +2,7 @@ package Data;
 
 import Controllers.AlphavantageAPIClient;
 import Controllers.DataExtractor;
+import Data.DataObjects.StockPrice;
 
 import java.util.ArrayList;
 

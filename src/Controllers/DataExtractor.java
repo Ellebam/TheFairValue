@@ -1,9 +1,6 @@
 package Controllers;
 
-import Data.StockPrice;
-import com.google.gson.JsonObject;
-import kong.unirest.HttpResponse;
-import kong.unirest.JsonNode;
+import Data.DataObjects.StockPrice;
 import kong.unirest.json.JSONObject;
 
 import java.util.ArrayList;

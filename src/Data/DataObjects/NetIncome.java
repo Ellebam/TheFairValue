@@ -1,10 +1,11 @@
-package Data;
+package Data.DataObjects;
 
-public class StockPrice {
+public class NetIncome {
+
     private double value;
     private String date;
 
-    public StockPrice(double value, String date){
+    public NetIncome(double value, String date){
         this.value = value;
         this.date = date;
     }
@@ -13,7 +14,7 @@ public class StockPrice {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
@@ -27,7 +28,7 @@ public class StockPrice {
 
     @Override
     public String toString() {
-        return "StockPrice{" +
+        return "Net Income{" +
                 "value=" + value +
                 ", date='" + date + '\'' +
                 '}'+ "\n" ;
