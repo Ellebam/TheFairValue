@@ -19,7 +19,7 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-            CompanyOverviewData data = new CompanyOverviewData("SAP", "shit nibba");
+            CompanyOverviewData data = new CompanyOverviewData("MCD", "oida");
             System.out.println(data);
         }catch (Exception ex){ex.printStackTrace();}
 

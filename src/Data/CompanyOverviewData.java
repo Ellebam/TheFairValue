@@ -2,7 +2,6 @@ package Data;
 
 import Controllers.AlphavantageAPIClient;
 import Controllers.DataExtractor;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.util.ArrayList;
 
@@ -27,7 +26,8 @@ public class CompanyOverviewData {
     private String bookValue;
     private String Sector;
     private ArrayList<StockPrice> historicalStockPrice;
-    private static final String apiFunction = "OVERVIEW";
+    private static final String apiFunctionOVERVIEW = "OVERVIEW";
+    private static final String apiFunctionTIME_SERIES_DAILY_ADJUSTED = "TIME_SERIES_DAILY_ADJUSTED";
 
     /**
      * The Constructor will repeatedly call the extractData2String() method from DataExtractor to
@@ -37,36 +37,31 @@ public class CompanyOverviewData {
      * @throws Exception
      */
     public CompanyOverviewData(String symbol, String apiKey) throws Exception{
-        AlphavantageAPIClient client = new AlphavantageAPIClient(apiFunction,symbol,apiKey);
-        Name = getData(client,"Name");
-        Country = getData(client,"Country");
-        Currency = getData(client,"Currency");
-        Description = getData(client,"Description");
-        MarketCap = getData(client, "MarketCapitalization");
-        EBITDA = getData(client, "EBITDA");
-        price2EarningsRatio = getData(client,"PERatio");
-        earningsPerShare = getData(client,"EPS");
-        dividendsPerShare = getData(client, "DividendPerShare");
-        dividendYield = getData(client,"DividendYield");
-        payoutRatio = getData(client, "PayoutRatio");
-        fiftytwoWeekHigh = getData(client, "52WeekHigh");
-        fiftytwoWeekLow = getData(client, "52WeekLow");
-        bookValue = getData(client, "BookValue");
-        Sector = getData(client, "Sector");
+        /*AlphavantageAPIClient OverviewFunctionClient = new AlphavantageAPIClient(apiFunctionOVERVIEW,symbol,apiKey);
+        Name = getData(OverviewFunctionClient,"Name");
+        Country = getData(OverviewFunctionClient,"Country");
+        Currency = getData(OverviewFunctionClient,"Currency");
+        Description = getData(OverviewFunctionClient,"Description");
+        MarketCap = getData(OverviewFunctionClient, "MarketCapitalization");
+        EBITDA = getData(OverviewFunctionClient, "EBITDA");
+        price2EarningsRatio = getData(OverviewFunctionClient,"PERatio");
+        earningsPerShare = getData(OverviewFunctionClient,"EPS");
+        dividendsPerShare = getData(OverviewFunctionClient, "DividendPerShare");
+        dividendYield = getData(OverviewFunctionClient,"DividendYield");
+        payoutRatio = getData(OverviewFunctionClient, "PayoutRatio");
+        fiftytwoWeekHigh = getData(OverviewFunctionClient, "52WeekHigh");
+        fiftytwoWeekLow = getData(OverviewFunctionClient, "52WeekLow");
+        bookValue = getData(OverviewFunctionClient, "BookValue");
+        Sector = getData(OverviewFunctionClient, "Sector");*/
+
+        AlphavantageAPIClient daylyTimeSeriesClient = new AlphavantageAPIClient(apiFunctionTIME_SERIES_DAILY_ADJUSTED
+        , symbol,apiKey);
+
+        String test = getData(daylyTimeSeriesClient,"2020-07-31");
 
 
 
-        /*Name = DataExtractor.extractData2String(client,"Name");
-        Country = DataExtractor.extractData2String(client,"Country");
-        Currency = DataExtractor.extractData2String(client,"Currency");
-        Description = DataExtractor.extractData2String(client,"Description");
-        MarketCap = DataExtractor.extractData2String(client,"MarketCapitalization");
-        EBITDA = DataExtractor.extractData2String(client,"MarketCapitalization");*/
 
-
-        /*Currency = client.getResponse().getBody().getObject().getString("Currency");
-        Country = client.getResponse().getBody().getObject().getString("Country");
-        sector = client.getResponse().getBody().getObject().getString("Sector");*/
 
 
 
@@ -75,7 +70,7 @@ public class CompanyOverviewData {
 
 
     public String getData(AlphavantageAPIClient client, String variableName){
-        String variable =DataExtractor.extractData2String(client,variableName);
+        String variable =DataExtractor.extractOVERVIEWData(client,variableName);
         return variable;
     }
     public String getName() {
@@ -172,6 +167,30 @@ public class CompanyOverviewData {
 
     public void setBookValue(String bookValue) {
         this.bookValue = bookValue;
+    }
+
+    public String getCountry() {
+        return Country;
+    }
+
+    public void setCountry(String country) {
+        Country = country;
+    }
+
+    public String getCurrency() {
+        return Currency;
+    }
+
+    public void setCurrency(String currency) {
+        Currency = currency;
+    }
+
+    public String getSector() {
+        return Sector;
+    }
+
+    public void setSector(String sector) {
+        Sector = sector;
     }
 
     @Override

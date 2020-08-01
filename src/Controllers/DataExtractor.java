@@ -1,19 +1,27 @@
 package Controllers;
 
+import Data.StockPrice;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
+
+import java.util.ArrayList;
 
 public  class DataExtractor {
 
     /**
      * Static method for extracting Data from the JSON Objects created by the AlphavantageAPIClient.
-     * This method is used by the various Data Classes (e.g. CompanyOverviewData Class)
+     * This method is used by the  CompanyOverviewData Class to access data from simple JSON objects
      * @param client used AlphavantageApiClient object
      * @param variableName variable that needs to be searched for inside JSON Object
      * @return String countaining desired data
      */
-    public static String extractData2String(AlphavantageAPIClient client,String variableName){
+    public static String extractOVERVIEWData(AlphavantageAPIClient client, String variableName){
         String dataVariable = client.getResponse().getBody().getObject().getString(variableName);
         return dataVariable;
+    }
+
+    public static ArrayList<StockPrice> extractHistoricalStockpirces (AlphavantageAPIClient client) {
+        ArrayList<StockPrice> stockPriceList = new ArrayList<>();
+        
     }
 }
