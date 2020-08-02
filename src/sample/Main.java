@@ -1,8 +1,7 @@
 package sample;
 
-import Controllers.APIManager;
-import Controllers.AlphavantageAPIClient;
-import Controllers.DataExtractor;
+import Controllers.ClientManager;
+import Data.CompanyFundamentalData;
 import Data.CompanyOverviewData;
 
 
@@ -21,10 +20,10 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           APIManager APIManager = new APIManager("MCD","ey");
-            CompanyOverviewData overviewData = new CompanyOverviewData(APIManager);
-            System.out.println(overviewData);
-            System.out.println(overviewData.getHistoricalStockPrice());
+           ClientManager ClientManager = new ClientManager("MCD","oida");
+            CompanyFundamentalData comp = new CompanyFundamentalData(ClientManager);
+            System.out.println(comp);
+
         }catch (Exception ex){ex.printStackTrace();}
 
 

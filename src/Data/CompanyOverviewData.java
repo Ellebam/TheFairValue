@@ -1,7 +1,6 @@
 package Data;
 
-import Controllers.APIManager;
-import Controllers.AlphavantageAPIClient;
+import Controllers.ClientManager;
 import Controllers.DataExtractor;
 
 
@@ -12,6 +11,7 @@ import java.util.ArrayList;
  */
 public class CompanyOverviewData {
 
+    private CompanyOverviewData companyOverviewData;
     private String Name;
     private String Country;
     private String Currency;
@@ -28,41 +28,43 @@ public class CompanyOverviewData {
     private String bookValue;
     private String Sector;
     private ArrayList<FinancialDataObject> historicalStockPrice;
-    private APIManager APIManager;
+    private ClientManager clientManager;
+
 
     /**
      * The Constructor will repeatedly call the extractData2String() method from DataExtractor to
      * update all its instance variables with the values found in the given API Function
      * @throws Exception
      */
-    public CompanyOverviewData(APIManager APIManager) throws Exception{
-        this.APIManager = APIManager;
+    public CompanyOverviewData(ClientManager ClientManager) throws Exception{
+        companyOverviewData = this;
+        this.clientManager = ClientManager;
 
-        Name = getData(APIManager,"Name");
-        Country = getData(APIManager,"Country");
-        Currency = getData(APIManager,"Currency");
-        Description = getData(APIManager,"Description");
-        MarketCap = getData(APIManager, "MarketCapitalization");
-        EBITDA = getData(APIManager, "EBITDA");
-        price2EarningsRatio = getData(APIManager,"PERatio");
-        earningsPerShare = getData(APIManager,"EPS");
-        dividendsPerShare = getData(APIManager, "DividendPerShare");
-        dividendYield = getData(APIManager,"DividendYield");
-        payoutRatio = getData(APIManager, "PayoutRatio");
-        fiftytwoWeekHigh = getData(APIManager, "52WeekHigh");
-        fiftytwoWeekLow = getData(APIManager, "52WeekLow");
-        bookValue = getData(APIManager, "BookValue");
-        Sector = getData(APIManager, "Sector");
+        Name = getData(ClientManager,"Name");
+        Country = getData(ClientManager,"Country");
+        Currency = getData(ClientManager,"Currency");
+        Description = getData(ClientManager,"Description");
+        MarketCap = getData(ClientManager, "MarketCapitalization");
+        EBITDA = getData(ClientManager, "EBITDA");
+        price2EarningsRatio = getData(ClientManager,"PERatio");
+        earningsPerShare = getData(ClientManager,"EPS");
+        dividendsPerShare = getData(ClientManager, "DividendPerShare");
+        dividendYield = getData(ClientManager,"DividendYield");
+        payoutRatio = getData(ClientManager, "PayoutRatio");
+        fiftytwoWeekHigh = getData(ClientManager, "52WeekHigh");
+        fiftytwoWeekLow = getData(ClientManager, "52WeekLow");
+        bookValue = getData(ClientManager, "BookValue");
+        Sector = getData(ClientManager, "Sector");
 
 
-        historicalStockPrice = DataExtractor.extractHistoricalStockPrices(APIManager);
+        historicalStockPrice = DataExtractor.extractHistoricalStockPrices(ClientManager);
 
     }
 
 
 
-    public String getData(APIManager APIManager, String variableName){
-        String variable =DataExtractor.extractOVERVIEWData(APIManager,variableName);
+    public String getData(ClientManager ClientManager, String variableName){
+        String variable =DataExtractor.extractOVERVIEWData(ClientManager,variableName);
         return variable;
     }
     public String getName() {

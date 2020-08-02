@@ -1,6 +1,6 @@
 package Controllers;
 
-public class APIManager {
+public class ClientManager {
     private String apiKey;
     private String symbol;
     private static final String apiFunctionOVERVIEW ="OVERVIEW";
@@ -15,7 +15,7 @@ public class APIManager {
     private AlphavantageAPIClient sectorPerformanceClient;
 
 
-    public APIManager(String symbol, String apiKey) throws Exception{
+    public ClientManager(String symbol, String apiKey) throws Exception{
         this.symbol = symbol;
         this.apiKey = apiKey;
         overviewClient = new AlphavantageAPIClient(apiFunctionOVERVIEW,symbol,apiKey);
