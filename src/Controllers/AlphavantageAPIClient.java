@@ -25,8 +25,8 @@ public class AlphavantageAPIClient {
 
     /**
      * creates an AlphavantageAPIClient object for other classes to access JSON data of the called function
-     * @param function based on Alpha Vantage API Documentatio. Used for different database entries
-     *                 (e.g. COmpany Overview or annual reports)
+     * @param function based on Alpha Vantage API Documentation. Used for different database entries
+     *                 (e.g. Company Overview or annual reports)
      * @param symbol    used for finding the desired company
      * @param apikey    user key for accessing the database
      * @throws Exception    might throw timeout Exception, want to catch it at Front-End level

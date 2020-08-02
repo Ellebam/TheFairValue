@@ -14,12 +14,12 @@ public  class DataExtractor {
      * Static method for extracting Data from the JSON Objects created by the AlphavantageAPIClient.
      * This method is used by the  CompanyOverviewData Class to access data from simple JSON objects
      *
-     * @param client       used AlphavantageApiClient object
+     * @param APIManager       used APIMAnager containing the AlphavantageApiClient(OVERVIEW) object
      * @param variableName variable that needs to be searched for inside JSON Object
      * @return String countaining desired data
      */
-    public static String extractOVERVIEWData(AlphavantageAPIClient client, String variableName) {
-        String dataVariable = client.getResponse().getBody().getObject().getString(variableName);
+    public static String extractOVERVIEWData(APIManager APIManager, String variableName) {
+        String dataVariable = APIManager.getOverviewClient().getResponse().getBody().getObject().getString(variableName);
         return dataVariable;
     }
 
@@ -28,12 +28,13 @@ public  class DataExtractor {
      * it will iterate through all entries (dates) while saving the corresponding adjusted close price values to a double.
      * The date and the value are then used to create a StockPrice object which is the added to an ArrayList<StockPrice>
      *     which is also returned. This
-     * @param client AlphavantageAPIClient used for this operation (APIFunction has to be "TIME_SERIES_DAILY_ADJUSTED")
+     * @param APIManager used APIManager containing the  AlphavantageAPIClient used for this operation
+     *                   (APIFunction has to be "TIME_SERIES_DAILY_ADJUSTED")
      * @return ArrayList containing all historical Stock Prices
      */
-     public static ArrayList<FinancialDataObject> extractHistoricalStockPrices(AlphavantageAPIClient client) {
+     public static ArrayList<FinancialDataObject> extractHistoricalStockPrices(APIManager APIManager) {
          ArrayList<FinancialDataObject> stockPriceList = new ArrayList<>();
-         JSONObject jsonObject = client.getResponse().getBody().getObject().getJSONObject("Time Series (Daily)");
+         JSONObject jsonObject = APIManager.getDailyTimeSeriesClient().getResponse().getBody().getObject().getJSONObject("Time Series (Daily)");
          Iterator<String> keys = jsonObject.keys();
          while (keys.hasNext()){
              String name = "Stock Price";
@@ -46,21 +47,33 @@ public  class DataExtractor {
          return stockPriceList;
      }
 
-     public static ArrayList<FinancialDataObject> extractIncomeStatementData(String keyName, AlphavantageAPIClient client){
+     public static ArrayList<FinancialDataObject> extractIncomeStatementData(String keyName, APIManager APIManager){
          ArrayList<FinancialDataObject> IncomeStatementDataList = new ArrayList<>();
-         JSONArray jsonArray= client.getResponse().getBody().getObject().getJSONArray("quarterlyReports");
+         JSONArray jsonArray= APIManager.getIncomeStatementClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
          for(int i=0; i<jsonArray.length();i++){
              String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
-             String name = jsonArray.getJSONObject(i).get(keyName).getClass().getSimpleName();//not right!
 
              Double value = jsonArray.getJSONObject(i).getDouble(keyName);
-             FinancialDataObject dataObject = new FinancialDataObject(name,value,date);
+             FinancialDataObject dataObject = new FinancialDataObject(keyName,value,date);
              IncomeStatementDataList.add(dataObject);
          }
-
-
          return IncomeStatementDataList;
      }
+
+    public static ArrayList<FinancialDataObject> extractBalanceSheetData(String keyName, APIManager APIManager){
+        ArrayList<FinancialDataObject> BalanceSheetDataList = new ArrayList<>();
+        JSONArray jsonArray= APIManager.getIncomeStatementClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
+        for(int i=0; i<jsonArray.length();i++){
+            String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
+
+            Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+            FinancialDataObject dataObject = new FinancialDataObject(keyName,value,date);
+            BalanceSheetDataList.add(dataObject);
+        }
+        return BalanceSheetDataList;
+    }
+
+
 
     }
 

@@ -1,5 +1,6 @@
 package Data;
 
+import Controllers.APIManager;
 import Controllers.AlphavantageAPIClient;
 import Controllers.DataExtractor;
 
@@ -27,44 +28,41 @@ public class CompanyOverviewData {
     private String bookValue;
     private String Sector;
     private ArrayList<FinancialDataObject> historicalStockPrice;
-    private static final String apiFunctionOVERVIEW = "OVERVIEW";
-    private static final String apiFunctionTIME_SERIES_DAILY_ADJUSTED = "TIME_SERIES_DAILY_ADJUSTED";
+    private APIManager APIManager;
 
     /**
      * The Constructor will repeatedly call the extractData2String() method from DataExtractor to
      * update all its instance variables with the values found in the given API Function
-     * @param symbol ticker symbol for desired company
-     * @param apiKey user apiKey
      * @throws Exception
      */
-    public CompanyOverviewData(String symbol, String apiKey) throws Exception{
-        AlphavantageAPIClient OverviewFunctionClient = new AlphavantageAPIClient(apiFunctionOVERVIEW,symbol,apiKey);
-        Name = getData(OverviewFunctionClient,"Name");
-        Country = getData(OverviewFunctionClient,"Country");
-        Currency = getData(OverviewFunctionClient,"Currency");
-        Description = getData(OverviewFunctionClient,"Description");
-        MarketCap = getData(OverviewFunctionClient, "MarketCapitalization");
-        EBITDA = getData(OverviewFunctionClient, "EBITDA");
-        price2EarningsRatio = getData(OverviewFunctionClient,"PERatio");
-        earningsPerShare = getData(OverviewFunctionClient,"EPS");
-        dividendsPerShare = getData(OverviewFunctionClient, "DividendPerShare");
-        dividendYield = getData(OverviewFunctionClient,"DividendYield");
-        payoutRatio = getData(OverviewFunctionClient, "PayoutRatio");
-        fiftytwoWeekHigh = getData(OverviewFunctionClient, "52WeekHigh");
-        fiftytwoWeekLow = getData(OverviewFunctionClient, "52WeekLow");
-        bookValue = getData(OverviewFunctionClient, "BookValue");
-        Sector = getData(OverviewFunctionClient, "Sector");
+    public CompanyOverviewData(APIManager APIManager) throws Exception{
+        this.APIManager = APIManager;
 
-        AlphavantageAPIClient dailyTimeSeriesClient = new AlphavantageAPIClient(apiFunctionTIME_SERIES_DAILY_ADJUSTED
-        , symbol,apiKey);
-        historicalStockPrice = DataExtractor.extractHistoricalStockPrices(dailyTimeSeriesClient);
+        Name = getData(APIManager,"Name");
+        Country = getData(APIManager,"Country");
+        Currency = getData(APIManager,"Currency");
+        Description = getData(APIManager,"Description");
+        MarketCap = getData(APIManager, "MarketCapitalization");
+        EBITDA = getData(APIManager, "EBITDA");
+        price2EarningsRatio = getData(APIManager,"PERatio");
+        earningsPerShare = getData(APIManager,"EPS");
+        dividendsPerShare = getData(APIManager, "DividendPerShare");
+        dividendYield = getData(APIManager,"DividendYield");
+        payoutRatio = getData(APIManager, "PayoutRatio");
+        fiftytwoWeekHigh = getData(APIManager, "52WeekHigh");
+        fiftytwoWeekLow = getData(APIManager, "52WeekLow");
+        bookValue = getData(APIManager, "BookValue");
+        Sector = getData(APIManager, "Sector");
+
+
+        historicalStockPrice = DataExtractor.extractHistoricalStockPrices(APIManager);
 
     }
 
 
 
-    public String getData(AlphavantageAPIClient client, String variableName){
-        String variable =DataExtractor.extractOVERVIEWData(client,variableName);
+    public String getData(APIManager APIManager, String variableName){
+        String variable =DataExtractor.extractOVERVIEWData(APIManager,variableName);
         return variable;
     }
     public String getName() {
@@ -187,6 +185,14 @@ public class CompanyOverviewData {
         Sector = sector;
     }
 
+    public ArrayList<FinancialDataObject> getHistoricalStockPrice() {
+        return historicalStockPrice;
+    }
+
+    public void setHistoricalStockPrice(ArrayList<FinancialDataObject> historicalStockPrice) {
+        this.historicalStockPrice = historicalStockPrice;
+    }
+
     @Override
     public String toString() {
         return "CompanyOverviewData{" +
@@ -207,4 +213,5 @@ public class CompanyOverviewData {
                 ", Sector='" + Sector + '\'' +"\n"+
                 '}';
     }
+
 }
