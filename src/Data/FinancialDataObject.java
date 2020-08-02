@@ -1,11 +1,12 @@
-package Data.DataObjects;
+package Data;
 
-public class NetIncome {
-
+public class FinancialDataObject {
+    private String name;
     private double value;
     private String date;
 
-    public NetIncome(double value, String date){
+    public FinancialDataObject(String name, double value, String date){
+        this.name = name;
         this.value = value;
         this.date = date;
     }
@@ -14,7 +15,7 @@ public class NetIncome {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(int value) {
         this.value = value;
     }
 
@@ -26,9 +27,17 @@ public class NetIncome {
         this.date = date;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
-        return "Net Income{" +
+        return name+"{" +
                 "value=" + value +
                 ", date='" + date + '\'' +
                 '}'+ "\n" ;

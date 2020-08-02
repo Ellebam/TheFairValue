@@ -2,7 +2,7 @@ package Data;
 
 import Controllers.AlphavantageAPIClient;
 import Controllers.DataExtractor;
-import Data.DataObjects.StockPrice;
+
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class CompanyOverviewData {
     private String fiftytwoWeekLow;
     private String bookValue;
     private String Sector;
-    private ArrayList<StockPrice> historicalStockPrice;
+    private ArrayList<FinancialDataObject> historicalStockPrice;
     private static final String apiFunctionOVERVIEW = "OVERVIEW";
     private static final String apiFunctionTIME_SERIES_DAILY_ADJUSTED = "TIME_SERIES_DAILY_ADJUSTED";
 

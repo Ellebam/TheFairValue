@@ -1,6 +1,8 @@
 package Controllers;
 
-import Data.DataObjects.StockPrice;
+
+import Data.FinancialDataObject;
+import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 import java.util.ArrayList;
@@ -29,18 +31,35 @@ public  class DataExtractor {
      * @param client AlphavantageAPIClient used for this operation (APIFunction has to be "TIME_SERIES_DAILY_ADJUSTED")
      * @return ArrayList containing all historical Stock Prices
      */
-     public static ArrayList<StockPrice> extractHistoricalStockPrices(AlphavantageAPIClient client) {
-         ArrayList<StockPrice> stockPriceList = new ArrayList<>();
+     public static ArrayList<FinancialDataObject> extractHistoricalStockPrices(AlphavantageAPIClient client) {
+         ArrayList<FinancialDataObject> stockPriceList = new ArrayList<>();
          JSONObject jsonObject = client.getResponse().getBody().getObject().getJSONObject("Time Series (Daily)");
          Iterator<String> keys = jsonObject.keys();
          while (keys.hasNext()){
+             String name = "Stock Price";
              String key = keys.next();
              JSONObject value = jsonObject.getJSONObject(key);
              String adjustedClose = value.getString("5. adjusted close");
-             StockPrice stockPrice = new StockPrice(Double.parseDouble(adjustedClose),key);
+             FinancialDataObject stockPrice = new FinancialDataObject(name,Double.parseDouble(adjustedClose),key);
              stockPriceList.add(stockPrice);
          }
          return stockPriceList;
+     }
+
+     public static ArrayList<FinancialDataObject> extractIncomeStatementData(String keyName, AlphavantageAPIClient client){
+         ArrayList<FinancialDataObject> IncomeStatementDataList = new ArrayList<>();
+         JSONArray jsonArray= client.getResponse().getBody().getObject().getJSONArray("quarterlyReports");
+         for(int i=0; i<jsonArray.length();i++){
+             String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
+             String name = jsonArray.getJSONObject(i).get(keyName).getClass().getSimpleName();//not right!
+
+             Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+             FinancialDataObject dataObject = new FinancialDataObject(name,value,date);
+             IncomeStatementDataList.add(dataObject);
+         }
+
+
+         return IncomeStatementDataList;
      }
 
     }

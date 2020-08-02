@@ -19,8 +19,8 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-            AlphavantageAPIClient client = new AlphavantageAPIClient("TIME_SERIES_DAILY_ADJUSTED","MCD","oida");
-            System.out.println(DataExtractor.extractHistoricalStockPrices(client));
+            AlphavantageAPIClient client = new AlphavantageAPIClient("INCOME_STATEMENT","MCD","oida");
+            System.out.println(DataExtractor.extractIncomeStatementData("totalRevenue",client));
         }catch (Exception ex){ex.printStackTrace();}
 
 
