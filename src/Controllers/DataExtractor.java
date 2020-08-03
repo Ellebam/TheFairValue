@@ -88,6 +88,13 @@ public  class DataExtractor {
         return  marginList;
     }
 
+    /*public static Double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
+         Integer sum =0;
+         if(!financialDataObject.isEmpty()){
+             for(int i=)
+         }
+    }*/
+
 
 
     }

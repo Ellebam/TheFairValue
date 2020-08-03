@@ -20,7 +20,7 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("MCD","oida");
+           ClientManager ClientManager = new ClientManager("JNJ","diggi");
             CompanyFundamentalData comp = new CompanyFundamentalData(ClientManager);
             System.out.println(comp);
 

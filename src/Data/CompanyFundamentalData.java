@@ -12,6 +12,7 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> netIncome;
     private ArrayList<FinancialDataObject> grossProfit;
     private ArrayList<FinancialDataObject> grossMargin;
+    private ArrayList<FinancialDataObject> operatingIncome;
     private ArrayList<FinancialDataObject> operatingMargin;
     private ArrayList<FinancialDataObject> netMargin;
     private ArrayList<FinancialDataObject> freeCashFlow;
@@ -28,6 +29,10 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
     netIncome = getDataFromIncomeStatement(clientManager,"netIncome");
     grossProfit = getDataFromIncomeStatement(clientManager,"grossProfit");
     grossMargin = DataExtractor.calculateMargins("grossMargin",grossProfit,totalRevenue);
+    operatingIncome = getDataFromIncomeStatement(clientManager,"operatingIncome");
+    operatingMargin = DataExtractor.calculateMargins("operatingMargin",operatingIncome,netIncome);
+    netMargin = DataExtractor.calculateMargins("netMargin",netIncome,totalRevenue);
+
 
 
 }
