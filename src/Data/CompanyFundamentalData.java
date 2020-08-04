@@ -19,11 +19,19 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> payOutRatio;
     private ArrayList<FinancialDataObject> dividendPerShare;
     private ArrayList<FinancialDataObject> dividendYield;
+
+    private ArrayList<FinancialDataObject> totalAssets;
+
+    private ArrayList<FinancialDataObject> operatingCashflow;
+
+
     private ClientManager clientManager;
+
+    private Double averageTotalRevenue;
 
 
 public CompanyFundamentalData(ClientManager clientManager) throws Exception{
-    companyFundamentalData = this;
+   /* companyFundamentalData = this;
     this.clientManager = clientManager;
     totalRevenue = getDataFromIncomeStatement(clientManager,"totalRevenue");
     netIncome = getDataFromIncomeStatement(clientManager,"netIncome");
@@ -32,6 +40,12 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
     operatingIncome = getDataFromIncomeStatement(clientManager,"operatingIncome");
     operatingMargin = DataExtractor.calculateMargins("operatingMargin",operatingIncome,netIncome);
     netMargin = DataExtractor.calculateMargins("netMargin",netIncome,totalRevenue);
+
+    averageTotalRevenue = DataExtractor.calculateMean(totalRevenue);*/
+
+    totalAssets = getDataFromBalanceSheet(clientManager,"totalAssets");
+    operatingCashflow = getDataFromCashFlowStatement(clientManager,"operatingCashflow");
+
 
 
 
@@ -47,14 +61,24 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
         return variable;
     }
 
+    ArrayList<FinancialDataObject> getDataFromCashFlowStatement(ClientManager clientManager,String variableName){
+        ArrayList<FinancialDataObject> variable = DataExtractor.extractCashFlowData(variableName, clientManager);
+        return variable;
+    }
+
 
     @Override
     public String toString() {
         return "CompanyFundamentalData{" + "\n"+
+
+                totalAssets + operatingCashflow;/*
                 "totalRevenue=" + totalRevenue +"\n"+
                 ", netIncome=" + netIncome +"\n"+
                 ", grossProfit=" + grossProfit +"\n"+
-                ", grossMargin=" + grossMargin +
-                '}';
+                ", grossMargin=" + grossMargin +"\n"+
+                ", grossMargin=" + averageTotalRevenue +"\n"+
+                '}'
+
+                ;*/
     }
 }

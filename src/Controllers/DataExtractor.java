@@ -51,27 +51,58 @@ public  class DataExtractor {
      public static ArrayList<FinancialDataObject> extractIncomeStatementData(String keyName, ClientManager ClientManager){
          ArrayList<FinancialDataObject> IncomeStatementDataList = new ArrayList<>();
          JSONArray jsonArray= ClientManager.getIncomeStatementClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
-         for(int i=0; i<jsonArray.length();i++){
+         for(int i=0; i<jsonArray.length();i++) {
              String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
 
-             Double value = jsonArray.getJSONObject(i).getDouble(keyName);
-             FinancialDataObject dataObject = new FinancialDataObject(keyName,value,date);
-             IncomeStatementDataList.add(dataObject);
+             if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
+                 Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
+                 IncomeStatementDataList.add(dataObject);
+             } else {
+                 Double value = 0.0;
+                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
+                 IncomeStatementDataList.add(dataObject);
+             }
          }
          return IncomeStatementDataList;
      }
 
     public static ArrayList<FinancialDataObject> extractBalanceSheetData(String keyName, ClientManager ClientManager){
         ArrayList<FinancialDataObject> BalanceSheetDataList = new ArrayList<>();
-        JSONArray jsonArray= ClientManager.getIncomeStatementClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
-        for(int i=0; i<jsonArray.length();i++){
+        JSONArray jsonArray= ClientManager.getBalanceSheetClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
+        for(int i=0; i<jsonArray.length();i++) {
             String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
 
-            Double value = jsonArray.getJSONObject(i).getDouble(keyName);
-            FinancialDataObject dataObject = new FinancialDataObject(keyName,value,date);
-            BalanceSheetDataList.add(dataObject);
+            if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
+                Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+                FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
+                BalanceSheetDataList.add(dataObject);
+            }else{
+                Double value = 0.0;
+                FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
+                BalanceSheetDataList.add(dataObject);
+            }
         }
         return BalanceSheetDataList;
+    }
+
+    public static ArrayList<FinancialDataObject> extractCashFlowData(String keyName, ClientManager ClientManager){
+        ArrayList<FinancialDataObject> CashFlowDataList = new ArrayList<>();
+        JSONArray jsonArray= ClientManager.getCashFlowClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
+        for(int i=0; i<jsonArray.length();i++) {
+            String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
+
+            if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
+                Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+                FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
+                CashFlowDataList.add(dataObject);
+            }else{
+                Double value = 0.0;
+                FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
+                CashFlowDataList.add(dataObject);
+            }
+        }
+        return CashFlowDataList;
     }
 
     public static ArrayList<FinancialDataObject> calculateMargins(String marginName, ArrayList<FinancialDataObject> sampleProfit,
@@ -88,12 +119,17 @@ public  class DataExtractor {
         return  marginList;
     }
 
-    /*public static Double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
-         Integer sum =0;
+    public static Double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
+         Double sum =0.0;
+         Double average;
          if(!financialDataObject.isEmpty()){
-             for(int i=)
-         }
-    }*/
+             for(int i=0; i<financialDataObject.size();i++){
+                 sum += financialDataObject.get(i).getValue();
+             }
+              average = sum/ financialDataObject.size();
+         }else{average =0.0;}
+         return average;
+    }
 
 
 

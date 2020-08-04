@@ -7,12 +7,13 @@ public class ClientManager {
     private static final String apiFunctionTIME_SERIES_DAILY_ADJUSTED = "TIME_SERIES_DAILY_ADJUSTED";
     private static final String apiFunctionINCOME_STATEMENT= "INCOME_STATEMENT";
     private static final String apiFunctionBALANCE_SHEET = "BALANCE_SHEET";
-    private static final String apiFunctionSECTOR = "SECTOR";
+    private static final String apiFunctionCASH_FLOW ="CASH_FLOW";
+
     private AlphavantageAPIClient overviewClient;
     private AlphavantageAPIClient dailyTimeSeriesClient;
     private AlphavantageAPIClient incomeStatementClient;
     private AlphavantageAPIClient balanceSheetClient;
-    private AlphavantageAPIClient sectorPerformanceClient;
+    private AlphavantageAPIClient cashFlowClient;
 
 
     public ClientManager(String symbol, String apiKey) throws Exception{
@@ -22,7 +23,7 @@ public class ClientManager {
         dailyTimeSeriesClient = new AlphavantageAPIClient(apiFunctionTIME_SERIES_DAILY_ADJUSTED,symbol,apiKey);
         incomeStatementClient = new AlphavantageAPIClient(apiFunctionINCOME_STATEMENT,symbol,apiKey);
         balanceSheetClient = new AlphavantageAPIClient(apiFunctionBALANCE_SHEET,symbol,apiKey);
-        sectorPerformanceClient = new AlphavantageAPIClient(apiFunctionSECTOR,symbol,apiKey);
+        cashFlowClient = new AlphavantageAPIClient(apiFunctionCASH_FLOW,symbol,apiKey);
     }
 
 
@@ -58,11 +59,12 @@ public class ClientManager {
         this.balanceSheetClient = balanceSheetClient;
     }
 
-    public AlphavantageAPIClient getSectorPerformanceClient() {
-        return sectorPerformanceClient;
+
+    public AlphavantageAPIClient getCashFlowClient() {
+        return cashFlowClient;
     }
 
-    public void setSectorPerformanceClient(AlphavantageAPIClient sectorPerformanceClient) {
-        this.sectorPerformanceClient = sectorPerformanceClient;
+    public void setCashFlowClient(AlphavantageAPIClient cashFlowClient) {
+        this.cashFlowClient = cashFlowClient;
     }
 }
