@@ -15,12 +15,19 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> operatingIncome;
     private ArrayList<FinancialDataObject> operatingMargin;
     private ArrayList<FinancialDataObject> netMargin;
+    private ArrayList<FinancialDataObject>  depreciation;
+    private  ArrayList<FinancialDataObject> capitalExpenditures;
+    private ArrayList<FinancialDataObject> totalAssets;
+    private ArrayList<FinancialDataObject> totalLiabilities;
+    private ArrayList<FinancialDataObject> workingCapital;
     private ArrayList<FinancialDataObject> freeCashFlow;
     private ArrayList<FinancialDataObject> payOutRatio;
     private ArrayList<FinancialDataObject> dividendPerShare;
     private ArrayList<FinancialDataObject> dividendYield;
 
-    private ArrayList<FinancialDataObject> totalAssets;
+
+
+
 
     private ArrayList<FinancialDataObject> operatingCashflow;
 
@@ -31,7 +38,7 @@ public class CompanyFundamentalData {
 
 
 public CompanyFundamentalData(ClientManager clientManager) throws Exception{
-   /* companyFundamentalData = this;
+    companyFundamentalData = this;
     this.clientManager = clientManager;
     totalRevenue = getDataFromIncomeStatement(clientManager,"totalRevenue");
     netIncome = getDataFromIncomeStatement(clientManager,"netIncome");
@@ -40,10 +47,15 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
     operatingIncome = getDataFromIncomeStatement(clientManager,"operatingIncome");
     operatingMargin = DataExtractor.calculateMargins("operatingMargin",operatingIncome,netIncome);
     netMargin = DataExtractor.calculateMargins("netMargin",netIncome,totalRevenue);
-
-    averageTotalRevenue = DataExtractor.calculateMean(totalRevenue);*/
-
+    depreciation = getDataFromCashFlowStatement(clientManager,"depreciation");
+    capitalExpenditures = getDataFromCashFlowStatement(clientManager,"capitalExpenditures");
     totalAssets = getDataFromBalanceSheet(clientManager,"totalAssets");
+    totalLiabilities = getDataFromBalanceSheet(clientManager,"totalLiabilities");
+    workingCapital = DataExtractor.subtractValues("workingCapital",totalAssets,totalLiabilities);
+
+    averageTotalRevenue = DataExtractor.calculateMean(totalRevenue);
+
+
     operatingCashflow = getDataFromCashFlowStatement(clientManager,"operatingCashflow");
 
 
@@ -69,16 +81,9 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
 
     @Override
     public String toString() {
-        return "CompanyFundamentalData{" + "\n"+
+        return "CompanyFundamentalData{" + depreciation+"\n"+ capitalExpenditures+"\n"+ totalAssets+"\n"+ totalLiabilities+"\n"+workingCapital;
 
-                totalAssets + operatingCashflow;/*
-                "totalRevenue=" + totalRevenue +"\n"+
-                ", netIncome=" + netIncome +"\n"+
-                ", grossProfit=" + grossProfit +"\n"+
-                ", grossMargin=" + grossMargin +"\n"+
-                ", grossMargin=" + averageTotalRevenue +"\n"+
-                '}'
 
-                ;*/
+
     }
 }

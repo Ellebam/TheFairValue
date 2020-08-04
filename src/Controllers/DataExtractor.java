@@ -131,6 +131,22 @@ public  class DataExtractor {
          return average;
     }
 
+    public static ArrayList<FinancialDataObject> subtractValues(String valueName, ArrayList<FinancialDataObject> minuend,
+                                                                  ArrayList<FinancialDataObject> subtrahend){
+        ArrayList<FinancialDataObject> difference = new ArrayList<>();
+        if (minuend.size() == subtrahend.size()){
+            for (int i=0; i<minuend.size();i++){
+                Double value = minuend.get(i).getValue()-subtrahend.get(i).getValue();
+                String date = minuend.get(i).getDate();
+                FinancialDataObject differenceObject = new FinancialDataObject(valueName,value,date);
+                difference.add(differenceObject);
+            }
+        }else{JOptionPane.showMessageDialog(null,"Error!");}
+        return  difference;
+    }
+
+
+
 
 
     }
