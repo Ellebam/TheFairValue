@@ -21,8 +21,12 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> totalLiabilities;
     private ArrayList<FinancialDataObject> workingCapital;
     private ArrayList<FinancialDataObject> freeCashFlow;
+    private ArrayList<FinancialDataObject> dividendPayout;
+    private ArrayList<FinancialDataObject> commonStockSharesOutstanding;
+    private ArrayList<FinancialDataObject> dividendsPerShare;
+    private ArrayList<FinancialDataObject> netIncomeApplicableToCommonShares;
+
     private ArrayList<FinancialDataObject> payOutRatio;
-    private ArrayList<FinancialDataObject> dividendPerShare;
     private ArrayList<FinancialDataObject> dividendYield;
 
 
@@ -43,20 +47,29 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
     totalRevenue = getDataFromIncomeStatement(clientManager,"totalRevenue");
     netIncome = getDataFromIncomeStatement(clientManager,"netIncome");
     grossProfit = getDataFromIncomeStatement(clientManager,"grossProfit");
-    grossMargin = DataExtractor.calculateMargins("grossMargin",grossProfit,totalRevenue);
+    grossMargin = DataExtractor.calculateMargins_IN_PERCENT("grossMargin",grossProfit,totalRevenue);
     operatingIncome = getDataFromIncomeStatement(clientManager,"operatingIncome");
-    operatingMargin = DataExtractor.calculateMargins("operatingMargin",operatingIncome,netIncome);
-    netMargin = DataExtractor.calculateMargins("netMargin",netIncome,totalRevenue);
+    operatingMargin = DataExtractor.calculateMargins_IN_PERCENT("operatingMargin",operatingIncome,netIncome);
+    netMargin = DataExtractor.calculateMargins_IN_PERCENT("netMargin",netIncome,totalRevenue);
     depreciation = getDataFromCashFlowStatement(clientManager,"depreciation");
     capitalExpenditures = getDataFromCashFlowStatement(clientManager,"capitalExpenditures");
     totalAssets = getDataFromBalanceSheet(clientManager,"totalAssets");
     totalLiabilities = getDataFromBalanceSheet(clientManager,"totalLiabilities");
-    workingCapital = DataExtractor.subtractValues("workingCapital",totalAssets,totalLiabilities);
+    workingCapital = DataExtractor.subtractTwoValues("workingCapital",totalAssets,totalLiabilities);
+    operatingCashflow = getDataFromCashFlowStatement(clientManager,"operatingCashflow");
+    freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
+    dividendPayout = getDataFromCashFlowStatement(clientManager,"dividendPayout");
+    commonStockSharesOutstanding = getDataFromBalanceSheet(clientManager,"commonStockSharesOutstanding");
+    dividendsPerShare = DataExtractor.calculateMargins_IN_PERCENT("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);
+    netIncomeApplicableToCommonShares = getDataFromIncomeStatement(clientManager,"netIncomeApplicableToCommonShares");
+
+
+
 
     averageTotalRevenue = DataExtractor.calculateMean(totalRevenue);
 
 
-    operatingCashflow = getDataFromCashFlowStatement(clientManager,"operatingCashflow");
+
 
 
 

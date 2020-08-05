@@ -59,7 +59,7 @@ public  class DataExtractor {
                  FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                  IncomeStatementDataList.add(dataObject);
              } else {
-                 Double value = 0.0;
+                 Double value = 0.00000;
                  FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                  IncomeStatementDataList.add(dataObject);
              }
@@ -78,7 +78,7 @@ public  class DataExtractor {
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 BalanceSheetDataList.add(dataObject);
             }else{
-                Double value = 0.0;
+                Double value = 0.00000;
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 BalanceSheetDataList.add(dataObject);
             }
@@ -97,7 +97,7 @@ public  class DataExtractor {
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 CashFlowDataList.add(dataObject);
             }else{
-                Double value = 0.0;
+                Double value = 0.00000;
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 CashFlowDataList.add(dataObject);
             }
@@ -105,15 +105,19 @@ public  class DataExtractor {
         return CashFlowDataList;
     }
 
-    public static ArrayList<FinancialDataObject> calculateMargins(String marginName, ArrayList<FinancialDataObject> sampleProfit,
-                                                        ArrayList<FinancialDataObject> sampleRevenue){
+    public static ArrayList<FinancialDataObject> calculateMargins_IN_PERCENT(String marginName, ArrayList<FinancialDataObject> sampleProfit,
+                                                                             ArrayList<FinancialDataObject> sampleRevenue){
         ArrayList<FinancialDataObject> marginList = new ArrayList<>();
         if (sampleProfit.size() == sampleRevenue.size()){
             for (int i=0; i<sampleProfit.size();i++){
-                Double value = sampleProfit.get(i).getValue()/sampleRevenue.get(i).getValue();
-                String date = sampleProfit.get(i).getDate();
-                FinancialDataObject marginObject = new FinancialDataObject(marginName,value,date);
-                marginList.add(marginObject);
+                double sampleProfitDataPoint = sampleProfit.get(i).getValue();
+                double sampleRevenueDataPoint = sampleRevenue.get(i).getValue();
+                if (!(sampleRevenueDataPoint==0.00000)) {
+                    Double value = sampleProfitDataPoint / sampleRevenueDataPoint * 100;
+                    String date = sampleProfit.get(i).getDate();
+                    FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
+                    marginList.add(marginObject);
+                }
             }
         }else{JOptionPane.showMessageDialog(null,"Error!");}
         return  marginList;
@@ -124,25 +128,31 @@ public  class DataExtractor {
          Double average;
          if(!financialDataObject.isEmpty()){
              for(int i=0; i<financialDataObject.size();i++){
-                 sum += financialDataObject.get(i).getValue();
+                 double dataPoint =financialDataObject.get(i).getValue();
+                 if (!(dataPoint == 0.00000)){
+                     sum +=  dataPoint;
+                 }
              }
               average = sum/ financialDataObject.size();
          }else{average =0.0;}
          return average;
     }
 
-    public static ArrayList<FinancialDataObject> subtractValues(String valueName, ArrayList<FinancialDataObject> minuend,
-                                                                  ArrayList<FinancialDataObject> subtrahend){
+    public static ArrayList<FinancialDataObject> subtractTwoValues(String valueName, ArrayList<FinancialDataObject> minuend,
+                                                                   ArrayList<FinancialDataObject> subtrahend) {
         ArrayList<FinancialDataObject> difference = new ArrayList<>();
-        if (minuend.size() == subtrahend.size()){
-            for (int i=0; i<minuend.size();i++){
-                Double value = minuend.get(i).getValue()-subtrahend.get(i).getValue();
+        if (minuend.size() == subtrahend.size()) {
+            for (int i = 0; i < minuend.size(); i++) {
+                Double value = minuend.get(i).getValue() - subtrahend.get(i).getValue();
                 String date = minuend.get(i).getDate();
-                FinancialDataObject differenceObject = new FinancialDataObject(valueName,value,date);
+                FinancialDataObject differenceObject = new FinancialDataObject(valueName, value, date);
                 difference.add(differenceObject);
             }
-        }else{JOptionPane.showMessageDialog(null,"Error!");}
-        return  difference;
+        } else {
+            JOptionPane.showMessageDialog(null, "Error!");
+        }
+        return difference;
+
     }
 
 
