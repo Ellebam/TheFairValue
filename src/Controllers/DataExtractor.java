@@ -123,6 +123,24 @@ public  class DataExtractor {
         return  marginList;
     }
 
+    public static ArrayList<FinancialDataObject> calculateDividendsPerShare(String marginName, ArrayList<FinancialDataObject> dividendPayout,
+                                                                            ArrayList<FinancialDataObject> commonStockSharesOutstanding){
+        ArrayList<FinancialDataObject> marginList = new ArrayList<>();
+        if (dividendPayout.size() == commonStockSharesOutstanding.size()){
+            for (int i=0; i<dividendPayout.size();i++){
+                double dividendPayoutDataPoint = dividendPayout.get(i).getValue();
+                double commonStockSharesOutstandingDataPoint = commonStockSharesOutstanding.get(i).getValue();
+                if (!(commonStockSharesOutstandingDataPoint==0.00000)) {
+                    Double value = -(dividendPayoutDataPoint) / commonStockSharesOutstandingDataPoint;
+                    String date = dividendPayout.get(i).getDate();
+                    FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
+                    marginList.add(marginObject);
+                }
+            }
+        }else{JOptionPane.showMessageDialog(null,"Error!");}
+        return  marginList;
+    }
+
     public static Double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
          Double sum =0.0;
          Double average;

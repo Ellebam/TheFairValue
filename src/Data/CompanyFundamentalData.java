@@ -60,7 +60,7 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
     freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
     dividendPayout = getDataFromCashFlowStatement(clientManager,"dividendPayout");
     commonStockSharesOutstanding = getDataFromBalanceSheet(clientManager,"commonStockSharesOutstanding");
-    dividendsPerShare = DataExtractor.calculateMargins_IN_PERCENT("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);
+    dividendsPerShare = DataExtractor.calculateDividendsPerShare("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);
     netIncomeApplicableToCommonShares = getDataFromIncomeStatement(clientManager,"netIncomeApplicableToCommonShares");
 
 
@@ -94,7 +94,8 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
 
     @Override
     public String toString() {
-        return "CompanyFundamentalData{" + depreciation+"\n"+ capitalExpenditures+"\n"+ totalAssets+"\n"+ totalLiabilities+"\n"+workingCapital;
+        return "CompanyFundamentalData{" + operatingCashflow+"\n"+ freeCashFlow+"\n"+ dividendPayout+"\n"+ commonStockSharesOutstanding+
+                "\n"+dividendsPerShare+ "\n"+ netIncomeApplicableToCommonShares;
 
 
 
