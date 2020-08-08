@@ -213,7 +213,7 @@ public class CompanyOverviewData {
                 ", fiftytwoWeekLow='" + fiftytwoWeekLow + '\'' +"\n"+
                 ", bookValue='" + bookValue + '\'' +"\n"+
                 ", Sector='" + Sector + '\'' +"\n"+
-                '}';
+                '}'+ historicalStockPrice+"\n";
     }
 
 }

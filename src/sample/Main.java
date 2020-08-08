@@ -1,6 +1,7 @@
 package sample;
 
 import Controllers.ClientManager;
+import Controllers.DataContainerManager;
 import Data.CompanyFundamentalData;
 import Data.CompanyOverviewData;
 
@@ -20,9 +21,10 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("MCD","diggi");
-            CompanyFundamentalData comp = new CompanyFundamentalData(ClientManager);
-            System.out.println(comp);
+           ClientManager ClientManager = new ClientManager("JNJ","diggi");
+            DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
+            System.out.println(dataContainerManager.getCompanyOverviewData().toString());
+            System.out.println(dataContainerManager.getCompanyFundamentalData().toString());
 
         }catch (Exception ex){ex.printStackTrace();}
 

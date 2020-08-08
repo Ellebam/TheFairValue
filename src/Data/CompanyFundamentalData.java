@@ -1,6 +1,7 @@
 package Data;
 
 import Controllers.ClientManager;
+import Controllers.DataContainerManager;
 import Controllers.DataExtractor;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> operatingMargin;
     private ArrayList<FinancialDataObject> netMargin;
     private ArrayList<FinancialDataObject>  depreciation;
-    private  ArrayList<FinancialDataObject> capitalExpenditures;
+    private ArrayList<FinancialDataObject> capitalExpenditures;
     private ArrayList<FinancialDataObject> totalAssets;
     private ArrayList<FinancialDataObject> totalLiabilities;
     private ArrayList<FinancialDataObject> workingCapital;
@@ -25,9 +26,12 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> commonStockSharesOutstanding;
     private ArrayList<FinancialDataObject> dividendsPerShare;
     private ArrayList<FinancialDataObject> netIncomeApplicableToCommonShares;
+    private ArrayList<FinancialDataObject> earningsPerShare;
+    private ArrayList<FinancialDataObject> dividendYield;
+
 
     private ArrayList<FinancialDataObject> payOutRatio;
-    private ArrayList<FinancialDataObject> dividendYield;
+
 
 
 
@@ -41,7 +45,7 @@ public class CompanyFundamentalData {
     private Double averageTotalRevenue;
 
 
-public CompanyFundamentalData(ClientManager clientManager) throws Exception{
+public CompanyFundamentalData(ClientManager clientManager, DataContainerManager dataContainerManager) throws Exception{
     companyFundamentalData = this;
     this.clientManager = clientManager;
     totalRevenue = getDataFromIncomeStatement(clientManager,"totalRevenue");
@@ -62,6 +66,10 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
     commonStockSharesOutstanding = getDataFromBalanceSheet(clientManager,"commonStockSharesOutstanding");
     dividendsPerShare = DataExtractor.calculateDividendsPerShare("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);
     netIncomeApplicableToCommonShares = getDataFromIncomeStatement(clientManager,"netIncomeApplicableToCommonShares");
+    earningsPerShare = DataExtractor.calculateMargins("earningsPerShare",netIncomeApplicableToCommonShares,commonStockSharesOutstanding);
+    payOutRatio =DataExtractor.calculateMargins_IN_PERCENT("payoutRatio",dividendsPerShare,earningsPerShare);
+    dividendYield = DataExtractor.calclateDividendYield("dividendYield",dividendsPerShare,
+            dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice());
 
 
 
@@ -94,10 +102,27 @@ public CompanyFundamentalData(ClientManager clientManager) throws Exception{
 
     @Override
     public String toString() {
-        return "CompanyFundamentalData{" + operatingCashflow+"\n"+ freeCashFlow+"\n"+ dividendPayout+"\n"+ commonStockSharesOutstanding+
-                "\n"+dividendsPerShare+ "\n"+ netIncomeApplicableToCommonShares;
-
-
-
+        return "CompanyFundamentalData{" +
+                "totalRevenue=" + totalRevenue + "\n"+
+                ", netIncome=" + netIncome +"\n"+
+                ", grossProfit=" + grossProfit +"\n"+
+                ", grossMargin=" + grossMargin +"\n"+
+                ", operatingIncome=" + operatingIncome +"\n"+
+                ", operatingMargin=" + operatingMargin +"\n"+
+                ", netMargin=" + netMargin +"\n"+
+                ", depreciation=" + depreciation +"\n"+
+                ", capitalExpenditures=" + capitalExpenditures +"\n"+
+                ", totalAssets=" + totalAssets +"\n"+
+                ", totalLiabilities=" + totalLiabilities +"\n"+
+                ", workingCapital=" + workingCapital +"\n"+
+                ", freeCashFlow=" + freeCashFlow +"\n"+
+                ", dividendPayout=" + dividendPayout +"\n"+
+                ", commonStockSharesOutstanding=" + commonStockSharesOutstanding +"\n"+
+                ", dividendsPerShare=" + dividendsPerShare +"\n"+
+                ", netIncomeApplicableToCommonShares=" + netIncomeApplicableToCommonShares +"\n"+
+                ", earningsPerShare=" + earningsPerShare +"\n"+
+                ", payOutRatio=" + payOutRatio +"\n"+
+                ", dividendYield=" + dividendYield +"\n"+
+                '}';
     }
 }

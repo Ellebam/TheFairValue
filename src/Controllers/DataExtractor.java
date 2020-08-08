@@ -6,7 +6,10 @@ import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 import javax.swing.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 
 public  class DataExtractor {
@@ -104,7 +107,23 @@ public  class DataExtractor {
         }
         return CashFlowDataList;
     }
-
+    public static ArrayList<FinancialDataObject> calculateMargins(String marginName, ArrayList<FinancialDataObject> sampleProfit,
+                                                                             ArrayList<FinancialDataObject> sampleRevenue){
+        ArrayList<FinancialDataObject> marginList = new ArrayList<>();
+        if (sampleProfit.size() == sampleRevenue.size()){
+            for (int i=0; i<sampleProfit.size();i++){
+                double sampleProfitDataPoint = sampleProfit.get(i).getValue();
+                double sampleRevenueDataPoint = sampleRevenue.get(i).getValue();
+                if (!(sampleRevenueDataPoint==0.00000)) {
+                    Double value = sampleProfitDataPoint / sampleRevenueDataPoint;
+                    String date = sampleProfit.get(i).getDate();
+                    FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
+                    marginList.add(marginObject);
+                }
+            }
+        }else{JOptionPane.showMessageDialog(null,"Error!");}
+        return  marginList;
+    }
     public static ArrayList<FinancialDataObject> calculateMargins_IN_PERCENT(String marginName, ArrayList<FinancialDataObject> sampleProfit,
                                                                              ArrayList<FinancialDataObject> sampleRevenue){
         ArrayList<FinancialDataObject> marginList = new ArrayList<>();
@@ -113,7 +132,7 @@ public  class DataExtractor {
                 double sampleProfitDataPoint = sampleProfit.get(i).getValue();
                 double sampleRevenueDataPoint = sampleRevenue.get(i).getValue();
                 if (!(sampleRevenueDataPoint==0.00000)) {
-                    Double value = sampleProfitDataPoint / sampleRevenueDataPoint * 100;
+                    Double value = (sampleProfitDataPoint / sampleRevenueDataPoint) * 100;
                     String date = sampleProfit.get(i).getDate();
                     FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
                     marginList.add(marginObject);
@@ -131,7 +150,7 @@ public  class DataExtractor {
                 double dividendPayoutDataPoint = dividendPayout.get(i).getValue();
                 double commonStockSharesOutstandingDataPoint = commonStockSharesOutstanding.get(i).getValue();
                 if (!(commonStockSharesOutstandingDataPoint==0.00000)) {
-                    Double value = -(dividendPayoutDataPoint) / commonStockSharesOutstandingDataPoint;
+                    double value = -(dividendPayoutDataPoint) / commonStockSharesOutstandingDataPoint;
                     String date = dividendPayout.get(i).getDate();
                     FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
                     marginList.add(marginObject);
@@ -139,6 +158,33 @@ public  class DataExtractor {
             }
         }else{JOptionPane.showMessageDialog(null,"Error!");}
         return  marginList;
+    }
+
+    public static ArrayList<FinancialDataObject> calclateDividendYield (String name, ArrayList<FinancialDataObject> dividendPerShare,
+                                                                       ArrayList<FinancialDataObject> historicalStockPrice)
+    throws Exception{
+         ArrayList<FinancialDataObject> dividendYieldList = new ArrayList<>();
+         int u = 0;
+         for (int i = 0; i<dividendPerShare.size();i++){
+             String date = dividendPerShare.get(i).getDate();
+             for(int a = u; a<historicalStockPrice.size();u++){
+                 SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+                 Date dividendPerShareDate = dateFormat.parse(dividendPerShare.get(i).getDate());
+
+                 Date historicalStockPriceDate = dateFormat.parse(historicalStockPrice.get(a).getDate());
+
+                 if(dividendPerShareDate.getMonth() == historicalStockPriceDate.getMonth() &&
+                         dividendPerShareDate.getYear()==historicalStockPriceDate.getYear()){
+                     double dividendPerShareDataPoint = dividendPerShare.get(i).getValue();
+                     double historicalStockPriceDataPoint = historicalStockPrice.get(a).getValue();
+                     double value = (dividendPerShareDataPoint/historicalStockPriceDataPoint)*100;
+                     FinancialDataObject dividendYieldObject = new FinancialDataObject(name,value,date);
+                     dividendYieldList.add(dividendYieldObject);
+                     break;
+                 } else{a =u;}
+             }
+
+         }return dividendYieldList;
     }
 
     public static Double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
