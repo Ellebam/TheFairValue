@@ -188,8 +188,8 @@ public  class DataExtractor {
     }
 
     public static Double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
-         Double sum =0.0;
-         Double average;
+         double sum =0.0;
+         double average;
          if(!financialDataObject.isEmpty()){
              for(int i=0; i<financialDataObject.size();i++){
                  double dataPoint =financialDataObject.get(i).getValue();
@@ -202,12 +202,21 @@ public  class DataExtractor {
          return average;
     }
 
+    public static double calculateRelativeChange (ArrayList<FinancialDataObject> financialDataObject,int timeFrameInArrayListUnits){
+         double relativeChange = 0.0;
+         if(!financialDataObject.isEmpty()) {
+             double lastValue = financialDataObject.get(0).getValue();
+             double firstValue = financialDataObject.get(timeFrameInArrayListUnits).getValue();
+             relativeChange =((lastValue-firstValue)/lastValue)*100;
+         }return  relativeChange;
+    }
+
     public static ArrayList<FinancialDataObject> subtractTwoValues(String valueName, ArrayList<FinancialDataObject> minuend,
                                                                    ArrayList<FinancialDataObject> subtrahend) {
         ArrayList<FinancialDataObject> difference = new ArrayList<>();
         if (minuend.size() == subtrahend.size()) {
             for (int i = 0; i < minuend.size(); i++) {
-                Double value = minuend.get(i).getValue() - subtrahend.get(i).getValue();
+                double value = minuend.get(i).getValue() - subtrahend.get(i).getValue();
                 String date = minuend.get(i).getDate();
                 FinancialDataObject differenceObject = new FinancialDataObject(valueName, value, date);
                 difference.add(differenceObject);

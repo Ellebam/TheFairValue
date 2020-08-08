@@ -2,6 +2,7 @@ package sample;
 
 import Controllers.ClientManager;
 import Controllers.DataContainerManager;
+import Controllers.DataExtractor;
 import Data.CompanyFundamentalData;
 import Data.CompanyOverviewData;
 
@@ -23,8 +24,10 @@ public class Main /*extends Application */{
         try {
            ClientManager ClientManager = new ClientManager("JNJ","diggi");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
-            System.out.println(dataContainerManager.getCompanyOverviewData().toString());
-            System.out.println(dataContainerManager.getCompanyFundamentalData().toString());
+
+            System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),90));
+            System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),365));
+            System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),1400));
 
         }catch (Exception ex){ex.printStackTrace();}
 

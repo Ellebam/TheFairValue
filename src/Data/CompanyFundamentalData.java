@@ -28,21 +28,22 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> netIncomeApplicableToCommonShares;
     private ArrayList<FinancialDataObject> earningsPerShare;
     private ArrayList<FinancialDataObject> dividendYield;
-
-
     private ArrayList<FinancialDataObject> payOutRatio;
-
-
-
-
-
-
     private ArrayList<FinancialDataObject> operatingCashflow;
+    private ArrayList<FinancialDataObject> cash;
+    private ArrayList<FinancialDataObject>  debtRatio;
+    private ArrayList<FinancialDataObject>  longTermDebt;
+    private ArrayList<FinancialDataObject>  shortTermDebt;
+    private ArrayList<FinancialDataObject>  longTermInvestements;
+    private ArrayList<FinancialDataObject>  shortTermInvestement;
+    private ArrayList<FinancialDataObject>  longDebtToInvestementRatio;
+    private ArrayList<FinancialDataObject>  shortDebtToInvestementRatio;
+
 
 
     private ClientManager clientManager;
 
-    private Double averageTotalRevenue;
+
 
 
 public CompanyFundamentalData(ClientManager clientManager, DataContainerManager dataContainerManager) throws Exception{
@@ -70,11 +71,13 @@ public CompanyFundamentalData(ClientManager clientManager, DataContainerManager 
     payOutRatio =DataExtractor.calculateMargins_IN_PERCENT("payoutRatio",dividendsPerShare,earningsPerShare);
     dividendYield = DataExtractor.calclateDividendYield("dividendYield",dividendsPerShare,
             dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice());
+    cash = getDataFromBalanceSheet(clientManager,"cash");
 
 
 
 
-    averageTotalRevenue = DataExtractor.calculateMean(totalRevenue);
+
+
 
 
 
