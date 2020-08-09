@@ -51,6 +51,15 @@ public  class DataExtractor {
          return stockPriceList;
      }
 
+    /**
+     * Main method used to extract Data from the generated Income Satement JSON-Object. It iterates through the JSON File
+     * under the Subnode "quarterly reports" (more avaiable data than "yearly" reports) and will extract all found values
+     * + their corresponding dates as a double (value) and a string (date) into a newly created FinancialDataObject inside
+     * a container Arraylist (which it will return). If the result of the found value is "none" it will save a zero value.
+     * @param keyName   key to find the searching value inside JSON File
+     * @param ClientManager object for API connection
+     * @return ArrayList containing all FinancialDataObjects containing requested data
+     */
      public static ArrayList<FinancialDataObject> extractIncomeStatementData(String keyName, ClientManager ClientManager){
          ArrayList<FinancialDataObject> IncomeStatementDataList = new ArrayList<>();
          JSONArray jsonArray= ClientManager.getIncomeStatementClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
@@ -70,6 +79,12 @@ public  class DataExtractor {
          return IncomeStatementDataList;
      }
 
+    /**
+     * Same method as extractIncomeStatementData() but with the "BalanceSheet" functionality as its source
+     * @param keyName key to find the searching value inside JSON File
+     * @param ClientManager object for API connection
+     * @return ArrayList containing all FinancialDataObjects containing requested data
+     */
     public static ArrayList<FinancialDataObject> extractBalanceSheetData(String keyName, ClientManager ClientManager){
         ArrayList<FinancialDataObject> BalanceSheetDataList = new ArrayList<>();
         JSONArray jsonArray= ClientManager.getBalanceSheetClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
@@ -89,6 +104,12 @@ public  class DataExtractor {
         return BalanceSheetDataList;
     }
 
+    /**
+     * Same method as extractIncomeStatementData() but with the "CashFlow" functionality as its source
+     * @param keyName key to find the searching value inside JSON File
+     * @param ClientManager object for API connection
+     * @return ArrayList containing all FinancialDataObjects containing requested data
+     */
     public static ArrayList<FinancialDataObject> extractCashFlowData(String keyName, ClientManager ClientManager){
         ArrayList<FinancialDataObject> CashFlowDataList = new ArrayList<>();
         JSONArray jsonArray= ClientManager.getCashFlowClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
@@ -107,6 +128,16 @@ public  class DataExtractor {
         }
         return CashFlowDataList;
     }
+
+    /**
+     * Used for calculating the margin of two given values. It will take two ArrayLists containing FinancialDataObjects
+     * and iterate through both while calculating the margins of the values in the same position of their corresponding
+     * ArrayList.
+     * @param marginName name of the new DataList
+     * @param sampleProfit the dividend
+     * @param sampleRevenue the divisor
+     * @return ArrayList containing FinancialDataObjects with quotients of the divisions as values
+     */
     public static ArrayList<FinancialDataObject> calculateMargins(String marginName, ArrayList<FinancialDataObject> sampleProfit,
                                                                              ArrayList<FinancialDataObject> sampleRevenue){
         ArrayList<FinancialDataObject> marginList = new ArrayList<>();
@@ -124,6 +155,14 @@ public  class DataExtractor {
         }else{JOptionPane.showMessageDialog(null,"Error!");}
         return  marginList;
     }
+
+    /**
+     * Same method as calculateMargins() but with percent values
+     * @param marginName name of the new DataList
+     * @param sampleProfit the dividend
+     * @param sampleRevenue the divisor
+     * @return ArrayList containing FinancialDataObjects with quotients of the divisions as values
+     */
     public static ArrayList<FinancialDataObject> calculateMargins_IN_PERCENT(String marginName, ArrayList<FinancialDataObject> sampleProfit,
                                                                              ArrayList<FinancialDataObject> sampleRevenue){
         ArrayList<FinancialDataObject> marginList = new ArrayList<>();
@@ -142,6 +181,13 @@ public  class DataExtractor {
         return  marginList;
     }
 
+    /**
+     * almost same method as calculateMargins() but with changed mathematical sign (data for dividend payout is negative)
+     * @param marginName name for new Data
+     * @param dividendPayout dividendPayout value
+     * @param commonStockSharesOutstanding number of outstanding common stocks
+     * @return ArrayList containing FinancialDataObjects with quotients of the divisions as values (positive)
+     */
     public static ArrayList<FinancialDataObject> calculateDividendsPerShare(String marginName, ArrayList<FinancialDataObject> dividendPayout,
                                                                             ArrayList<FinancialDataObject> commonStockSharesOutstanding){
         ArrayList<FinancialDataObject> marginList = new ArrayList<>();
@@ -160,8 +206,19 @@ public  class DataExtractor {
         return  marginList;
     }
 
-    public static ArrayList<FinancialDataObject> calclateDividendYield (String name, ArrayList<FinancialDataObject> dividendPerShare,
-                                                                       ArrayList<FinancialDataObject> historicalStockPrice)
+    /**
+     * Method to calculate dividend Yield when given two ArrayLists containing dividendPerShare and historicalStockPrices
+     * Since the two lists have different  Data Point Date-Modulation (quarterley vs daily) the method is designed to
+     * used the dividendPerShare Date (Year and month) to search for the first entry of the historicalStockPrice List date found (it will
+     * be the last reported stock price for that particular month).
+     * @param name name for new Data
+     * @param dividendPerShare list containing dividendPerShare Data
+     * @param historicalStockPrice list containing historicalStockPrices
+     * @return list containing dividend Yield FinancialDataObjects
+     * @throws Exception if found no values
+     */
+    public static ArrayList<FinancialDataObject> calculateDividendYield(String name, ArrayList<FinancialDataObject> dividendPerShare,
+                                                                        ArrayList<FinancialDataObject> historicalStockPrice)
     throws Exception{
          ArrayList<FinancialDataObject> dividendYieldList = new ArrayList<>();
          int u = 0;
@@ -202,15 +259,32 @@ public  class DataExtractor {
          return average;
     }
 
-    public static double calculateRelativeChange (ArrayList<FinancialDataObject> financialDataObject,int timeFrameInArrayListUnits){
+    /**
+     * This method will take an ArrayList>FinancialDataObject> and calculate the relative change of its first value (last
+     * reported value in the real world) with a value chosen by the user. For finding that value a int is used to determine
+     * how far thet iteration to that value has to be.
+     * @param financialDataObjectList List containing all values
+     * @param timeFrameInArrayListUnits number determined to set the position of the searched value(+1 = one position
+     *                                  further in the ArrayList)
+     * @return relative change of the given values as a double in percent
+     */
+    public static double calculateRelativeChange (ArrayList<FinancialDataObject> financialDataObjectList,int timeFrameInArrayListUnits){
          double relativeChange = 0.0;
-         if(!financialDataObject.isEmpty()) {
-             double lastValue = financialDataObject.get(0).getValue();
-             double firstValue = financialDataObject.get(timeFrameInArrayListUnits).getValue();
+         if(!financialDataObjectList.isEmpty()) {
+             double lastValue = financialDataObjectList.get(0).getValue();
+             double firstValue = financialDataObjectList.get(timeFrameInArrayListUnits).getValue();
              relativeChange =((lastValue-firstValue)/lastValue)*100;
          }return  relativeChange;
     }
 
+    /**
+     * Method used for subtracting of  all values from one ArrayList from the corresponding values of another ArrayList
+     * (both containing FinancialDataObjects).
+     * @param valueName name of new Data
+     * @param minuend list containing the minuend values
+     * @param subtrahend list containing the subtrahend values
+     * @return new DataList for subtracted values
+     */
     public static ArrayList<FinancialDataObject> subtractTwoValues(String valueName, ArrayList<FinancialDataObject> minuend,
                                                                    ArrayList<FinancialDataObject> subtrahend) {
         ArrayList<FinancialDataObject> difference = new ArrayList<>();

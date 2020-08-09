@@ -25,6 +25,7 @@ public class Main /*extends Application */{
            ClientManager ClientManager = new ClientManager("JNJ","diggi");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
+            System.out.println(dataContainerManager.getCompanyFundamentalData());
             System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),90));
             System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),365));
             System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),1400));

@@ -6,6 +6,11 @@ import Controllers.DataExtractor;
 
 import java.util.ArrayList;
 
+
+/**
+ * This is the DataContainer-Class for fundamental data of a company. Most of its instance variables represent ArrayLists
+ * which containing FinancialDataObjects of the data which they are named to
+ */
 public class CompanyFundamentalData {
 
     private CompanyFundamentalData companyFundamentalData;
@@ -34,10 +39,10 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject>  debtRatio;
     private ArrayList<FinancialDataObject>  longTermDebt;
     private ArrayList<FinancialDataObject>  shortTermDebt;
-    private ArrayList<FinancialDataObject>  longTermInvestements;
-    private ArrayList<FinancialDataObject>  shortTermInvestement;
-    private ArrayList<FinancialDataObject>  longDebtToInvestementRatio;
-    private ArrayList<FinancialDataObject>  shortDebtToInvestementRatio;
+    private ArrayList<FinancialDataObject> longTermInvestments;
+    private ArrayList<FinancialDataObject> shortTermInvestments;
+    private ArrayList<FinancialDataObject> longDebtToInvestmentsRatio;
+    private ArrayList<FinancialDataObject> shortDebtToInvestmentsRatio;
 
 
 
@@ -69,9 +74,19 @@ public CompanyFundamentalData(ClientManager clientManager, DataContainerManager 
     netIncomeApplicableToCommonShares = getDataFromIncomeStatement(clientManager,"netIncomeApplicableToCommonShares");
     earningsPerShare = DataExtractor.calculateMargins("earningsPerShare",netIncomeApplicableToCommonShares,commonStockSharesOutstanding);
     payOutRatio =DataExtractor.calculateMargins_IN_PERCENT("payoutRatio",dividendsPerShare,earningsPerShare);
-    dividendYield = DataExtractor.calclateDividendYield("dividendYield",dividendsPerShare,
+    dividendYield = DataExtractor.calculateDividendYield("dividendYield",dividendsPerShare,
             dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice());
     cash = getDataFromBalanceSheet(clientManager,"cash");
+    debtRatio = DataExtractor.calculateMargins_IN_PERCENT("debtRatio",totalLiabilities,totalAssets);
+    longTermDebt = getDataFromBalanceSheet(clientManager,"longTermDebt");
+    shortTermDebt = getDataFromBalanceSheet(clientManager,"shortTermDebt");
+    longTermInvestments = getDataFromBalanceSheet(clientManager,"longTermInvestments");
+    shortTermInvestments = getDataFromBalanceSheet(clientManager,"shortTermInvestments");
+    longDebtToInvestmentsRatio =DataExtractor.calculateMargins_IN_PERCENT("longTermDebtToInvestmentsRatio",longTermDebt,
+            longTermInvestments);
+    shortDebtToInvestmentsRatio =DataExtractor.calculateMargins_IN_PERCENT("shortTermDebtToInvestmentsRatio",shortTermDebt,
+            shortTermInvestments);
+
 
 
 
@@ -103,10 +118,242 @@ public CompanyFundamentalData(ClientManager clientManager, DataContainerManager 
     }
 
 
+    public ArrayList<FinancialDataObject> getTotalRevenue() {
+        return totalRevenue;
+    }
+
+    public void setTotalRevenue(ArrayList<FinancialDataObject> totalRevenue) {
+        this.totalRevenue = totalRevenue;
+    }
+
+    public ArrayList<FinancialDataObject> getNetIncome() {
+        return netIncome;
+    }
+
+    public void setNetIncome(ArrayList<FinancialDataObject> netIncome) {
+        this.netIncome = netIncome;
+    }
+
+    public ArrayList<FinancialDataObject> getGrossProfit() {
+        return grossProfit;
+    }
+
+    public void setGrossProfit(ArrayList<FinancialDataObject> grossProfit) {
+        this.grossProfit = grossProfit;
+    }
+
+    public ArrayList<FinancialDataObject> getGrossMargin() {
+        return grossMargin;
+    }
+
+    public void setGrossMargin(ArrayList<FinancialDataObject> grossMargin) {
+        this.grossMargin = grossMargin;
+    }
+
+    public ArrayList<FinancialDataObject> getOperatingIncome() {
+        return operatingIncome;
+    }
+
+    public void setOperatingIncome(ArrayList<FinancialDataObject> operatingIncome) {
+        this.operatingIncome = operatingIncome;
+    }
+
+    public ArrayList<FinancialDataObject> getOperatingMargin() {
+        return operatingMargin;
+    }
+
+    public void setOperatingMargin(ArrayList<FinancialDataObject> operatingMargin) {
+        this.operatingMargin = operatingMargin;
+    }
+
+    public ArrayList<FinancialDataObject> getNetMargin() {
+        return netMargin;
+    }
+
+    public void setNetMargin(ArrayList<FinancialDataObject> netMargin) {
+        this.netMargin = netMargin;
+    }
+
+    public ArrayList<FinancialDataObject> getDepreciation() {
+        return depreciation;
+    }
+
+    public void setDepreciation(ArrayList<FinancialDataObject> depreciation) {
+        this.depreciation = depreciation;
+    }
+
+    public ArrayList<FinancialDataObject> getCapitalExpenditures() {
+        return capitalExpenditures;
+    }
+
+    public void setCapitalExpenditures(ArrayList<FinancialDataObject> capitalExpenditures) {
+        this.capitalExpenditures = capitalExpenditures;
+    }
+
+    public ArrayList<FinancialDataObject> getTotalAssets() {
+        return totalAssets;
+    }
+
+    public void setTotalAssets(ArrayList<FinancialDataObject> totalAssets) {
+        this.totalAssets = totalAssets;
+    }
+
+    public ArrayList<FinancialDataObject> getTotalLiabilities() {
+        return totalLiabilities;
+    }
+
+    public void setTotalLiabilities(ArrayList<FinancialDataObject> totalLiabilities) {
+        this.totalLiabilities = totalLiabilities;
+    }
+
+    public ArrayList<FinancialDataObject> getWorkingCapital() {
+        return workingCapital;
+    }
+
+    public void setWorkingCapital(ArrayList<FinancialDataObject> workingCapital) {
+        this.workingCapital = workingCapital;
+    }
+
+    public ArrayList<FinancialDataObject> getFreeCashFlow() {
+        return freeCashFlow;
+    }
+
+    public void setFreeCashFlow(ArrayList<FinancialDataObject> freeCashFlow) {
+        this.freeCashFlow = freeCashFlow;
+    }
+
+    public ArrayList<FinancialDataObject> getDividendPayout() {
+        return dividendPayout;
+    }
+
+    public void setDividendPayout(ArrayList<FinancialDataObject> dividendPayout) {
+        this.dividendPayout = dividendPayout;
+    }
+
+    public ArrayList<FinancialDataObject> getCommonStockSharesOutstanding() {
+        return commonStockSharesOutstanding;
+    }
+
+    public void setCommonStockSharesOutstanding(ArrayList<FinancialDataObject> commonStockSharesOutstanding) {
+        this.commonStockSharesOutstanding = commonStockSharesOutstanding;
+    }
+
+    public ArrayList<FinancialDataObject> getDividendsPerShare() {
+        return dividendsPerShare;
+    }
+
+    public void setDividendsPerShare(ArrayList<FinancialDataObject> dividendsPerShare) {
+        this.dividendsPerShare = dividendsPerShare;
+    }
+
+    public ArrayList<FinancialDataObject> getNetIncomeApplicableToCommonShares() {
+        return netIncomeApplicableToCommonShares;
+    }
+
+    public void setNetIncomeApplicableToCommonShares(ArrayList<FinancialDataObject> netIncomeApplicableToCommonShares) {
+        this.netIncomeApplicableToCommonShares = netIncomeApplicableToCommonShares;
+    }
+
+    public ArrayList<FinancialDataObject> getEarningsPerShare() {
+        return earningsPerShare;
+    }
+
+    public void setEarningsPerShare(ArrayList<FinancialDataObject> earningsPerShare) {
+        this.earningsPerShare = earningsPerShare;
+    }
+
+    public ArrayList<FinancialDataObject> getDividendYield() {
+        return dividendYield;
+    }
+
+    public void setDividendYield(ArrayList<FinancialDataObject> dividendYield) {
+        this.dividendYield = dividendYield;
+    }
+
+    public ArrayList<FinancialDataObject> getPayOutRatio() {
+        return payOutRatio;
+    }
+
+    public void setPayOutRatio(ArrayList<FinancialDataObject> payOutRatio) {
+        this.payOutRatio = payOutRatio;
+    }
+
+    public ArrayList<FinancialDataObject> getOperatingCashflow() {
+        return operatingCashflow;
+    }
+
+    public void setOperatingCashflow(ArrayList<FinancialDataObject> operatingCashflow) {
+        this.operatingCashflow = operatingCashflow;
+    }
+
+    public ArrayList<FinancialDataObject> getCash() {
+        return cash;
+    }
+
+    public void setCash(ArrayList<FinancialDataObject> cash) {
+        this.cash = cash;
+    }
+
+    public ArrayList<FinancialDataObject> getDebtRatio() {
+        return debtRatio;
+    }
+
+    public void setDebtRatio(ArrayList<FinancialDataObject> debtRatio) {
+        this.debtRatio = debtRatio;
+    }
+
+    public ArrayList<FinancialDataObject> getLongTermDebt() {
+        return longTermDebt;
+    }
+
+    public void setLongTermDebt(ArrayList<FinancialDataObject> longTermDebt) {
+        this.longTermDebt = longTermDebt;
+    }
+
+    public ArrayList<FinancialDataObject> getShortTermDebt() {
+        return shortTermDebt;
+    }
+
+    public void setShortTermDebt(ArrayList<FinancialDataObject> shortTermDebt) {
+        this.shortTermDebt = shortTermDebt;
+    }
+
+    public ArrayList<FinancialDataObject> getLongTermInvestments() {
+        return longTermInvestments;
+    }
+
+    public void setLongTermInvestments(ArrayList<FinancialDataObject> longTermInvestments) {
+        this.longTermInvestments = longTermInvestments;
+    }
+
+    public ArrayList<FinancialDataObject> getShortTermInvestments() {
+        return shortTermInvestments;
+    }
+
+    public void setShortTermInvestments(ArrayList<FinancialDataObject> shortTermInvestments) {
+        this.shortTermInvestments = shortTermInvestments;
+    }
+
+    public ArrayList<FinancialDataObject> getLongDebtToInvestmentsRatio() {
+        return longDebtToInvestmentsRatio;
+    }
+
+    public void setLongDebtToInvestmentsRatio(ArrayList<FinancialDataObject> longDebtToInvestmentsRatio) {
+        this.longDebtToInvestmentsRatio = longDebtToInvestmentsRatio;
+    }
+
+    public ArrayList<FinancialDataObject> getShortDebtToInvestmentsRatio() {
+        return shortDebtToInvestmentsRatio;
+    }
+
+    public void setShortDebtToInvestmentsRatio(ArrayList<FinancialDataObject> shortDebtToInvestmentsRatio) {
+        this.shortDebtToInvestmentsRatio = shortDebtToInvestmentsRatio;
+    }
+
     @Override
     public String toString() {
-        return "CompanyFundamentalData{" +
-                "totalRevenue=" + totalRevenue + "\n"+
+        return "CompanyFundamentalData{" + "\n"+
+                "totalRevenue=" + totalRevenue +"\n"+
                 ", netIncome=" + netIncome +"\n"+
                 ", grossProfit=" + grossProfit +"\n"+
                 ", grossMargin=" + grossMargin +"\n"+
@@ -124,8 +371,17 @@ public CompanyFundamentalData(ClientManager clientManager, DataContainerManager 
                 ", dividendsPerShare=" + dividendsPerShare +"\n"+
                 ", netIncomeApplicableToCommonShares=" + netIncomeApplicableToCommonShares +"\n"+
                 ", earningsPerShare=" + earningsPerShare +"\n"+
-                ", payOutRatio=" + payOutRatio +"\n"+
                 ", dividendYield=" + dividendYield +"\n"+
+                ", payOutRatio=" + payOutRatio +"\n"+
+                ", operatingCashflow=" + operatingCashflow +"\n"+
+                ", cash=" + cash +"\n"+
+                ", debtRatio=" + debtRatio +"\n"+
+                ", longTermDebt=" + longTermDebt +"\n"+
+                ", shortTermDebt=" + shortTermDebt +"\n"+
+                ", longTermInvestments=" + longTermInvestments +"\n"+
+                ", shortTermInvestments=" + shortTermInvestments +"\n"+
+                ", longDebtToInvestmentsRatio=" + longDebtToInvestmentsRatio +"\n"+
+                ", shortDebtToInvestmentsRatio=" + shortDebtToInvestmentsRatio +"\n"+
                 '}';
     }
 }
