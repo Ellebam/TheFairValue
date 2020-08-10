@@ -244,7 +244,7 @@ public  class DataExtractor {
          }return dividendYieldList;
     }
 
-    public static Double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
+    public static double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
          double sum =0.0;
          double average;
          if(!financialDataObject.isEmpty()){
@@ -278,6 +278,43 @@ public  class DataExtractor {
     }
 
     /**
+     * This method will calculate the mean change in values given any ArrayList containing Financial Data Objects. It
+     * will take the Arraylist and also a int for deciding how far to traverse the ArrayList (if 0 is selected all values
+     * are calculated for the mean relative change.
+     * @param financialDataObjects
+     * @param timeFrameInArrayListUnits
+     * @return
+     */
+    public static double calculateMeanRelativeChange (ArrayList<FinancialDataObject> financialDataObjects, int timeFrameInArrayListUnits){
+        double meanRelativeChange = 0.0;
+        if (!financialDataObjects.isEmpty()){
+            double sumOfValues = 0.0;
+            int numOfValues;
+            if (timeFrameInArrayListUnits == 0){
+                numOfValues = financialDataObjects.size();
+                for (int i = 0; i<financialDataObjects.size()-1;i++){
+                    double currentValue = financialDataObjects.get(i).getValue();
+                    double pastValue = financialDataObjects.get(i+1).getValue();
+                    double relativeChange  = ((currentValue-pastValue)/currentValue)*100;
+                    System.out.println(relativeChange);
+                    sumOfValues += relativeChange;
+                    numOfValues++;
+                }
+            }else{
+                numOfValues = timeFrameInArrayListUnits + 1;
+                for(int i = 0; i<timeFrameInArrayListUnits;i++){
+                    double currentValue = financialDataObjects.get(i).getValue();
+                    double pastValue = financialDataObjects.get(i+1).getValue();
+                    double relativeChange  = ((currentValue-pastValue)/currentValue)*100;
+                    sumOfValues += relativeChange;
+                    numOfValues++;
+                }
+            }
+            meanRelativeChange = sumOfValues/numOfValues;
+        }return meanRelativeChange;
+    }
+
+    /**
      * Method used for subtracting of  all values from one ArrayList from the corresponding values of another ArrayList
      * (both containing FinancialDataObjects).
      * @param valueName name of new Data
@@ -301,6 +338,22 @@ public  class DataExtractor {
         return difference;
 
     }
+
+    public static  double calculateCAGR (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
+        double CAGR = 0.00;
+        if (!financialDataObjects.isEmpty()){
+            double endingValue = financialDataObjects.get(0).getValue();
+            double beginningValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
+            double numOfYears = timeFrameInArrayListUnits/365;
+
+        }return CAGR;
+    }
+
+   /* public static ArrayList<FinancialDataObject> calculateDCFFairValue (String valueName, DataContainerManager dataContainerManager){
+        ArrayList<FinancialDataObject> DCFFairValue = new ArrayList<>();
+        double meanFreeCashFlowYearly = calculateMean(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow()) *4;
+        double mean
+    }*/
 
 
 

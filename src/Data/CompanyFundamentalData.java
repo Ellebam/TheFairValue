@@ -8,8 +8,9 @@ import java.util.ArrayList;
 
 
 /**
- * This is the DataContainer-Class for fundamental data of a company. Most of its instance variables represent ArrayLists
- * which containing FinancialDataObjects of the data which they are named to
+ * This is the DataContainer-Class for creating and storing of fundamental data of a company.
+ * Most of its instance variables represent ArrayLists which containing FinancialDataObjects of the data which they are
+ * named to.
  */
 public class CompanyFundamentalData {
 
@@ -49,9 +50,15 @@ public class CompanyFundamentalData {
     private ClientManager clientManager;
 
 
-
-
-public CompanyFundamentalData(ClientManager clientManager, DataContainerManager dataContainerManager) throws Exception{
+    /**
+     * The Constructor for this class will set up all instance variables using either one of the 3 class methods to get
+     * data directly from the raw datasheet (Income-Statement, Balance-Sheet, cashflow statement from the APIClients in
+     * ClientManager) or use one of the DataExtractor static methods to calculate certain values (e.g. gross margin).
+     * @param clientManager Object in which all API-Connections are established an all raw data objects are created and stored
+     * @param dataContainerManager Object containing all DataClasses (like this one)
+     * @throws Exception might throw a nullpointer Exception when data limit of API is reached (max 5 calls per minute)
+     */
+    public CompanyFundamentalData(ClientManager clientManager, DataContainerManager dataContainerManager) throws Exception{
     companyFundamentalData = this;
     this.clientManager = clientManager;
     totalRevenue = getDataFromIncomeStatement(clientManager,"totalRevenue");
@@ -82,9 +89,9 @@ public CompanyFundamentalData(ClientManager clientManager, DataContainerManager 
     shortTermDebt = getDataFromBalanceSheet(clientManager,"shortTermDebt");
     longTermInvestments = getDataFromBalanceSheet(clientManager,"longTermInvestments");
     shortTermInvestments = getDataFromBalanceSheet(clientManager,"shortTermInvestments");
-    longDebtToInvestmentsRatio =DataExtractor.calculateMargins_IN_PERCENT("longTermDebtToInvestmentsRatio",longTermDebt,
+    longDebtToInvestmentsRatio =DataExtractor.calculateMargins("longTermDebtToInvestmentsRatio",longTermDebt,
             longTermInvestments);
-    shortDebtToInvestmentsRatio =DataExtractor.calculateMargins_IN_PERCENT("shortTermDebtToInvestmentsRatio",shortTermDebt,
+    shortDebtToInvestmentsRatio =DataExtractor.calculateMargins("shortTermDebtToInvestmentsRatio",shortTermDebt,
             shortTermInvestments);
 
 
@@ -102,16 +109,34 @@ public CompanyFundamentalData(ClientManager clientManager, DataContainerManager 
 
 }
 
+    /**
+     * Method for accessing data from the Balance sheet from the corresponding AlphavantageAPIClient
+     * @param clientManager object containing all data clients (here we access the BalanceSheetClient)
+     * @param variableName key for finding certain data (e.g. "totalAssets")
+     * @return returns an ArrayList<FinancialDataObject> containing all searched data with values and dates
+     */
     ArrayList<FinancialDataObject> getDataFromBalanceSheet(ClientManager clientManager,String variableName){
         ArrayList<FinancialDataObject> variable = DataExtractor.extractBalanceSheetData(variableName, clientManager);
     return variable;
 }
 
+    /**
+     * Same method as getDataFromBalanceSheet but for the IncomeStatementClient
+     * @param clientManager object containing all data clients (here we access the BalanceSheetClient)
+     * @param variableName key for finding certain data (e.g. "totalAssets")
+     * @return returns an ArrayList<FinancialDataObject> containing all searched data with values and dates
+     */
     ArrayList<FinancialDataObject> getDataFromIncomeStatement(ClientManager clientManager,String variableName){
         ArrayList<FinancialDataObject> variable = DataExtractor.extractIncomeStatementData(variableName, clientManager);
         return variable;
     }
 
+    /**
+     * Same method as getDataFromBalanceSheet but for the CashFlowStatementClient
+     * @param clientManager object containing all data clients (here we access the BalanceSheetClient)
+     * @param variableName key for finding certain data (e.g. "totalAssets")
+     * @return returns an ArrayList<FinancialDataObject> containing all searched data with values and dates
+     */
     ArrayList<FinancialDataObject> getDataFromCashFlowStatement(ClientManager clientManager,String variableName){
         ArrayList<FinancialDataObject> variable = DataExtractor.extractCashFlowData(variableName, clientManager);
         return variable;

@@ -22,13 +22,14 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("JNJ","diggi");
+           ClientManager ClientManager = new ClientManager("MSFT","diggi");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
-            System.out.println(dataContainerManager.getCompanyFundamentalData());
-            System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),90));
-            System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),365));
-            System.out.println(DataExtractor.calculateRelativeChange(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),1400));
+
+
+
+
+
 
         }catch (Exception ex){ex.printStackTrace();}
 
