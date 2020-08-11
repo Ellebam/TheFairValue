@@ -22,10 +22,11 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("MSFT","diggi");
+           ClientManager ClientManager = new ClientManager("NKE","diggi");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
-
+            System.out.println(DataExtractor.calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow(),0));
+            System.out.println(DataExtractor.calculateTenYearDiscountedDCFSum(dataContainerManager));
 
 
 

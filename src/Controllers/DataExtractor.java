@@ -6,6 +6,7 @@ import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 import javax.swing.*;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -339,20 +340,58 @@ public  class DataExtractor {
 
     }
 
-    public static  double calculateCAGR (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
+    public static  double calculateCAGRFromDailyData (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
         double CAGR = 0.00;
         if (!financialDataObjects.isEmpty()){
             double endingValue = financialDataObjects.get(0).getValue();
             double beginningValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
             double numOfYears = timeFrameInArrayListUnits/365;
-
+            CAGR = Math.pow((endingValue/beginningValue),1.0/numOfYears)-1;
         }return CAGR;
     }
 
-   /* public static ArrayList<FinancialDataObject> calculateDCFFairValue (String valueName, DataContainerManager dataContainerManager){
+    public static  double calculateCAGRFromQuarterlyData (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
+        double CAGR = 0.00;
+        if (!financialDataObjects.isEmpty()){
+            System.out.println("not empty");
+            if(!(timeFrameInArrayListUnits==0)) {
+                double beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
+                double endingValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
+                double numOfYears = timeFrameInArrayListUnits /4;
+                CAGR = Math.pow((endingValue / beginningValue), (1.0 / numOfYears)) - 1;
+
+            }else if (timeFrameInArrayListUnits==0){
+                double beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
+                double endingValue = financialDataObjects.get(0).getValue();
+                double numOfYears = financialDataObjects.size() / 4;
+                CAGR = Math.pow((endingValue / beginningValue), (1.0 / numOfYears)) - 1;
+            }
+        }return CAGR;
+    }
+
+    public static double calculateTenYearDiscountedDCFSum(DataContainerManager dataContainerManager){
+        double DCFSum = 0.00;
+        double discountFactor = 1.15;
+        double currentFreeCashFlow = dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().get(0).getValue();
+        double CAGR = calculateCAGRFromQuarterlyData(dataContainerManager.
+                getCompanyFundamentalData().getFreeCashFlow(),0);
+        for (int i =0; i<10;i++){
+            double dicountedFreeCashFLow = currentFreeCashFlow/discountFactor;
+            DCFSum+=dicountedFreeCashFLow;
+            discountFactor+=0.15;
+            currentFreeCashFlow = currentFreeCashFlow*(1+CAGR);
+        }
+        return DCFSum;
+
+    }
+
+
+    /*public static ArrayList<FinancialDataObject> calculateDCFFairValue (String valueName, DataContainerManager dataContainerManager){
         ArrayList<FinancialDataObject> DCFFairValue = new ArrayList<>();
         double meanFreeCashFlowYearly = calculateMean(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow()) *4;
-        double mean
+        double meanGrowRateOfFreeCashFlow = 1.15*(calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow(),0));
+
+
     }*/
 
 
