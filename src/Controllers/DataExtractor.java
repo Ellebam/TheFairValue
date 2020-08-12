@@ -5,6 +5,7 @@ import Data.FinancialDataObject;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
+import javax.naming.NameNotFoundException;
 import javax.swing.*;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -358,32 +359,81 @@ public  class DataExtractor {
                 double beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
                 double endingValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
                 double numOfYears = timeFrameInArrayListUnits /4;
-                CAGR = Math.pow((endingValue / beginningValue), (1.0 / numOfYears)) - 1;
+                double endToBeginningRatio = endingValue/beginningValue;
+                if (!(endToBeginningRatio<=0)) {
+                    CAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
+                }else{
+                    System.out.println("CashFlow increase less than 0!");}
 
             }else if (timeFrameInArrayListUnits==0){
                 double beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
                 double endingValue = financialDataObjects.get(0).getValue();
                 double numOfYears = financialDataObjects.size() / 4;
-                CAGR = Math.pow((endingValue / beginningValue), (1.0 / numOfYears)) - 1;
+                double endToBeginningRatio = endingValue/beginningValue;
+
+                if (!(endToBeginningRatio<=0)) {
+                    CAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
+
+                }else{
+                    System.out.println("CashFlow increase less than 0!");}
             }
-        }return CAGR;
+        }
+        return CAGR;
     }
 
-    public static double calculateTenYearDiscountedDCFSum(DataContainerManager dataContainerManager){
+   /* public static double calculateCAGRWithSingleValues (double endingValue, double beginningValue, double numOfYears){
+        double CAGR = 0.00;
+
+            double beginningValue =
+            double endingValue = financialDataObjects.get(0).getValue();
+            double numOfYears = financialDataObjects.size() / 4;
+            double endToBeginningRatio = endingValue/beginningValue;
+
+            if (!(endToBeginningRatio<=0)) {
+                CAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
+
+            }
+
+        return CAGR;
+}*/
+
+
+    public static double calculateDCFFairValuePerShare(DataContainerManager dataContainerManager){
+        double DCFFairValuePerShare = 0.00;
+        double lastDiscountedFreeCashFlowValue = 0.00;
         double DCFSum = 0.00;
-        double discountFactor = 1.15;
+        double discountFactor = 1.1;
         double currentFreeCashFlow = dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().get(0).getValue();
         double CAGR = calculateCAGRFromQuarterlyData(dataContainerManager.
                 getCompanyFundamentalData().getFreeCashFlow(),0);
         for (int i =0; i<10;i++){
-            double dicountedFreeCashFLow = currentFreeCashFlow/discountFactor;
-            DCFSum+=dicountedFreeCashFLow;
-            discountFactor+=0.15;
+            double discountedFreeCashFLow = currentFreeCashFlow/discountFactor;
+            DCFSum+=discountedFreeCashFLow;
+            discountFactor+=0.1;
             currentFreeCashFlow = currentFreeCashFlow*(1+CAGR);
+            if (i ==9){
+                lastDiscountedFreeCashFlowValue = discountedFreeCashFLow;
+            }
+
         }
-        return DCFSum;
+        double terminalValue = lastDiscountedFreeCashFlowValue*((1.03)/(0.07));
+        double totalAssets = dataContainerManager.getCompanyFundamentalData().getTotalAssets().get(0).getValue();
+        double totalLiabilities = dataContainerManager.getCompanyFundamentalData().getTotalLiabilities().get(0).getValue();
+        double outstandingShares = dataContainerManager.getCompanyFundamentalData().getCommonStockSharesOutstanding().get(0).getValue();
+        double netCash = totalAssets-totalLiabilities;
+        double totalFairValue = DCFSum+terminalValue+netCash;
+        if (outstandingShares==0.0){
+            outstandingShares = dataContainerManager.getCompanyFundamentalData().getCommonStockSharesOutstanding().get(1).getValue();
+         }
+        DCFFairValuePerShare = totalFairValue/outstandingShares;
+
+
+        return DCFFairValuePerShare;
+
 
     }
+
+
 
 
     /*public static ArrayList<FinancialDataObject> calculateDCFFairValue (String valueName, DataContainerManager dataContainerManager){

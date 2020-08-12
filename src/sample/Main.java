@@ -3,8 +3,6 @@ package sample;
 import Controllers.ClientManager;
 import Controllers.DataContainerManager;
 import Controllers.DataExtractor;
-import Data.CompanyFundamentalData;
-import Data.CompanyOverviewData;
 
 
 public class Main /*extends Application */{
@@ -22,11 +20,11 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("NKE","diggi");
+           ClientManager ClientManager = new ClientManager("JNJ","diggi");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
-            System.out.println(DataExtractor.calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow(),0));
-            System.out.println(DataExtractor.calculateTenYearDiscountedDCFSum(dataContainerManager));
+            System.out.println(dataContainerManager.getCompanyOverviewData().getName());
+            System.out.println(DataExtractor.calculateDCFFairValuePerShare(dataContainerManager));
 
 
 
