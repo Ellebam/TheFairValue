@@ -20,11 +20,14 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("JNJ","diggi");
+           ClientManager ClientManager = new ClientManager("JNJ","7382NJ201MJ23");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
             System.out.println(dataContainerManager.getCompanyOverviewData().getName());
-            System.out.println(DataExtractor.calculateDCFFairValuePerShare(dataContainerManager));
+            System.out.println(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue());
+            for (int i =0; i<dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().size();i++) {
+                System.out.println(DataExtractor.calculateDCFFairValuePerShare(dataContainerManager,i));
+            }
 
 
 

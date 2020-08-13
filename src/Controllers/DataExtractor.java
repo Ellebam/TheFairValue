@@ -354,16 +354,17 @@ public  class DataExtractor {
     public static  double calculateCAGRFromQuarterlyData (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
         double CAGR = 0.00;
         if (!financialDataObjects.isEmpty()){
-            System.out.println("not empty");
             if(!(timeFrameInArrayListUnits==0)) {
                 double beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
                 double endingValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
                 double numOfYears = timeFrameInArrayListUnits /4;
                 double endToBeginningRatio = endingValue/beginningValue;
                 if (!(endToBeginningRatio<=0)) {
-                    CAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
-                }else{
-                    System.out.println("CashFlow increase less than 0!");}
+                    double temporalCAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
+                    if (!(temporalCAGR<0)){
+                        CAGR = temporalCAGR;
+                    }
+                }
 
             }else if (timeFrameInArrayListUnits==0){
                 double beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
@@ -372,10 +373,11 @@ public  class DataExtractor {
                 double endToBeginningRatio = endingValue/beginningValue;
 
                 if (!(endToBeginningRatio<=0)) {
-                    CAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
-
-                }else{
-                    System.out.println("CashFlow increase less than 0!");}
+                    double temporalCAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
+                     if(!(temporalCAGR<0)){
+                         CAGR = temporalCAGR;
+                     }
+                }
             }
         }
         return CAGR;
@@ -398,32 +400,41 @@ public  class DataExtractor {
 }*/
 
 
-    public static double calculateDCFFairValuePerShare(DataContainerManager dataContainerManager){
+    public static double calculateDCFFairValuePerShare(DataContainerManager dataContainerManager, int ArrayListEntry){
         double DCFFairValuePerShare = 0.00;
         double lastDiscountedFreeCashFlowValue = 0.00;
         double DCFSum = 0.00;
-        double discountFactor = 1.1;
-        double currentFreeCashFlow = dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().get(0).getValue();
-        double CAGR = calculateCAGRFromQuarterlyData(dataContainerManager.
+        double discountRate = 0.07;
+        double longtimeGrowRate = 0.04;
+        double discountFactor = 1+ discountRate;
+        double currentFreeCashFlow = dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().get(ArrayListEntry).getValue();
+        double FCFCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.
                 getCompanyFundamentalData().getFreeCashFlow(),0);
+        double totalRevenueCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().
+                getTotalRevenue(),0);
+        double netIncomeCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().
+                getNetIncome(),0);
+        double EPSCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().
+                getEarningsPerShare(),0);
+        double totalCAGR = (FCFCAGR+totalRevenueCAGR+netIncomeCAGR+EPSCAGR)/4;
+
         for (int i =0; i<10;i++){
             double discountedFreeCashFLow = currentFreeCashFlow/discountFactor;
             DCFSum+=discountedFreeCashFLow;
-            discountFactor+=0.1;
-            currentFreeCashFlow = currentFreeCashFlow*(1+CAGR);
+            discountFactor+= discountRate;
+            currentFreeCashFlow = currentFreeCashFlow*(1+totalCAGR);
             if (i ==9){
                 lastDiscountedFreeCashFlowValue = discountedFreeCashFLow;
             }
 
         }
-        double terminalValue = lastDiscountedFreeCashFlowValue*((1.03)/(0.07));
-        double totalAssets = dataContainerManager.getCompanyFundamentalData().getTotalAssets().get(0).getValue();
-        double totalLiabilities = dataContainerManager.getCompanyFundamentalData().getTotalLiabilities().get(0).getValue();
+        double terminalValue = lastDiscountedFreeCashFlowValue*((1+longtimeGrowRate)/(discountRate-longtimeGrowRate));
         double outstandingShares = dataContainerManager.getCompanyFundamentalData().getCommonStockSharesOutstanding().get(0).getValue();
-        double netCash = totalAssets-totalLiabilities;
-        double totalFairValue = DCFSum+terminalValue+netCash;
+        double workingCapital = dataContainerManager.getCompanyFundamentalData().getWorkingCapital().get(ArrayListEntry).getValue();
+        double totalFairValue = DCFSum+terminalValue+workingCapital;
         if (outstandingShares==0.0){
             outstandingShares = dataContainerManager.getCompanyFundamentalData().getCommonStockSharesOutstanding().get(1).getValue();
+
          }
         DCFFairValuePerShare = totalFairValue/outstandingShares;
 
