@@ -351,22 +351,30 @@ public  class DataExtractor {
         }return CAGR;
     }
 
+    /**
+     * This method calculates the Compounded Annual Growth Rate of a company from its quarterly financial reports. It
+     * will use the standard formula for calculating CAGRs for as many Years as given to the method through parameters.
+     * If the calculated CAGR is negative, it will return a CAGR of 0.00
+     * @param financialDataObjects ArrayList used for calculation of CAGR
+     * @param timeFrameInArrayListUnits
+     * @return double containing the CAGR
+     */
     public static  double calculateCAGRFromQuarterlyData (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
         double CAGR = 0.00;
         if (!financialDataObjects.isEmpty()){
-            if(!(timeFrameInArrayListUnits==0)) {
+            if(!(timeFrameInArrayListUnits==0)) { //used if CAGR of certain time frames should be calculated
                 double beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
                 double endingValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
-                double numOfYears = timeFrameInArrayListUnits /4;
+                double numOfYears = timeFrameInArrayListUnits /4; //dividing by 4 will give the time in years since we are using quarterly data
                 double endToBeginningRatio = endingValue/beginningValue;
                 if (!(endToBeginningRatio<=0)) {
-                    double temporalCAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
+                    double temporalCAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1; //standard CAGR formula
                     if (!(temporalCAGR<0)){
                         CAGR = temporalCAGR;
                     }
                 }
 
-            }else if (timeFrameInArrayListUnits==0){
+            }else if (timeFrameInArrayListUnits==0){ //used if CAGR of whole time frame of the ArrayList should be calculated
                 double beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
                 double endingValue = financialDataObjects.get(0).getValue();
                 double numOfYears = financialDataObjects.size() / 4;
@@ -383,31 +391,23 @@ public  class DataExtractor {
         return CAGR;
     }
 
-   /* public static double calculateCAGRWithSingleValues (double endingValue, double beginningValue, double numOfYears){
-        double CAGR = 0.00;
 
-            double beginningValue =
-            double endingValue = financialDataObjects.get(0).getValue();
-            double numOfYears = financialDataObjects.size() / 4;
-            double endToBeginningRatio = endingValue/beginningValue;
-
-            if (!(endToBeginningRatio<=0)) {
-                CAGR = Math.pow(endToBeginningRatio, (1.0 / numOfYears)) - 1;
-
-            }
-
-        return CAGR;
-}*/
-
-
+    /**
+     * calculation of the Discounted Cash Flow Fair Value per Share of a certain company. The method will utilize
+     * various CAGRs of the Company for evaluation of the DCF Fair Value per share. This method takes the CAGR of the
+     * whole time frame of the given data, but calculates the fair value only for one point in the data list (one date)
+     * @param dataContainerManager container for all used data
+     * @param ArrayListEntry point/date at which the fair value should be calculated
+     * @return double containing the DCFFAirValue per share
+     */
     public static double calculateDCFFairValuePerShare(DataContainerManager dataContainerManager, int ArrayListEntry){
         double DCFFairValuePerShare = 0.00;
         double lastDiscountedFreeCashFlowValue = 0.00;
         double DCFSum = 0.00;
         double discountRate = 0.07;
-        double longtimeGrowRate = 0.04;
+        double longtimeGrowRate = 0.02;
         double discountFactor = 1+ discountRate;
-        double currentFreeCashFlow = dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().get(ArrayListEntry).getValue();
+        double currentFreeCashFlow = dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().get(ArrayListEntry).getValue()*4;
         double FCFCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.
                 getCompanyFundamentalData().getFreeCashFlow(),0);
         double totalRevenueCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().
@@ -429,9 +429,13 @@ public  class DataExtractor {
 
         }
         double terminalValue = lastDiscountedFreeCashFlowValue*((1+longtimeGrowRate)/(discountRate-longtimeGrowRate));
-        double outstandingShares = dataContainerManager.getCompanyFundamentalData().getCommonStockSharesOutstanding().get(0).getValue();
-        double workingCapital = dataContainerManager.getCompanyFundamentalData().getWorkingCapital().get(ArrayListEntry).getValue();
-        double totalFairValue = DCFSum+terminalValue+workingCapital;
+        double outstandingShares = dataContainerManager.getCompanyFundamentalData().getCommonStockSharesOutstanding().get(ArrayListEntry).getValue();
+        double Cash = dataContainerManager.getCompanyFundamentalData().getCash().get(ArrayListEntry).getValue();
+        double shortTermDebt = dataContainerManager.getCompanyFundamentalData().getShortTermDebt().get(ArrayListEntry).getValue();
+        double longTermDebt = dataContainerManager.getCompanyFundamentalData().getLongTermDebt().get(ArrayListEntry).getValue();
+        double totalDebt = shortTermDebt+longTermDebt;
+        double netCash =  Cash - totalDebt;
+        double totalFairValue = DCFSum+terminalValue+netCash;
         if (outstandingShares==0.0){
             outstandingShares = dataContainerManager.getCompanyFundamentalData().getCommonStockSharesOutstanding().get(1).getValue();
 
@@ -444,16 +448,29 @@ public  class DataExtractor {
 
     }
 
+    /**
+     * This method utilizes the calculateDCFFairValuePerShare() method for calculating all DCFFairValues per share of
+     * an ArrayList containing Financial data objects. It will loop through the list and create a new
+     * ArrayList<FinancialDataObject> for storing the new values
+     * @param dataContainerManager container for all data
+     * @return ArrayList containing all new values
+     */
+    public static ArrayList<FinancialDataObject> calculateHistoricalDCFFairValuePerShare (DataContainerManager dataContainerManager){
+
+        ArrayList<FinancialDataObject> HistoricalDCFFairValuePerShare = new ArrayList<>();
+        for (int i =0; i<dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().size();i++) {
+            String name = "DCFFairValuePerShare";
+            String date = dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().get(i).getDate();
+            double value = DataExtractor.calculateDCFFairValuePerShare(dataContainerManager,i);
+            FinancialDataObject DCFFairValuePerShareDataPoint = new FinancialDataObject(name,value,date);
+            HistoricalDCFFairValuePerShare.add(DCFFairValuePerShareDataPoint);
+        }
+            return HistoricalDCFFairValuePerShare;
+    }
 
 
 
-    /*public static ArrayList<FinancialDataObject> calculateDCFFairValue (String valueName, DataContainerManager dataContainerManager){
-        ArrayList<FinancialDataObject> DCFFairValue = new ArrayList<>();
-        double meanFreeCashFlowYearly = calculateMean(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow()) *4;
-        double meanGrowRateOfFreeCashFlow = 1.15*(calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow(),0));
 
-
-    }*/
 
 
 

@@ -19,7 +19,7 @@ public class DataContainerManager {
         this.clientManager = clientManager;
         companyOverviewData = new CompanyOverviewData(clientManager);
         companyFundamentalData = new CompanyFundamentalData(clientManager,dataContainerManager);
-        //fairValueAnalysisData = new FairValueAnalysisData();
+        fairValueAnalysisData = new FairValueAnalysisData(dataContainerManager);
 
 
     }

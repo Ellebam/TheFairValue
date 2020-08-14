@@ -27,6 +27,8 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> totalAssets;
     private ArrayList<FinancialDataObject> totalLiabilities;
     private ArrayList<FinancialDataObject> workingCapital;
+    private ArrayList<FinancialDataObject> interestExpense;
+    private ArrayList<FinancialDataObject> taxProvision;
     private ArrayList<FinancialDataObject> freeCashFlow;
     private ArrayList<FinancialDataObject> dividendPayout;
     private ArrayList<FinancialDataObject> commonStockSharesOutstanding;
@@ -44,6 +46,7 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> shortTermInvestments;
     private ArrayList<FinancialDataObject> longDebtToInvestmentsRatio;
     private ArrayList<FinancialDataObject> shortDebtToInvestmentsRatio;
+
 
 
 
@@ -74,7 +77,10 @@ public class CompanyFundamentalData {
     totalLiabilities = getDataFromBalanceSheet(clientManager,"totalLiabilities");
     workingCapital = DataExtractor.subtractTwoValues("workingCapital",totalAssets,totalLiabilities);
     operatingCashflow = getDataFromCashFlowStatement(clientManager,"operatingCashflow");
-    freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
+    interestExpense = getDataFromIncomeStatement(clientManager,"interestExpense");
+    taxProvision =getDataFromIncomeStatement(clientManager,"taxProvision");
+
+    //freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
     dividendPayout = getDataFromCashFlowStatement(clientManager,"dividendPayout");
     commonStockSharesOutstanding = getDataFromBalanceSheet(clientManager,"commonStockSharesOutstanding");
     dividendsPerShare = DataExtractor.calculateDividendsPerShare("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);

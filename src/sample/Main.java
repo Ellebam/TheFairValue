@@ -3,6 +3,7 @@ package sample;
 import Controllers.ClientManager;
 import Controllers.DataContainerManager;
 import Controllers.DataExtractor;
+import Data.FairValueAnalysisData;
 
 
 public class Main /*extends Application */{
@@ -20,14 +21,12 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("JNJ","7382NJ201MJ23");
+           ClientManager ClientManager = new ClientManager("V","aroumba");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
             System.out.println(dataContainerManager.getCompanyOverviewData().getName());
             System.out.println(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue());
-            for (int i =0; i<dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().size();i++) {
-                System.out.println(DataExtractor.calculateDCFFairValuePerShare(dataContainerManager,i));
-            }
+            System.out.println(dataContainerManager.getFairValueAnalysisData().toString());
 
 
 
