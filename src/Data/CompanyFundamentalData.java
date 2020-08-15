@@ -16,19 +16,24 @@ public class CompanyFundamentalData {
 
     private CompanyFundamentalData companyFundamentalData;
     private ArrayList<FinancialDataObject> totalRevenue;
+    private ArrayList<FinancialDataObject> incomeBeforeTax;
     private ArrayList<FinancialDataObject> netIncome;
     private ArrayList<FinancialDataObject> grossProfit;
+    private ArrayList<FinancialDataObject> ebit;
     private ArrayList<FinancialDataObject> grossMargin;
     private ArrayList<FinancialDataObject> operatingIncome;
     private ArrayList<FinancialDataObject> operatingMargin;
     private ArrayList<FinancialDataObject> netMargin;
-    private ArrayList<FinancialDataObject>  depreciation;
+    private ArrayList<FinancialDataObject> depreciation;
     private ArrayList<FinancialDataObject> capitalExpenditures;
     private ArrayList<FinancialDataObject> totalAssets;
     private ArrayList<FinancialDataObject> totalLiabilities;
     private ArrayList<FinancialDataObject> workingCapital;
     private ArrayList<FinancialDataObject> interestExpense;
     private ArrayList<FinancialDataObject> taxProvision;
+    private ArrayList<FinancialDataObject> netInterestIncome;
+    private ArrayList<FinancialDataObject> extraordinaryItems;
+    private ArrayList<FinancialDataObject> incomeTaxExpense;
     private ArrayList<FinancialDataObject> freeCashFlow;
     private ArrayList<FinancialDataObject> dividendPayout;
     private ArrayList<FinancialDataObject> commonStockSharesOutstanding;
@@ -65,8 +70,10 @@ public class CompanyFundamentalData {
     companyFundamentalData = this;
     this.clientManager = clientManager;
     totalRevenue = getDataFromIncomeStatement(clientManager,"totalRevenue");
+    incomeBeforeTax = getDataFromIncomeStatement(clientManager,"incomeBeforeTax");
     netIncome = getDataFromIncomeStatement(clientManager,"netIncome");
     grossProfit = getDataFromIncomeStatement(clientManager,"grossProfit");
+    ebit = getDataFromIncomeStatement(clientManager,"ebit");
     grossMargin = DataExtractor.calculateMargins_IN_PERCENT("grossMargin",grossProfit,totalRevenue);
     operatingIncome = getDataFromIncomeStatement(clientManager,"operatingIncome");
     operatingMargin = DataExtractor.calculateMargins_IN_PERCENT("operatingMargin",operatingIncome,netIncome);
@@ -79,8 +86,10 @@ public class CompanyFundamentalData {
     operatingCashflow = getDataFromCashFlowStatement(clientManager,"operatingCashflow");
     interestExpense = getDataFromIncomeStatement(clientManager,"interestExpense");
     taxProvision =getDataFromIncomeStatement(clientManager,"taxProvision");
-
-    //freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
+    netInterestIncome = getDataFromIncomeStatement(clientManager,"netInterestIncome");
+    extraordinaryItems = getDataFromIncomeStatement(clientManager,"extraordinaryItems");
+    incomeTaxExpense = getDataFromIncomeStatement(clientManager,"incomeTaxExpense");
+    freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
     dividendPayout = getDataFromCashFlowStatement(clientManager,"dividendPayout");
     commonStockSharesOutstanding = getDataFromBalanceSheet(clientManager,"commonStockSharesOutstanding");
     dividendsPerShare = DataExtractor.calculateDividendsPerShare("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);
@@ -114,6 +123,8 @@ public class CompanyFundamentalData {
 
 
 }
+
+
 
     /**
      * Method for accessing data from the Balance sheet from the corresponding AlphavantageAPIClient
@@ -381,9 +392,50 @@ public class CompanyFundamentalData {
         this.shortDebtToInvestmentsRatio = shortDebtToInvestmentsRatio;
     }
 
+
+    public ArrayList<FinancialDataObject> getInterestExpense() {
+        return interestExpense;
+    }
+
+    public void setInterestExpense(ArrayList<FinancialDataObject> interestExpense) {
+        this.interestExpense = interestExpense;
+    }
+
+    public ArrayList<FinancialDataObject> getTaxProvision() {
+        return taxProvision;
+    }
+
+    public void setTaxProvision(ArrayList<FinancialDataObject> taxProvision) {
+        this.taxProvision = taxProvision;
+    }
+
+    public ArrayList<FinancialDataObject> getNetInterestIncome() {
+        return netInterestIncome;
+    }
+
+    public void setNetInterestIncome(ArrayList<FinancialDataObject> netInterestIncome) {
+        this.netInterestIncome = netInterestIncome;
+    }
+
+    public ArrayList<FinancialDataObject> getExtraordinaryItems() {
+        return extraordinaryItems;
+    }
+
+    public void setExtraordinaryItems(ArrayList<FinancialDataObject> extraordinaryItems) {
+        this.extraordinaryItems = extraordinaryItems;
+    }
+
+    public ArrayList<FinancialDataObject> getIncomeTaxExpense() {
+        return incomeTaxExpense;
+    }
+
+    public void setIncomeTaxExpense(ArrayList<FinancialDataObject> incomeTaxExpense) {
+        this.incomeTaxExpense = incomeTaxExpense;
+    }
+
     @Override
     public String toString() {
-        return "CompanyFundamentalData{" + "\n"+
+        return "CompanyFundamentalData{" +"\n"+
                 "totalRevenue=" + totalRevenue +"\n"+
                 ", netIncome=" + netIncome +"\n"+
                 ", grossProfit=" + grossProfit +"\n"+
@@ -396,6 +448,11 @@ public class CompanyFundamentalData {
                 ", totalAssets=" + totalAssets +"\n"+
                 ", totalLiabilities=" + totalLiabilities +"\n"+
                 ", workingCapital=" + workingCapital +"\n"+
+                ", interestExpense=" + interestExpense +"\n"+
+                ", taxProvision=" + taxProvision +"\n"+
+                ", netInterestIncome=" + netInterestIncome +"\n"+
+                ", extraordinaryItems=" + extraordinaryItems +"\n"+
+                ", incomeTaxExpense=" + incomeTaxExpense +"\n"+
                 ", freeCashFlow=" + freeCashFlow +"\n"+
                 ", dividendPayout=" + dividendPayout +"\n"+
                 ", commonStockSharesOutstanding=" + commonStockSharesOutstanding +"\n"+

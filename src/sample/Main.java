@@ -21,12 +21,14 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("V","aroumba");
+           ClientManager ClientManager = new ClientManager("AAPL","bumsi");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
             System.out.println(dataContainerManager.getCompanyOverviewData().getName());
             System.out.println(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue());
-            System.out.println(dataContainerManager.getFairValueAnalysisData().toString());
+
+
+            System.out.println(dataContainerManager.getFairValueAnalysisData());
 
 
 
