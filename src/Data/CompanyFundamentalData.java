@@ -91,7 +91,7 @@ public class CompanyFundamentalData {
     incomeTaxExpense = getDataFromIncomeStatement(clientManager,"incomeTaxExpense");
     freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
     dividendPayout = getDataFromCashFlowStatement(clientManager,"dividendPayout");
-    commonStockSharesOutstanding = getDataFromBalanceSheet(clientManager,"commonStockSharesOutstanding");
+    commonStockSharesOutstanding = DataExtractor.extractCommonSharesOutstandingData(clientManager,"commonStockSharesOutstanding",dataContainerManager);
     dividendsPerShare = DataExtractor.calculateDividendsPerShare("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);
     netIncomeApplicableToCommonShares = getDataFromIncomeStatement(clientManager,"netIncomeApplicableToCommonShares");
     earningsPerShare = DataExtractor.calculateMargins("earningsPerShare",netIncomeApplicableToCommonShares,commonStockSharesOutstanding);

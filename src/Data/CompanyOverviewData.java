@@ -27,6 +27,7 @@ public class CompanyOverviewData {
     private String fiftytwoWeekLow;
     private String bookValue;
     private String Sector;
+    private String SharesOutstanding;
     private ArrayList<FinancialDataObject> historicalStockPrice;
     private ClientManager clientManager;
 
@@ -55,6 +56,7 @@ public class CompanyOverviewData {
         fiftytwoWeekLow = getData(ClientManager, "52WeekLow");
         bookValue = getData(ClientManager, "BookValue");
         Sector = getData(ClientManager, "Sector");
+        SharesOutstanding = getData(clientManager,"SharesOutstanding");
 
 
         historicalStockPrice = DataExtractor.extractHistoricalStockPrices(ClientManager);
@@ -187,6 +189,14 @@ public class CompanyOverviewData {
         Sector = sector;
     }
 
+    public String getSharesOutstanding() {
+        return SharesOutstanding;
+    }
+
+    public void setSharesOutstanding(String sharesOutstanding) {
+        SharesOutstanding = sharesOutstanding;
+    }
+
     public ArrayList<FinancialDataObject> getHistoricalStockPrice() {
         return historicalStockPrice;
     }
@@ -194,6 +204,8 @@ public class CompanyOverviewData {
     public void setHistoricalStockPrice(ArrayList<FinancialDataObject> historicalStockPrice) {
         this.historicalStockPrice = historicalStockPrice;
     }
+
+
 
     @Override
     public String toString() {

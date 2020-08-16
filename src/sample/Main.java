@@ -21,7 +21,7 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("AAPL","bumsi");
+           ClientManager ClientManager = new ClientManager("MSFT","ABOdiggis");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
             System.out.println(dataContainerManager.getCompanyOverviewData().getName());
@@ -29,6 +29,7 @@ public class Main /*extends Application */{
 
 
             System.out.println(dataContainerManager.getFairValueAnalysisData());
+            System.out.println(DataExtractor.calculatePriceToEarningsRatio("PE",dataContainerManager));
 
 
 

@@ -210,6 +210,25 @@ public  class DataExtractor {
         return  marginList;
     }
 
+    public static ArrayList<FinancialDataObject> extractCommonSharesOutstandingData(ClientManager ClientManager,String keyName,  DataContainerManager dataContainerManager){
+        ArrayList<FinancialDataObject> BalanceSheetDataList = new ArrayList<>();
+        JSONArray jsonArray= ClientManager.getBalanceSheetClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
+        for(int i=0; i<jsonArray.length();i++) {
+            String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
+
+            if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
+                Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+                FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
+                BalanceSheetDataList.add(dataObject);
+            }else{
+                Double value = Double.parseDouble(dataContainerManager.getCompanyOverviewData().getSharesOutstanding());
+                FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
+                BalanceSheetDataList.add(dataObject);
+            }
+        }
+        return BalanceSheetDataList;
+    }
+
     /**
      * Method to calculate dividend Yield when given two ArrayLists containing dividendPerShare and historicalStockPrices
      * Since the two lists have different  Data Point Date-Modulation (quarterley vs daily) the method is designed to
@@ -247,6 +266,11 @@ public  class DataExtractor {
 
          }return dividendYieldList;
     }
+
+
+
+
+
 
     public static double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
          double sum =0.0;
@@ -358,6 +382,37 @@ public  class DataExtractor {
         }
         return sum;
 
+    }
+
+    public static ArrayList<FinancialDataObject> calculatePriceToEarningsRatio (String name, DataContainerManager dataContainerManager)
+    throws Exception {
+        ArrayList<FinancialDataObject> PERatio = new ArrayList<>();
+        ArrayList<FinancialDataObject> earningsPerShare = dataContainerManager.getCompanyFundamentalData().getEarningsPerShare();
+        ArrayList<FinancialDataObject> historicalStockPrice = dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice();
+        int u = 0;
+        for (int i = 0; i < earningsPerShare.size(); i++) {
+            String date = earningsPerShare.get(i).getDate();
+            for (int a = u; a < historicalStockPrice.size(); u++) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+                Date earningsPerShareDate = dateFormat.parse(earningsPerShare.get(i).getDate());
+
+                Date historicalStockPriceDate = dateFormat.parse(historicalStockPrice.get(a).getDate());
+
+                if (earningsPerShareDate.getMonth() == historicalStockPriceDate.getMonth() &&
+                        earningsPerShareDate.getYear() == historicalStockPriceDate.getYear()) {
+                    double earningsPerShareDataPoint = earningsPerShare.get(i).getValue();
+                    double historicalStockPriceDataPoint = historicalStockPrice.get(a).getValue();
+                    double value = (earningsPerShareDataPoint / historicalStockPriceDataPoint) * 100;
+                    FinancialDataObject PERatioObject = new FinancialDataObject(name, value, date);
+                    PERatio.add(PERatioObject);
+                    break;
+                } else {
+                    a = u;
+                }
+            }
+
+        }
+        return PERatio;
     }
 
     public static  double calculateCAGRFromDailyData (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
