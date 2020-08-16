@@ -25,6 +25,7 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> operatingMargin;
     private ArrayList<FinancialDataObject> netMargin;
     private ArrayList<FinancialDataObject> depreciation;
+    private ArrayList<FinancialDataObject> EBITDA;
     private ArrayList<FinancialDataObject> capitalExpenditures;
     private ArrayList<FinancialDataObject> totalAssets;
     private ArrayList<FinancialDataObject> totalLiabilities;
@@ -79,6 +80,7 @@ public class CompanyFundamentalData {
     operatingMargin = DataExtractor.calculateMargins_IN_PERCENT("operatingMargin",operatingIncome,netIncome);
     netMargin = DataExtractor.calculateMargins_IN_PERCENT("netMargin",netIncome,totalRevenue);
     depreciation = getDataFromCashFlowStatement(clientManager,"depreciation");
+    EBITDA = DataExtractor.addTwoValues("EBITDA",operatingIncome,depreciation);
     capitalExpenditures = getDataFromCashFlowStatement(clientManager,"capitalExpenditures");
     totalAssets = getDataFromBalanceSheet(clientManager,"totalAssets");
     totalLiabilities = getDataFromBalanceSheet(clientManager,"totalLiabilities");
@@ -92,6 +94,7 @@ public class CompanyFundamentalData {
     freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
     dividendPayout = getDataFromCashFlowStatement(clientManager,"dividendPayout");
     commonStockSharesOutstanding = DataExtractor.extractCommonSharesOutstandingData(clientManager,"commonStockSharesOutstanding",dataContainerManager);
+
     dividendsPerShare = DataExtractor.calculateDividendsPerShare("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);
     netIncomeApplicableToCommonShares = getDataFromIncomeStatement(clientManager,"netIncomeApplicableToCommonShares");
     earningsPerShare = DataExtractor.calculateMargins("earningsPerShare",netIncomeApplicableToCommonShares,commonStockSharesOutstanding);
@@ -433,6 +436,14 @@ public class CompanyFundamentalData {
         this.incomeTaxExpense = incomeTaxExpense;
     }
 
+    public ArrayList<FinancialDataObject> getEBITDA() {
+        return EBITDA;
+    }
+
+    public void setEBITDA(ArrayList<FinancialDataObject> EBITDA) {
+        this.EBITDA = EBITDA;
+    }
+
     @Override
     public String toString() {
         return "CompanyFundamentalData{" +"\n"+
@@ -444,6 +455,7 @@ public class CompanyFundamentalData {
                 ", operatingMargin=" + operatingMargin +"\n"+
                 ", netMargin=" + netMargin +"\n"+
                 ", depreciation=" + depreciation +"\n"+
+                ", EBITDA=" + EBITDA +"\n"+
                 ", capitalExpenditures=" + capitalExpenditures +"\n"+
                 ", totalAssets=" + totalAssets +"\n"+
                 ", totalLiabilities=" + totalLiabilities +"\n"+
@@ -470,6 +482,7 @@ public class CompanyFundamentalData {
                 ", shortTermInvestments=" + shortTermInvestments +"\n"+
                 ", longDebtToInvestmentsRatio=" + longDebtToInvestmentsRatio +"\n"+
                 ", shortDebtToInvestmentsRatio=" + shortDebtToInvestmentsRatio +"\n"+
+
                 '}';
     }
 }

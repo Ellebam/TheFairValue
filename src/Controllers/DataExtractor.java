@@ -415,6 +415,20 @@ public  class DataExtractor {
         return PERatio;
     }
 
+    public static ArrayList<FinancialDataObject> calculatePEGRatio (ArrayList<FinancialDataObject> PERatio, double CAGR)
+    throws Exception{
+        ArrayList<FinancialDataObject> PEGRatio = new ArrayList<>();
+        for (int i = 0; i< PERatio.size();i++){
+            String name = "PEGRatio";
+            String date = PERatio.get(i).getDate();
+            double value = PERatio.get(i).getValue()/CAGR;
+            FinancialDataObject PEGRatioDataPoint = new FinancialDataObject(name,value,date);
+            PEGRatio.add(PEGRatioDataPoint);
+        }
+        return PEGRatio;
+
+    }
+
     public static  double calculateCAGRFromDailyData (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
         double CAGR = 0.00;
         if (!financialDataObjects.isEmpty()){
@@ -549,6 +563,31 @@ public  class DataExtractor {
             HistoricalDCFFairValuePerShare.add(DCFFairValuePerShareDataPoint);
         }
             return HistoricalDCFFairValuePerShare;
+    }
+
+
+    public static ArrayList<FinancialDataObject> calculatePeterLynchFairValue (DataContainerManager dataContainerManager)
+    throws Exception{
+        ArrayList<FinancialDataObject> PeterLynchFairValue = new ArrayList<>();
+        double netIncomeCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getNetIncome(),0);
+        double EBITDACAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getEBITDA(),0);
+        ArrayList<FinancialDataObject> PERatio = calculatePriceToEarningsRatio("PERatio",dataContainerManager);
+        ArrayList<FinancialDataObject> PEGRatio = calculatePEGRatio(PERatio,netIncomeCAGR);
+        for (int i = 0; i<PEGRatio.size(); i++){
+            double earningsPerShareDataPoint = dataContainerManager.getCompanyFundamentalData().getEarningsPerShare().get(i).getValue();
+            double PEGRatioDataPoint = PEGRatio.get(i).getValue();
+
+            double value = PEGRatioDataPoint*EBITDACAGR*earningsPerShareDataPoint;
+            String name = "PeterLynchFairValue";
+            String date = PEGRatio.get(i).getDate();
+
+            FinancialDataObject PeterLynchFairValueDataPoint = new FinancialDataObject(name,value,date);
+            PeterLynchFairValue.add(PeterLynchFairValueDataPoint);
+
+        }
+
+
+        return PeterLynchFairValue;
     }
 
 

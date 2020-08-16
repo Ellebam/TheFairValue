@@ -21,15 +21,14 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("MSFT","ABOdiggis");
+           ClientManager ClientManager = new ClientManager("AAPL","SAMRA");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
-            System.out.println(dataContainerManager.getCompanyOverviewData().getName());
-            System.out.println(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue());
 
-
+            System.out.println(dataContainerManager.getCompanyOverviewData());
+            System.out.println(dataContainerManager.getCompanyFundamentalData());
             System.out.println(dataContainerManager.getFairValueAnalysisData());
-            System.out.println(DataExtractor.calculatePriceToEarningsRatio("PE",dataContainerManager));
+
 
 
 
