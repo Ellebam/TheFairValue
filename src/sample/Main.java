@@ -21,7 +21,7 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("AAPL","SAMRA");
+           ClientManager ClientManager = new ClientManager("MCD","capisamrah");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
 

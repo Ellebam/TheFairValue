@@ -38,6 +38,8 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> freeCashFlow;
     private ArrayList<FinancialDataObject> dividendPayout;
     private ArrayList<FinancialDataObject> commonStockSharesOutstanding;
+    private ArrayList<FinancialDataObject> bookValue;
+    private ArrayList<FinancialDataObject> bookValuePerShare;
     private ArrayList<FinancialDataObject> dividendsPerShare;
     private ArrayList<FinancialDataObject> netIncomeApplicableToCommonShares;
     private ArrayList<FinancialDataObject> earningsPerShare;
@@ -94,7 +96,8 @@ public class CompanyFundamentalData {
     freeCashFlow = DataExtractor.subtractTwoValues("freeCashFlow",operatingCashflow,capitalExpenditures);
     dividendPayout = getDataFromCashFlowStatement(clientManager,"dividendPayout");
     commonStockSharesOutstanding = DataExtractor.extractCommonSharesOutstandingData(clientManager,"commonStockSharesOutstanding",dataContainerManager);
-
+    bookValue = DataExtractor.extractBalanceSheetData("totalShareholderEquity",clientManager);
+    bookValuePerShare = DataExtractor.calculateMargins("bookValuePerShare",bookValue,commonStockSharesOutstanding);
     dividendsPerShare = DataExtractor.calculateDividendsPerShare("dividendsPerShare",dividendPayout,commonStockSharesOutstanding);
     netIncomeApplicableToCommonShares = getDataFromIncomeStatement(clientManager,"netIncomeApplicableToCommonShares");
     earningsPerShare = DataExtractor.calculateMargins("earningsPerShare",netIncomeApplicableToCommonShares,commonStockSharesOutstanding);
@@ -468,6 +471,8 @@ public class CompanyFundamentalData {
                 ", freeCashFlow=" + freeCashFlow +"\n"+
                 ", dividendPayout=" + dividendPayout +"\n"+
                 ", commonStockSharesOutstanding=" + commonStockSharesOutstanding +"\n"+
+                ", bookValue=" + bookValue +"\n"+
+                ", bookValuePerShare=" + bookValuePerShare +"\n"+
                 ", dividendsPerShare=" + dividendsPerShare +"\n"+
                 ", netIncomeApplicableToCommonShares=" + netIncomeApplicableToCommonShares +"\n"+
                 ", earningsPerShare=" + earningsPerShare +"\n"+

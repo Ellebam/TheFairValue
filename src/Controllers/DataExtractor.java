@@ -9,6 +9,9 @@ import javax.naming.NameNotFoundException;
 import javax.swing.*;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -248,12 +251,12 @@ public  class DataExtractor {
          for (int i = 0; i<dividendPerShare.size();i++){
              String date = dividendPerShare.get(i).getDate();
              for(int a = u; a<historicalStockPrice.size();u++){
-                 SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
-                 Date dividendPerShareDate = dateFormat.parse(dividendPerShare.get(i).getDate());
 
-                 Date historicalStockPriceDate = dateFormat.parse(historicalStockPrice.get(a).getDate());
 
-                 if(dividendPerShareDate.getMonth() == historicalStockPriceDate.getMonth() &&
+                 LocalDate dividendPerShareDate = LocalDate.parse(dividendPerShare.get(i).getDate());
+                 LocalDate historicalStockPriceDate = LocalDate.parse(historicalStockPrice.get(a).getDate());
+
+                 if(dividendPerShareDate.getMonthValue() == historicalStockPriceDate.getMonthValue() &&
                          dividendPerShareDate.getYear()==historicalStockPriceDate.getYear()){
                      double dividendPerShareDataPoint = dividendPerShare.get(i).getValue();
                      double historicalStockPriceDataPoint = historicalStockPrice.get(a).getValue();
@@ -265,6 +268,22 @@ public  class DataExtractor {
              }
 
          }return dividendYieldList;
+    }
+    
+    public static double extractValueByDate (ArrayList<FinancialDataObject> DataList, String key)throws Exception{
+        double extractedValue = 0.0;
+        for(int i=0;i<DataList.size();i++){
+
+
+            LocalDate keyDate = LocalDate.parse(key);
+            LocalDate DataListDate = LocalDate.parse(DataList.get(i).getDate());
+            if(keyDate.getMonthValue() == DataListDate.getMonthValue() && keyDate.getYear() == DataListDate.getYear()){
+                extractedValue = DataList.get(i).getValue();
+                break;
+            }
+            
+        }return extractedValue;
+        
     }
 
 
@@ -393,12 +412,12 @@ public  class DataExtractor {
         for (int i = 0; i < earningsPerShare.size(); i++) {
             String date = earningsPerShare.get(i).getDate();
             for (int a = u; a < historicalStockPrice.size(); u++) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
-                Date earningsPerShareDate = dateFormat.parse(earningsPerShare.get(i).getDate());
 
-                Date historicalStockPriceDate = dateFormat.parse(historicalStockPrice.get(a).getDate());
+                LocalDate earningsPerShareDate = LocalDate.parse(earningsPerShare.get(i).getDate());
 
-                if (earningsPerShareDate.getMonth() == historicalStockPriceDate.getMonth() &&
+                LocalDate historicalStockPriceDate = LocalDate.parse(historicalStockPrice.get(a).getDate());
+
+                if (earningsPerShareDate.getMonthValue() == historicalStockPriceDate.getMonthValue() &&
                         earningsPerShareDate.getYear() == historicalStockPriceDate.getYear()) {
                     double earningsPerShareDataPoint = earningsPerShare.get(i).getValue();
                     double historicalStockPriceDataPoint = historicalStockPrice.get(a).getValue();
@@ -418,6 +437,9 @@ public  class DataExtractor {
     public static ArrayList<FinancialDataObject> calculatePEGRatio (ArrayList<FinancialDataObject> PERatio, double CAGR)
     throws Exception{
         ArrayList<FinancialDataObject> PEGRatio = new ArrayList<>();
+        if (CAGR == 0.0){
+            CAGR =1.0;
+        }
         for (int i = 0; i< PERatio.size();i++){
             String name = "PEGRatio";
             String date = PERatio.get(i).getDate();
@@ -514,6 +536,9 @@ public  class DataExtractor {
         double bookValuePlusDividendsCAGR = calculateCAGRFromQuarterlyData(bookValuePlusDividends,0);
 
         double totalCAGR = (operativeCashflowCAGR+bookValuePlusDividendsCAGR+totalRevenueCAGR)/3;
+        if (totalCAGR==0.0){
+            totalCAGR =1.0;
+        }
 
         for (int i =0; i<10;i++){
             double discountedOperativeCashFlow = currentoperativeCashFlow/discountFactor;
@@ -571,15 +596,25 @@ public  class DataExtractor {
         ArrayList<FinancialDataObject> PeterLynchFairValue = new ArrayList<>();
         double netIncomeCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getNetIncome(),0);
         double EBITDACAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getEBITDA(),0);
+        if (EBITDACAGR==0.0){
+            EBITDACAGR = 1.0;
+        }
+        if (netIncomeCAGR ==0.00){
+            netIncomeCAGR = 1.0;
+        }
+        ArrayList<FinancialDataObject> historicalStockPrice = dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice();
         ArrayList<FinancialDataObject> PERatio = calculatePriceToEarningsRatio("PERatio",dataContainerManager);
         ArrayList<FinancialDataObject> PEGRatio = calculatePEGRatio(PERatio,netIncomeCAGR);
         for (int i = 0; i<PEGRatio.size(); i++){
             double earningsPerShareDataPoint = dataContainerManager.getCompanyFundamentalData().getEarningsPerShare().get(i).getValue();
             double PEGRatioDataPoint = PEGRatio.get(i).getValue();
 
-            double value = PEGRatioDataPoint*EBITDACAGR*earningsPerShareDataPoint;
-            String name = "PeterLynchFairValue";
             String date = PEGRatio.get(i).getDate();
+            String name = "PeterLynchFairValue";
+            double stockprice = extractValueByDate(historicalStockPrice,date);
+            double value = stockprice/(PEGRatioDataPoint*EBITDACAGR*earningsPerShareDataPoint);
+
+
 
             FinancialDataObject PeterLynchFairValueDataPoint = new FinancialDataObject(name,value,date);
             PeterLynchFairValue.add(PeterLynchFairValueDataPoint);
