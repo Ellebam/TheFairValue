@@ -447,46 +447,78 @@ public class CompanyFundamentalData {
         this.EBITDA = EBITDA;
     }
 
+    public ArrayList<FinancialDataObject> getIncomeBeforeTax() {
+        return incomeBeforeTax;
+    }
+
+    public void setIncomeBeforeTax(ArrayList<FinancialDataObject> incomeBeforeTax) {
+        this.incomeBeforeTax = incomeBeforeTax;
+    }
+
+    public ArrayList<FinancialDataObject> getEbit() {
+        return ebit;
+    }
+
+    public void setEbit(ArrayList<FinancialDataObject> ebit) {
+        this.ebit = ebit;
+    }
+
+    public ArrayList<FinancialDataObject> getBookValue() {
+        return bookValue;
+    }
+
+    public void setBookValue(ArrayList<FinancialDataObject> bookValue) {
+        this.bookValue = bookValue;
+    }
+
+    public ArrayList<FinancialDataObject> getBookValuePerShare() {
+        return bookValuePerShare;
+    }
+
+    public void setBookValuePerShare(ArrayList<FinancialDataObject> bookValuePerShare) {
+        this.bookValuePerShare = bookValuePerShare;
+    }
+
     @Override
     public String toString() {
         return "CompanyFundamentalData{" +"\n"+
-                "totalRevenue=" + totalRevenue +"\n"+
-                ", netIncome=" + netIncome +"\n"+
-                ", grossProfit=" + grossProfit +"\n"+
-                ", grossMargin=" + grossMargin +"\n"+
-                ", operatingIncome=" + operatingIncome +"\n"+
-                ", operatingMargin=" + operatingMargin +"\n"+
-                ", netMargin=" + netMargin +"\n"+
-                ", depreciation=" + depreciation +"\n"+
-                ", EBITDA=" + EBITDA +"\n"+
-                ", capitalExpenditures=" + capitalExpenditures +"\n"+
-                ", totalAssets=" + totalAssets +"\n"+
-                ", totalLiabilities=" + totalLiabilities +"\n"+
-                ", workingCapital=" + workingCapital +"\n"+
-                ", interestExpense=" + interestExpense +"\n"+
-                ", taxProvision=" + taxProvision +"\n"+
-                ", netInterestIncome=" + netInterestIncome +"\n"+
-                ", extraordinaryItems=" + extraordinaryItems +"\n"+
-                ", incomeTaxExpense=" + incomeTaxExpense +"\n"+
-                ", freeCashFlow=" + freeCashFlow +"\n"+
-                ", dividendPayout=" + dividendPayout +"\n"+
-                ", commonStockSharesOutstanding=" + commonStockSharesOutstanding +"\n"+
-                ", bookValue=" + bookValue +"\n"+
-                ", bookValuePerShare=" + bookValuePerShare +"\n"+
-                ", dividendsPerShare=" + dividendsPerShare +"\n"+
-                ", netIncomeApplicableToCommonShares=" + netIncomeApplicableToCommonShares +"\n"+
-                ", earningsPerShare=" + earningsPerShare +"\n"+
-                ", dividendYield=" + dividendYield +"\n"+
-                ", payOutRatio=" + payOutRatio +"\n"+
-                ", operatingCashflow=" + operatingCashflow +"\n"+
-                ", cash=" + cash +"\n"+
-                ", debtRatio=" + debtRatio +"\n"+
-                ", longTermDebt=" + longTermDebt +"\n"+
-                ", shortTermDebt=" + shortTermDebt +"\n"+
-                ", longTermInvestments=" + longTermInvestments +"\n"+
-                ", shortTermInvestments=" + shortTermInvestments +"\n"+
-                ", longDebtToInvestmentsRatio=" + longDebtToInvestmentsRatio +"\n"+
-                ", shortDebtToInvestmentsRatio=" + shortDebtToInvestmentsRatio +"\n"+
+                "totalRevenue="+"\n" + totalRevenue +"\n"+
+                ", netIncome="+"\n" + netIncome +"\n"+
+                ", grossProfit=" +"\n"+ grossProfit +"\n"+
+                ", grossMargin="+"\n" + grossMargin +"\n"+
+                ", operatingIncome="+"\n" + operatingIncome +"\n"+
+                ", operatingMargin="+"\n" + operatingMargin +"\n"+
+                ", netMargin="+"\n" + netMargin +"\n"+
+                ", depreciation="+"\n" + depreciation +"\n"+
+                ", EBITDA="+"\n" + EBITDA +"\n"+
+                ", capitalExpenditures="+"\n" + capitalExpenditures +"\n"+
+                ", totalAssets="+"\n" + totalAssets +"\n"+
+                ", totalLiabilities="+"\n" + totalLiabilities +"\n"+
+                ", workingCapital="+"\n" + workingCapital +"\n"+
+                ", interestExpense="+"\n" + interestExpense +"\n"+
+                ", taxProvision="+"\n" + taxProvision +"\n"+
+                ", netInterestIncome="+"\n" + netInterestIncome +"\n"+
+                ", extraordinaryItems="+"\n" + extraordinaryItems +"\n"+
+                ", incomeTaxExpense="+"\n" + incomeTaxExpense +"\n"+
+                ", freeCashFlow="+"\n" + freeCashFlow +"\n"+
+                ", dividendPayout="+"\n" + dividendPayout +"\n"+
+                ", commonStockSharesOutstanding="+"\n" + commonStockSharesOutstanding +"\n"+
+                ", bookValue="+"\n" + bookValue +"\n"+
+                ", bookValuePerShare="+"\n" + bookValuePerShare +"\n"+
+                ", dividendsPerShare="+"\n" + dividendsPerShare +"\n"+
+                ", netIncomeApplicableToCommonShares="+"\n" + netIncomeApplicableToCommonShares +"\n"+
+                ", earningsPerShare="+"\n" + earningsPerShare +"\n"+
+                ", dividendYield="+"\n" + dividendYield +"\n"+
+                ", payOutRatio="+"\n" + payOutRatio +"\n"+
+                ", operatingCashflow="+"\n" + operatingCashflow +"\n"+
+                ", cash="+"\n" + cash +"\n"+
+                ", debtRatio=" +"\n"+ debtRatio +"\n"+
+                ", longTermDebt="+"\n" + longTermDebt +"\n"+
+                ", shortTermDebt="+"\n" + shortTermDebt +"\n"+
+                ", longTermInvestments="+"\n" + longTermInvestments +"\n"+
+                ", shortTermInvestments="+"\n" + shortTermInvestments +"\n"+
+                ", longDebtToInvestmentsRatio="+"\n" + longDebtToInvestmentsRatio +"\n"+
+                ", shortDebtToInvestmentsRatio="+"\n" + shortDebtToInvestmentsRatio +"\n"+
 
                 '}';
     }

@@ -2,6 +2,7 @@ package Controllers;
 
 
 import Data.FinancialDataObject;
+import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
@@ -595,10 +596,8 @@ public  class DataExtractor {
     throws Exception{
         ArrayList<FinancialDataObject> PeterLynchFairValue = new ArrayList<>();
         double netIncomeCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getNetIncome(),0);
-        double EBITDACAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getEBITDA(),0);
-        if (EBITDACAGR==0.0){
-            EBITDACAGR = 1.0;
-        }
+        double EBITDACAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().getEBITDA(),0)*100;
+
         if (netIncomeCAGR ==0.00){
             netIncomeCAGR = 1.0;
         }
@@ -611,8 +610,13 @@ public  class DataExtractor {
 
             String date = PEGRatio.get(i).getDate();
             String name = "PeterLynchFairValue";
-            double stockprice = extractValueByDate(historicalStockPrice,date);
-            double value = stockprice/(PEGRatioDataPoint*EBITDACAGR*earningsPerShareDataPoint);
+            double value;
+            double growthFactor = PEGRatioDataPoint+EBITDACAGR;
+            if (!(growthFactor==0.0)) {
+                 value = ((growthFactor)/2) * earningsPerShareDataPoint * 4;
+            }else{
+                value =earningsPerShareDataPoint*4;
+            }
 
 
 
@@ -625,7 +629,27 @@ public  class DataExtractor {
         return PeterLynchFairValue;
     }
 
+    public static ArrayList<FinancialDataObject> calculateGrahamNumber (DataContainerManager dataContainerManager)
+        throws Exception{
+        ArrayList<FinancialDataObject> GrahamNumber = new ArrayList<>();
+        ArrayList<FinancialDataObject> earningsPerShare = dataContainerManager.getCompanyFundamentalData().getEarningsPerShare();
+        ArrayList<FinancialDataObject> bookValuePerShare = dataContainerManager.getCompanyFundamentalData().getBookValuePerShare();
+        for (int i = 0; i<earningsPerShare.size();i++){
+            String name = "GrahamNumber";
+            String date = earningsPerShare.get(i).getDate();
+            double value = 0.0;
+            double earningsPerShareValue = earningsPerShare.get(i).getValue()*4;
+            double bookValuePerShareValue = bookValuePerShare.get(i).getValue()*4;
+            double EPSAndBVSMultiple =  earningsPerShareValue*bookValuePerShareValue;
+            if(!(EPSAndBVSMultiple <0)) {
+                 value = Math.pow((22.5 * EPSAndBVSMultiple), 0.5);
+            }
+            FinancialDataObject GrahamNumberDataPoint = new FinancialDataObject(name, value, date);
+            GrahamNumber.add(GrahamNumberDataPoint);
+        }
 
+        return GrahamNumber;
+    }
 
 
 
