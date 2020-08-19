@@ -12,6 +12,7 @@ public class FairValueAnalysisData {
     private ArrayList<FinancialDataObject> PERatio;
     private ArrayList<FinancialDataObject> PeterLynchFairValue;
     private ArrayList<FinancialDataObject> GrahamNumber;
+    private ArrayList<FinancialDataObject> meanFairValue;
 
 
     public FairValueAnalysisData (DataContainerManager dataContainerManager) throws Exception{
@@ -21,6 +22,9 @@ public class FairValueAnalysisData {
         PERatio = DataExtractor.calculatePriceToEarningsRatio("PERatio",dataContainerManager);
         PeterLynchFairValue = DataExtractor.calculatePeterLynchFairValue(dataContainerManager);
         GrahamNumber = DataExtractor.calculateGrahamNumber(dataContainerManager);
+        meanFairValue = DataExtractor.calculateMeanOverThreeLists("meanFairValue",HistoricalDCFFairValuePerShare,
+                PeterLynchFairValue,GrahamNumber);
+
 
     }
 
@@ -31,6 +35,7 @@ public class FairValueAnalysisData {
                 "PERatio="+"\n" +PERatio +"\n"+
                 "PeterLynchFairValue="+"\n" +PeterLynchFairValue +"\n"+
                 "GrahamNumber="+"\n" +GrahamNumber +"\n"+
+                "meanFairValue="+"\n" +meanFairValue +"\n"+
                 '}';
     }
 }

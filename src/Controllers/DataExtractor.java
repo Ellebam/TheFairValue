@@ -196,8 +196,10 @@ public  class DataExtractor {
      * @param commonStockSharesOutstanding number of outstanding common stocks
      * @return ArrayList containing FinancialDataObjects with quotients of the divisions as values (positive)
      */
-    public static ArrayList<FinancialDataObject> calculateDividendsPerShare(String marginName, ArrayList<FinancialDataObject> dividendPayout,
-                                                                            ArrayList<FinancialDataObject> commonStockSharesOutstanding){
+    public static ArrayList<FinancialDataObject> calculateDividendsPerShare
+    (String marginName, ArrayList<FinancialDataObject> dividendPayout,
+     ArrayList<FinancialDataObject> commonStockSharesOutstanding) throws Exception{
+
         ArrayList<FinancialDataObject> marginList = new ArrayList<>();
         if (dividendPayout.size() == commonStockSharesOutstanding.size()){
             for (int i=0; i<dividendPayout.size();i++){
@@ -214,8 +216,19 @@ public  class DataExtractor {
         return  marginList;
     }
 
-    public static ArrayList<FinancialDataObject> extractCommonSharesOutstandingData(ClientManager ClientManager,String keyName,  DataContainerManager dataContainerManager){
-        ArrayList<FinancialDataObject> BalanceSheetDataList = new ArrayList<>();
+    /**
+     * method to extract data regarding outstanding common shares of a company from the client manager. This method will
+     * try to get the exact number of outstanding common shares from the quarterly reports. If it is not able to (e.g.
+     * if there is no value saved in one or more of the quarterly reports from the json files) it will instead take
+     * the value saved in the CompanyOverviewData object.
+     * @param ClientManager client used for establishing api connection
+     * @param keyName String used for seearching of certain keywords in the json file
+     * @param dataContainerManager data object used for data storage of whole script
+     * @return returns a list containing all found or replaced numbers for outstanding common shares at certain dates
+     */
+    public static ArrayList<FinancialDataObject> extractCommonSharesOutstandingData
+    (ClientManager ClientManager, String keyName,  DataContainerManager dataContainerManager)throws Exception{
+        ArrayList<FinancialDataObject> CommonSharesOutstandingDataList = new ArrayList<>();
         JSONArray jsonArray= ClientManager.getBalanceSheetClient().getResponse().getBody().getObject().getJSONArray("quarterlyReports");
         for(int i=0; i<jsonArray.length();i++) {
             String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
@@ -223,14 +236,14 @@ public  class DataExtractor {
             if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
                 Double value = jsonArray.getJSONObject(i).getDouble(keyName);
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
-                BalanceSheetDataList.add(dataObject);
+                CommonSharesOutstandingDataList.add(dataObject);
             }else{
                 Double value = Double.parseDouble(dataContainerManager.getCompanyOverviewData().getSharesOutstanding());
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
-                BalanceSheetDataList.add(dataObject);
+                CommonSharesOutstandingDataList.add(dataObject);
             }
         }
-        return BalanceSheetDataList;
+        return CommonSharesOutstandingDataList;
     }
 
     /**
@@ -270,7 +283,15 @@ public  class DataExtractor {
 
          }return dividendYieldList;
     }
-    
+
+
+    /**
+     * short method for extracting a certain value from an ArrayList<FinancialDataObject> if given a certain date
+     * @param DataList list from which the values need to be extracted
+     * @param key key to search for (date)
+     * @return returns extracted value
+     * @throws Exception
+     */
     public static double extractValueByDate (ArrayList<FinancialDataObject> DataList, String key)throws Exception{
         double extractedValue = 0.0;
         for(int i=0;i<DataList.size();i++){
@@ -288,23 +309,63 @@ public  class DataExtractor {
     }
 
 
-
-
-
-
-    public static double calculateMean (ArrayList<FinancialDataObject> financialDataObject){
+    /**
+     * Calculation of mean values of an ArrayList containing Financial Data Objects.
+     * @param dataList ArrayList containing all data values that need to be calculated as mean
+     * @return mean value as a double
+     */
+    public static double calculateMeanValueOverOneList (ArrayList<FinancialDataObject> dataList){
          double sum =0.0;
          double average;
-         if(!financialDataObject.isEmpty()){
-             for(int i=0; i<financialDataObject.size();i++){
-                 double dataPoint =financialDataObject.get(i).getValue();
+         if(!dataList.isEmpty()){
+             for(int i=0; i<dataList.size();i++){
+                 double dataPoint =dataList.get(i).getValue();
                  if (!(dataPoint == 0.00000)){
                      sum +=  dataPoint;
                  }
              }
-              average = sum/ financialDataObject.size();
+              average = sum/ dataList.size();
          }else{average =0.0;}
          return average;
+    }
+
+
+    /**
+     * Method to calculate the mean values of three distinctive ArrayLists containing Financial Data Objects. The method
+     * will NOT calculated the mean over all lists values but only from the values of the list of the same date. It
+     * will then return a new ArrayList containing new Financial Data Objects but with the means as new values.
+     * @param nameOfMean name String for the new data objects
+     * @param listOne first list
+     * @param listTwo second list
+     * @param listThree third list
+     * @return new ArrayList containing new Financial Data Objects with mean values
+     * @throws Exception
+     */
+    public static ArrayList<FinancialDataObject> calculateMeanOverThreeLists(String nameOfMean,ArrayList<FinancialDataObject> listOne, ArrayList<FinancialDataObject> listTwo,
+                                                     ArrayList<FinancialDataObject> listThree) throws Exception{
+        double sum;
+        double average;
+        ArrayList<FinancialDataObject> meanList = new ArrayList<>();
+        if(!(listOne.isEmpty())&&!(listTwo.isEmpty())&&!(listThree.isEmpty())){
+            for(int i = 0; i<listOne.size();i++){
+                sum =0.0;
+                String date = listOne.get(i).getDate();
+                double dataPointOne = listOne.get(i).getValue();
+                double dataPointTwo = listTwo.get(i).getValue();
+                double dataPointThree = listThree.get(i).getValue();
+                sum += dataPointOne+dataPointTwo+dataPointThree;
+                if (!(sum==0.0)){
+                    average = sum/3;
+                }else{
+                    average=0.0;
+                }
+                FinancialDataObject meanValueDataPoint = new FinancialDataObject(nameOfMean,average,date);
+                meanList.add(meanValueDataPoint);
+            }
+
+        }
+        return meanList;
+
     }
 
     /**
@@ -387,6 +448,15 @@ public  class DataExtractor {
 
     }
 
+    /**
+     * Method for adding two values from every Financial Data Object of two distinctive ArrayLists. Method will return
+     * a new ArrayList containing Financial Data Objects containing the summed values with the dates taken from either one
+     * of the lists.
+     * @param valueName name of the value
+     * @param valueOne first list
+     * @param valueTwo second list
+     * @return ArrayList<FinancialDataObject> with summed values
+     */
     public static ArrayList<FinancialDataObject> addTwoValues(String valueName, ArrayList<FinancialDataObject> valueOne,
                                                                    ArrayList<FinancialDataObject> valueTwo) {
         ArrayList<FinancialDataObject> sum = new ArrayList<>();
@@ -404,6 +474,16 @@ public  class DataExtractor {
 
     }
 
+    /**
+     * Method to calculate the Ratio between stock price and earnings per share of a company. It will scan the dataContainerManager
+     * for earningsPerShare values and try to find matching stock prices from the CompanyOverviewData object in the
+     * same dataContainerManager. The used loop only searches for matching months and years, since certain days are misssing
+     * in the database for stockprices. The first found stockprice of the month is taken for this calculation.
+     * @param name
+     * @param dataContainerManager
+     * @return
+     * @throws Exception
+     */
     public static ArrayList<FinancialDataObject> calculatePriceToEarningsRatio (String name, DataContainerManager dataContainerManager)
     throws Exception {
         ArrayList<FinancialDataObject> PERatio = new ArrayList<>();
