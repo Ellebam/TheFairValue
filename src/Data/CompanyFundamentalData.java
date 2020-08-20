@@ -47,9 +47,9 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> payOutRatio;
     private ArrayList<FinancialDataObject> operatingCashflow;
     private ArrayList<FinancialDataObject> cash;
-    private ArrayList<FinancialDataObject>  debtRatio;
-    private ArrayList<FinancialDataObject>  longTermDebt;
-    private ArrayList<FinancialDataObject>  shortTermDebt;
+    private ArrayList<FinancialDataObject> debtRatio;
+    private ArrayList<FinancialDataObject> longTermDebt;
+    private ArrayList<FinancialDataObject> shortTermDebt;
     private ArrayList<FinancialDataObject> longTermInvestments;
     private ArrayList<FinancialDataObject> shortTermInvestments;
     private ArrayList<FinancialDataObject> longDebtToInvestmentsRatio;
@@ -89,7 +89,7 @@ public class CompanyFundamentalData {
     workingCapital = DataExtractor.subtractTwoValues("workingCapital",totalAssets,totalLiabilities);
     operatingCashflow = getDataFromCashFlowStatement(clientManager,"operatingCashflow");
     interestExpense = getDataFromIncomeStatement(clientManager,"interestExpense");
-    taxProvision =getDataFromIncomeStatement(clientManager,"taxProvision");
+    taxProvision = getDataFromIncomeStatement(clientManager,"taxProvision");
     netInterestIncome = getDataFromIncomeStatement(clientManager,"netInterestIncome");
     extraordinaryItems = getDataFromIncomeStatement(clientManager,"extraordinaryItems");
     incomeTaxExpense = getDataFromIncomeStatement(clientManager,"incomeTaxExpense");
@@ -518,7 +518,7 @@ public class CompanyFundamentalData {
                 ", longTermInvestments="+"\n" + longTermInvestments +"\n"+
                 ", shortTermInvestments="+"\n" + shortTermInvestments +"\n"+
                 ", longDebtToInvestmentsRatio="+"\n" + longDebtToInvestmentsRatio +"\n"+
-                ", shortDebtToInvestmentsRatio="+"\n" + shortDebtToInvestmentsRatio +"\n"+
+                ", shortDebtToInvestmentsRatio="+"\n"    + shortDebtToInvestmentsRatio +"\n"+
 
                 '}';
     }

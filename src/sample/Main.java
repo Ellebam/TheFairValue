@@ -21,7 +21,7 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("TXN","oidaaaa");
+           ClientManager ClientManager = new ClientManager("BRK-B","capisamrah");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
 

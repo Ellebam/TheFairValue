@@ -22,6 +22,7 @@ public class DataContainerManager {
         fairValueAnalysisData = new FairValueAnalysisData(dataContainerManager);
 
 
+
     }
     public CompanyOverviewData getCompanyOverviewData() {
         return companyOverviewData;

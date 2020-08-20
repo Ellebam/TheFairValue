@@ -8,6 +8,7 @@ import kong.unirest.json.JSONObject;
 
 import javax.naming.NameNotFoundException;
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -730,6 +731,20 @@ public  class DataExtractor {
 
         return GrahamNumber;
     }
+
+
+    private double calculateReturnOnAssets (DataContainerManager dataContainerManager)throws Exception{
+        double returnOnAssets = 0.0;
+        double netIncome = dataContainerManager.getCompanyFundamentalData().getNetIncome().get(0).getValue();
+        double totalAssets = dataContainerManager.getCompanyFundamentalData().getTotalAssets().get(0).getValue();
+
+        if (!(netIncome==0.0) && !(totalAssets==0.0)) {
+             returnOnAssets = netIncome / totalAssets;
+        }
+        return  returnOnAssets;
+    }
+
+
 
 
 
