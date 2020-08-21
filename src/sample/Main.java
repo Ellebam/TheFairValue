@@ -21,13 +21,11 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("BRK-B","capisamrah");
+           ClientManager ClientManager = new ClientManager("UL","capisamrah");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
 
-            System.out.println(dataContainerManager.getCompanyOverviewData());
-            System.out.println(dataContainerManager.getCompanyFundamentalData());
-            System.out.println(dataContainerManager.getFairValueAnalysisData());
+            System.out.println(DataExtractor.calculateReturnOnAssets(0,dataContainerManager));
 
 
 

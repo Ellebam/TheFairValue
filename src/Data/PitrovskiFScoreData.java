@@ -1,8 +1,13 @@
 package Data;
 
+import Controllers.DataContainerManager;
+import Controllers.DataExtractor;
+
 public class PitrovskiFScoreData {
 
-    private double returnOnAssets;
+    private PitrovskiFScoreData pitrovskiFScoreData;
+    private double returnOnAssetsCurrentYear;
+    private double returnOnAssetsLastYear;
     private double cashFlowReturnOnAssets;
     private double changeInReturnOnAssets;
     private double qualityOfEarnings;
@@ -15,6 +20,16 @@ public class PitrovskiFScoreData {
     private int PitrovskiFScore = 0;
 
 
+public PitrovskiFScoreData (DataContainerManager dataContainerManager) throws Exception {
+    pitrovskiFScoreData = this;
+    returnOnAssetsCurrentYear = DataExtractor.calculateReturnOnAssets(0,dataContainerManager);
+    returnOnAssetsLastYear = DataExtractor.calculateReturnOnAssets(4,dataContainerManager);
+    cashFlowReturnOnAssets = DataExtractor.calculateCashflowReturnOnAssets(dataContainerManager);
+    changeInReturnOnAssets = returnOnAssetsCurrentYear-returnOnAssetsLastYear;
 
+
+
+
+}
 
 }

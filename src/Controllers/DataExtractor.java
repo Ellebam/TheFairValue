@@ -2,21 +2,11 @@ package Controllers;
 
 
 import Data.FinancialDataObject;
-import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
-
-import javax.naming.NameNotFoundException;
 import javax.swing.*;
-import java.lang.reflect.Array;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 
 public  class DataExtractor {
@@ -30,8 +20,8 @@ public  class DataExtractor {
      * @return String countaining desired data
      */
     public static String extractOVERVIEWData(ClientManager ClientManager, String variableName) {
-        String dataVariable = ClientManager.getOverviewClient().getResponse().getBody().getObject().getString(variableName);
-        return dataVariable;
+        return  ClientManager.getOverviewClient().getResponse().getBody().getObject().getString(variableName);
+
     }
 
     /**
@@ -74,11 +64,11 @@ public  class DataExtractor {
              String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
 
              if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
-                 Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+                 double value = jsonArray.getJSONObject(i).getDouble(keyName);
                  FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                  IncomeStatementDataList.add(dataObject);
              } else {
-                 Double value = 0.00000;
+                 double value = 0.00000;
                  FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                  IncomeStatementDataList.add(dataObject);
              }
@@ -99,11 +89,11 @@ public  class DataExtractor {
             String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
 
             if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
-                Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+                double value = jsonArray.getJSONObject(i).getDouble(keyName);
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 BalanceSheetDataList.add(dataObject);
             }else{
-                Double value = 0.00000;
+                double value = 0.00000;
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 BalanceSheetDataList.add(dataObject);
             }
@@ -124,11 +114,11 @@ public  class DataExtractor {
             String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
 
             if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
-                Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+                double value = jsonArray.getJSONObject(i).getDouble(keyName);
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 CashFlowDataList.add(dataObject);
             }else{
-                Double value = 0.00000;
+                double value = 0.00000;
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 CashFlowDataList.add(dataObject);
             }
@@ -148,20 +138,22 @@ public  class DataExtractor {
      * @return ArrayList containing FinancialDataObjects with quotients of the divisions as values
      */
     public static ArrayList<FinancialDataObject> calculateMargins(String marginName, ArrayList<FinancialDataObject> sampleProfit,
-                                                                             ArrayList<FinancialDataObject> sampleRevenue){
+                                                                             ArrayList<FinancialDataObject> sampleRevenue)
+    throws Exception{
         ArrayList<FinancialDataObject> marginList = new ArrayList<>();
-        if (sampleProfit.size() == sampleRevenue.size()){
+
             for (int i=0; i<sampleProfit.size();i++){
+                double value;
                 double sampleProfitDataPoint = sampleProfit.get(i).getValue();
-                double sampleRevenueDataPoint = sampleRevenue.get(i).getValue();
+                double sampleRevenueDataPoint = extractMatchingValue(i,sampleProfit,sampleRevenue);
                 if (!(sampleRevenueDataPoint==0.00000)) {
-                    Double value = sampleProfitDataPoint / sampleRevenueDataPoint;
+                     value = sampleProfitDataPoint / sampleRevenueDataPoint;
                     String date = sampleProfit.get(i).getDate();
                     FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
                     marginList.add(marginObject);
                 }
             }
-        }else{JOptionPane.showMessageDialog(null,"Error!");}
+
         return  marginList;
     }
 
@@ -173,22 +165,26 @@ public  class DataExtractor {
      * @return ArrayList containing FinancialDataObjects with quotients of the divisions as values
      */
     public static ArrayList<FinancialDataObject> calculateMargins_IN_PERCENT(String marginName, ArrayList<FinancialDataObject> sampleProfit,
-                                                                             ArrayList<FinancialDataObject> sampleRevenue){
+                                                                             ArrayList<FinancialDataObject> sampleRevenue)
+    throws Exception{
         ArrayList<FinancialDataObject> marginList = new ArrayList<>();
-        if (sampleProfit.size() == sampleRevenue.size()){
-            for (int i=0; i<sampleProfit.size();i++){
-                double sampleProfitDataPoint = sampleProfit.get(i).getValue();
-                double sampleRevenueDataPoint = sampleRevenue.get(i).getValue();
-                if (!(sampleRevenueDataPoint==0.00000)) {
-                    Double value = (sampleProfitDataPoint / sampleRevenueDataPoint) * 100;
-                    String date = sampleProfit.get(i).getDate();
-                    FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
-                    marginList.add(marginObject);
-                }
+
+        for (int i=0; i<sampleProfit.size();i++){
+            double value;
+            double sampleProfitDataPoint = sampleProfit.get(i).getValue();
+            double sampleRevenueDataPoint = extractMatchingValue(i,sampleProfit,sampleRevenue);
+            if (!(sampleRevenueDataPoint==0.00000)) {
+                value = sampleProfitDataPoint / sampleRevenueDataPoint;
+                String date = sampleProfit.get(i).getDate();
+                FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
+                marginList.add(marginObject);
             }
-        }else{JOptionPane.showMessageDialog(null,"Error!");}
+        }
+
         return  marginList;
     }
+
+
 
     /**
      * almost same method as calculateMargins() but with changed mathematical sign (data for dividend payout is negative)
@@ -247,6 +243,22 @@ public  class DataExtractor {
         return CommonSharesOutstandingDataList;
     }
 
+    private static double extractMatchingValue (int listOnePosition, ArrayList<FinancialDataObject> baseList,
+                                                ArrayList<FinancialDataObject> list2Iterate) throws Exception {
+        double matchingValue = 0.0;
+        LocalDate baseListDate = LocalDate.parse(baseList.get(listOnePosition).getDate());
+        if (!list2Iterate.isEmpty()) {
+            for (int i = 0; i < list2Iterate.size(); i++) {
+
+                LocalDate list2IterateDate = LocalDate.parse(list2Iterate.get(i).getDate());
+
+                if (baseListDate.getMonthValue() == list2IterateDate.getMonthValue() &&
+                        baseListDate.getYear() == list2IterateDate.getYear()) {
+                    matchingValue = list2Iterate.get(i).getValue();
+                }
+            }
+        }  return matchingValue;
+    }
     /**
      * Method to calculate dividend Yield when given two ArrayLists containing dividendPerShare and historicalStockPrices
      * Since the two lists have different  Data Point Date-Modulation (quarterley vs daily) the method is designed to
@@ -352,8 +364,8 @@ public  class DataExtractor {
                 sum =0.0;
                 String date = listOne.get(i).getDate();
                 double dataPointOne = listOne.get(i).getValue();
-                double dataPointTwo = listTwo.get(i).getValue();
-                double dataPointThree = listThree.get(i).getValue();
+                double dataPointTwo = extractMatchingValue(i,listOne,listTwo);
+                double dataPointThree = extractMatchingValue(i,listOne,listThree);
                 sum += dataPointOne+dataPointTwo+dataPointThree;
                 if (!(sum==0.0)){
                     average = sum/3;
@@ -424,6 +436,8 @@ public  class DataExtractor {
         }return meanRelativeChange;
     }
 
+
+
     /**
      * Method used for subtracting of  all values from one ArrayList from the corresponding values of another ArrayList
      * (both containing FinancialDataObjects).
@@ -432,8 +446,8 @@ public  class DataExtractor {
      * @param subtrahend list containing the subtrahend values
      * @return new DataList for subtracted values
      */
-    public static ArrayList<FinancialDataObject> subtractTwoValues(String valueName, ArrayList<FinancialDataObject> minuend,
-                                                                   ArrayList<FinancialDataObject> subtrahend) {
+    public static ArrayList<FinancialDataObject> subtractTwoListValues(String valueName, ArrayList<FinancialDataObject> minuend,
+                                                                       ArrayList<FinancialDataObject> subtrahend) {
         ArrayList<FinancialDataObject> difference = new ArrayList<>();
         if (minuend.size() == subtrahend.size()) {
             for (int i = 0; i < minuend.size(); i++) {
@@ -458,8 +472,8 @@ public  class DataExtractor {
      * @param valueTwo second list
      * @return ArrayList<FinancialDataObject> with summed values
      */
-    public static ArrayList<FinancialDataObject> addTwoValues(String valueName, ArrayList<FinancialDataObject> valueOne,
-                                                                   ArrayList<FinancialDataObject> valueTwo) {
+    public static ArrayList<FinancialDataObject> addTwoListValues(String valueName, ArrayList<FinancialDataObject> valueOne,
+                                                                  ArrayList<FinancialDataObject> valueTwo) {
         ArrayList<FinancialDataObject> sum = new ArrayList<>();
         if (valueOne.size() == valueTwo.size()) {
             for (int i = 0; i < valueOne.size(); i++) {
@@ -612,7 +626,7 @@ public  class DataExtractor {
 
         double totalRevenueCAGR = calculateCAGRFromQuarterlyData(dataContainerManager.getCompanyFundamentalData().
                 getTotalRevenue(),0);
-        ArrayList<FinancialDataObject> bookValuePlusDividends = addTwoValues("bookValuePlusDividends",
+        ArrayList<FinancialDataObject> bookValuePlusDividends = addTwoListValues("bookValuePlusDividends",
                 dataContainerManager.getCompanyFundamentalData().getWorkingCapital(),
                 dataContainerManager.getCompanyFundamentalData().getDividendPayout());
         double bookValuePlusDividendsCAGR = calculateCAGRFromQuarterlyData(bookValuePlusDividends,0);
@@ -733,13 +747,24 @@ public  class DataExtractor {
     }
 
 
-    private double calculateReturnOnAssets (DataContainerManager dataContainerManager)throws Exception{
+    public static double calculateReturnOnAssets (int timeFactor, DataContainerManager dataContainerManager)throws Exception{
         double returnOnAssets = 0.0;
-        double netIncome = dataContainerManager.getCompanyFundamentalData().getNetIncome().get(0).getValue();
-        double totalAssets = dataContainerManager.getCompanyFundamentalData().getTotalAssets().get(0).getValue();
+        double netIncome = dataContainerManager.getCompanyFundamentalData().getNetIncome().get(timeFactor).getValue();
+        double totalAssets = dataContainerManager.getCompanyFundamentalData().getTotalAssets().get(timeFactor).getValue();
 
         if (!(netIncome==0.0) && !(totalAssets==0.0)) {
              returnOnAssets = netIncome / totalAssets;
+        }
+        return  returnOnAssets;
+    }
+
+    public static double calculateCashflowReturnOnAssets (DataContainerManager dataContainerManager)throws Exception{
+        double returnOnAssets = 0.0;
+        double operatingCashflow = dataContainerManager.getCompanyFundamentalData().getOperatingCashflow().get(0).getValue();
+        double totalAssets = dataContainerManager.getCompanyFundamentalData().getTotalAssets().get(0).getValue();
+
+        if (!(operatingCashflow==0.0) && !(totalAssets==0.0)) {
+            returnOnAssets = operatingCashflow / totalAssets;
         }
         return  returnOnAssets;
     }
