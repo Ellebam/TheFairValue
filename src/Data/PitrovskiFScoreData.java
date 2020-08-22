@@ -44,7 +44,7 @@ public PitrovskiFScoreData (DataContainerManager dataContainerManager) throws Ex
     cashFlowReturnOnAssets = DataExtractor.calculateCashflowReturnOnAssets(dataContainerManager);
     changeInReturnOnAssets = returnOnAssetsCurrentYear-returnOnAssetsLastYear;
     qualityOfEarnings = cashFlowReturnOnAssets-returnOnAssetsCurrentYear;
-    averageTotalAssets = DataExtractor.calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getTotalAssets());
+    averageTotalAssets = DataExtractor.calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getTotalAssets(),0);
     currentLongTermDebt = dataContainerManager.getCompanyFundamentalData().getLongTermDebt().get(0).getValue();
     lastYearLongTermDebt = dataContainerManager.getCompanyFundamentalData().getLongTermDebt().get(3).getValue();
     currentLeverage = DataExtractor.divideTwoValues(currentLongTermDebt,averageTotalAssets);

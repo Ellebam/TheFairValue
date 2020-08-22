@@ -189,29 +189,31 @@ public  class DataExtractor {
 
     /**
      * almost same method as calculateMargins() but with changed mathematical sign (data for dividend payout is negative)
-     * @param marginName name for new Data
+     * @param name name for new Data
      * @param dividendPayout dividendPayout value
      * @param commonStockSharesOutstanding number of outstanding common stocks
      * @return ArrayList containing FinancialDataObjects with quotients of the divisions as values (positive)
      */
     public static ArrayList<FinancialDataObject> calculateDividendsPerShare
-    (String marginName, ArrayList<FinancialDataObject> dividendPayout,
+    (String name, ArrayList<FinancialDataObject> dividendPayout,
      ArrayList<FinancialDataObject> commonStockSharesOutstanding) throws Exception{
 
-        ArrayList<FinancialDataObject> marginList = new ArrayList<>();
-        if (dividendPayout.size() == commonStockSharesOutstanding.size()){
+        ArrayList<FinancialDataObject> DividendsPerShareList = new ArrayList<>();
+
             for (int i=0; i<dividendPayout.size();i++){
+                double value = 0.0;
                 double dividendPayoutDataPoint = dividendPayout.get(i).getValue();
-                double commonStockSharesOutstandingDataPoint = commonStockSharesOutstanding.get(i).getValue();
-                if (!(commonStockSharesOutstandingDataPoint==0.00000)) {
-                    double value = -(dividendPayoutDataPoint) / commonStockSharesOutstandingDataPoint;
-                    String date = dividendPayout.get(i).getDate();
-                    FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
-                    marginList.add(marginObject);
+                double commonStockSharesOutstandingDataPoint = extractMatchingValue(i,dividendPayout,commonStockSharesOutstanding);
+                if (!(dividendPayoutDataPoint ==0)){
+                     value = -(dividendPayoutDataPoint) / commonStockSharesOutstandingDataPoint;
                 }
+                    String date = dividendPayout.get(i).getDate();
+                    FinancialDataObject DividendPerShareDataPoint = new FinancialDataObject(name, value, date);
+                    DividendsPerShareList.add(DividendPerShareDataPoint);
+
             }
-        }else{JOptionPane.showMessageDialog(null,"Error!");}
-        return  marginList;
+
+        return  DividendsPerShareList;
     }
 
     /**
@@ -328,10 +330,11 @@ public  class DataExtractor {
      * @param dataList ArrayList containing all data values that need to be calculated as mean
      * @return mean value as a double
      */
-    public static double calculateMeanValueOverOneList (ArrayList<FinancialDataObject> dataList){
+    public static double calculateMeanValueOverOneList (ArrayList<FinancialDataObject> dataList, int timeFrameInArrayListUnits ){
          double sum =0.0;
          double average;
          if(!dataList.isEmpty()){
+             if (timeFrameInArrayListUnits==0){
              for(int i=0; i<dataList.size();i++){
                  double dataPoint =dataList.get(i).getValue();
                  if (!(dataPoint == 0.00000)){
@@ -339,6 +342,15 @@ public  class DataExtractor {
                  }
              }
               average = sum/ dataList.size();
+             } else {
+                 for(int i=0; i<timeFrameInArrayListUnits;i++){
+                     double dataPoint =dataList.get(i).getValue();
+                     if (!(dataPoint == 0.00000)){
+                         sum +=  dataPoint;
+                     }
+                 }
+                 average = sum/ dataList.size();
+             }
          }else{average =0.0;}
          return average;
     }
@@ -729,7 +741,7 @@ public  class DataExtractor {
         if (netIncomeCAGR ==0.00){
             netIncomeCAGR = 1.0;
         }
-        ArrayList<FinancialDataObject> historicalStockPrice = dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice();
+
         ArrayList<FinancialDataObject> PERatio = calculatePriceToEarningsRatio("PERatio",dataContainerManager);
         ArrayList<FinancialDataObject> PEGRatio = calculatePEGRatio(PERatio,netIncomeCAGR);
         for (int i = 0; i<PEGRatio.size(); i++){
@@ -740,9 +752,14 @@ public  class DataExtractor {
             String name = "PeterLynchFairValue";
             double value;
             double growthFactor = PEGRatioDataPoint+EBITDACAGR;
-            if (!(growthFactor==0.0)) {
-                 value = ((growthFactor)/2) * earningsPerShareDataPoint * 4;
-            }else{
+
+            if ((growthFactor>16 && growthFactor<50) || (growthFactor >0 && growthFactor<16)){
+                value = ((growthFactor) / 2) * earningsPerShareDataPoint * 4;
+            }else if (growthFactor>50) {
+                growthFactor = 25;
+                value = growthFactor * earningsPerShareDataPoint * 4;
+
+            }else {
                 value =earningsPerShareDataPoint*4;
             }
 

@@ -25,10 +25,11 @@ public class Main /*extends Application */{
         try {
             KeyManager keyManager = new KeyManager();
             System.out.println(keyManager.getKey());
-            ClientManager ClientManager = new ClientManager("MCD",keyManager.getKey());
+            ClientManager ClientManager = new ClientManager("FB",keyManager.getKey());
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
 
+            System.out.println(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0));
             System.out.println(dataContainerManager.getFairValueAnalysisData());
             System.out.println(dataContainerManager.getPitrovskiFScoreData());
 

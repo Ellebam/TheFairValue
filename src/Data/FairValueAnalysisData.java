@@ -28,6 +28,47 @@ public class FairValueAnalysisData {
 
     }
 
+
+    public ArrayList<FinancialDataObject> getHistoricalDCFFairValuePerShare() {
+        return HistoricalDCFFairValuePerShare;
+    }
+
+    public void setHistoricalDCFFairValuePerShare(ArrayList<FinancialDataObject> historicalDCFFairValuePerShare) {
+        HistoricalDCFFairValuePerShare = historicalDCFFairValuePerShare;
+    }
+
+    public ArrayList<FinancialDataObject> getPERatio() {
+        return PERatio;
+    }
+
+    public void setPERatio(ArrayList<FinancialDataObject> PERatio) {
+        this.PERatio = PERatio;
+    }
+
+    public ArrayList<FinancialDataObject> getPeterLynchFairValue() {
+        return PeterLynchFairValue;
+    }
+
+    public void setPeterLynchFairValue(ArrayList<FinancialDataObject> peterLynchFairValue) {
+        PeterLynchFairValue = peterLynchFairValue;
+    }
+
+    public ArrayList<FinancialDataObject> getGrahamNumber() {
+        return GrahamNumber;
+    }
+
+    public void setGrahamNumber(ArrayList<FinancialDataObject> grahamNumber) {
+        GrahamNumber = grahamNumber;
+    }
+
+    public ArrayList<FinancialDataObject> getMeanFairValue() {
+        return meanFairValue;
+    }
+
+    public void setMeanFairValue(ArrayList<FinancialDataObject> meanFairValue) {
+        this.meanFairValue = meanFairValue;
+    }
+
     @Override
     public String toString() {
         return "FairValueAnalysisData{" +"\n"+
