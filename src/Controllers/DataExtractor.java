@@ -2,6 +2,7 @@ package Controllers;
 
 
 import Data.FinancialDataObject;
+import Data.PitrovskiFScoreData;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 import javax.swing.*;
@@ -12,12 +13,12 @@ import java.util.Iterator;
 public  class DataExtractor {
 
     /**
-     * Static method for extracting Data from the JSON Objects created by the AlphavantageAPIClient.
+     * Static method for extracting Data from the JSON Objects created by the AlphaVantageAPIClient.
      * This method is used by the  CompanyOverviewData Class to access data from simple JSON objects
      *
-     * @param ClientManager       used APIMAnager containing the AlphavantageApiClient(OVERVIEW) object
+     * @param ClientManager       used APIManager containing the AlphaVantageApiClient(OVERVIEW) object
      * @param variableName variable that needs to be searched for inside JSON Object
-     * @return String countaining desired data
+     * @return String containing desired data
      */
     public static String extractOVERVIEWData(ClientManager ClientManager, String variableName) {
         return  ClientManager.getOverviewClient().getResponse().getBody().getObject().getString(variableName);
@@ -25,11 +26,11 @@ public  class DataExtractor {
     }
 
     /**
-     * This constructor will take an AlphavantageAPIClient and search for the "Time Series (Daily)" key. After getting that key
+     * This constructor will take an AlphaVantageAPIClient and search for the "Time Series (Daily)" key. After getting that key
      * it will iterate through all entries (dates) while saving the corresponding adjusted close price values to a double.
      * The date and the value are then used to create a StockPrice object which is the added to an ArrayList<StockPrice>
      *     which is also returned. This
-     * @param ClientManager used APIManager containing the  AlphavantageAPIClient used for this operation
+     * @param ClientManager used APIManager containing the  AlphaVantageAPIClient used for this operation
      *                   (APIFunction has to be "TIME_SERIES_DAILY_ADJUSTED")
      * @return ArrayList containing all historical Stock Prices
      */
@@ -49,8 +50,8 @@ public  class DataExtractor {
      }
 
     /**
-     * Main method used to extract Data from the generated Income Satement JSON-Object. It iterates through the JSON File
-     * under the Subnode "quarterly reports" (more avaiable data than "yearly" reports) and will extract all found values
+     * Main method used to extract Data from the generated Income Statement JSON-Object. It iterates through the JSON File
+     * under the Sub-Node "quarterly reports" (more available data than "yearly" reports) and will extract all found values
      * + their corresponding dates as a double (value) and a string (date) into a newly created FinancialDataObject inside
      * a container Arraylist (which it will return). If the result of the found value is "none" it will save a zero value.
      * @param keyName   key to find the searching value inside JSON File
@@ -219,7 +220,7 @@ public  class DataExtractor {
      * if there is no value saved in one or more of the quarterly reports from the json files) it will instead take
      * the value saved in the CompanyOverviewData object.
      * @param ClientManager client used for establishing api connection
-     * @param keyName String used for seearching of certain keywords in the json file
+     * @param keyName String used for searching of certain keywords in the json file
      * @param dataContainerManager data object used for data storage of whole script
      * @return returns a list containing all found or replaced numbers for outstanding common shares at certain dates
      */
@@ -231,11 +232,11 @@ public  class DataExtractor {
             String date = jsonArray.getJSONObject(i).getString("fiscalDateEnding");
 
             if (!(jsonArray.getJSONObject(i).getString(keyName).equals("None"))) {
-                Double value = jsonArray.getJSONObject(i).getDouble(keyName);
+                double value = jsonArray.getJSONObject(i).getDouble(keyName);
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 CommonSharesOutstandingDataList.add(dataObject);
             }else{
-                Double value = Double.parseDouble(dataContainerManager.getCompanyOverviewData().getSharesOutstanding());
+                double value = Double.parseDouble(dataContainerManager.getCompanyOverviewData().getSharesOutstanding());
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 CommonSharesOutstandingDataList.add(dataObject);
             }
@@ -261,7 +262,7 @@ public  class DataExtractor {
     }
     /**
      * Method to calculate dividend Yield when given two ArrayLists containing dividendPerShare and historicalStockPrices
-     * Since the two lists have different  Data Point Date-Modulation (quarterley vs daily) the method is designed to
+     * Since the two lists have different  Data Point Date-Modulation (quarterly vs daily) the method is designed to
      * used the dividendPerShare Date (Year and month) to search for the first entry of the historicalStockPrice List date found (it will
      * be the last reported stock price for that particular month).
      * @param name name for new Data
@@ -384,7 +385,7 @@ public  class DataExtractor {
     /**
      * This method will take an ArrayList>FinancialDataObject> and calculate the relative change of its first value (last
      * reported value in the real world) with a value chosen by the user. For finding that value a int is used to determine
-     * how far thet iteration to that value has to be.
+     * how far that iteration to that value has to be.
      * @param financialDataObjectList List containing all values
      * @param timeFrameInArrayListUnits number determined to set the position of the searched value(+1 = one position
      *                                  further in the ArrayList)
@@ -504,8 +505,8 @@ public  class DataExtractor {
     /**
      * Method to calculate the Ratio between stock price and earnings per share of a company. It will scan the dataContainerManager
      * for earningsPerShare values and try to find matching stock prices from the CompanyOverviewData object in the
-     * same dataContainerManager. The used loop only searches for matching months and years, since certain days are misssing
-     * in the database for stockprices. The first found stockprice of the month is taken for this calculation.
+     * same dataContainerManager. The used loop only searches for matching months and years, since certain days are missing
+     * in the database for stock prices. The first found stock price of the month is taken for this calculation.
      * @param name
      * @param dataContainerManager
      * @return
@@ -542,11 +543,21 @@ public  class DataExtractor {
         return PERatio;
     }
 
+    /**
+     * This method calculates the Price to Earnings growth ratio. It will need an ArrayList containing FinancialDataObjects
+     * with Price to Earning values inside and also a double representing the Compounded Annual Growth Rate. It will
+     * use these values to calculate the PEGRatio and return a new ArrayList with the same dates but new values.
+     * @param PERatio Price to Earnings Ratio needed to calculate PEGRatio
+     * @param CAGR growth rate
+     * @return new ArrayList containing desired values
+     * @throws Exception
+     */
     public static ArrayList<FinancialDataObject> calculatePEGRatio (ArrayList<FinancialDataObject> PERatio, double CAGR)
     throws Exception{
         ArrayList<FinancialDataObject> PEGRatio = new ArrayList<>();
         if (CAGR == 0.0){
-            CAGR =1.0;
+            CAGR =1.0; /* if given CAGR is exactly 0 the CAGR is changed to 1 to make the division possible (1 means
+                        neither positive nor negative growth */
         }
         for (int i = 0; i< PERatio.size();i++){
             String name = "PEGRatio";
@@ -559,12 +570,20 @@ public  class DataExtractor {
 
     }
 
+    /**
+     * calculation of the Compounded Annual Growth rate for ArrayLists containing FinancialDataObjects which represent
+     * DAILY stock price Data.
+     * @param financialDataObjects Data List needed for calculation
+     * @param timeFrameInArrayListUnits int needed to set the point to which the calculation should go (higher number
+     *                                  means it will go further back in time for the calculation
+     * @return CAGR of daily Stock Prices
+     */
     public static  double calculateCAGRFromDailyData (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
         double CAGR = 0.00;
         if (!financialDataObjects.isEmpty()){
             double endingValue = financialDataObjects.get(0).getValue();
             double beginningValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
-            double numOfYears = timeFrameInArrayListUnits/365;
+            double numOfYears = timeFrameInArrayListUnits/365; //calculation differs here from the normal calculateCAGR() method
             CAGR = Math.pow((endingValue/beginningValue),1.0/numOfYears)-1;
         }return CAGR;
     }
@@ -781,6 +800,48 @@ public  class DataExtractor {
             returnOnAssets = operatingCashflow / totalAssets;
         }
         return  returnOnAssets;
+    }
+
+    public static void calculatePitrovskiFScore (DataContainerManager dataContainerManager) throws Exception{
+        PitrovskiFScoreData pitrovskiFScoreData = dataContainerManager.getPitrovskiFScoreData();
+
+        if (pitrovskiFScoreData.getReturnOnAssetsCurrentYear()>0){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[0] = 1;
+        }
+        if (pitrovskiFScoreData.getCashFlowReturnOnAssets()>0){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[1] = 1;
+        }
+        if (pitrovskiFScoreData.getChangeInReturnOnAssets()>0){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[2] = 1;
+        }
+        if (pitrovskiFScoreData.getCashFlowReturnOnAssets()>pitrovskiFScoreData.getReturnOnAssetsCurrentYear()){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[3] = 1;
+        }
+        if (pitrovskiFScoreData.getChangeInLeverage()<0){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[4] = 1;
+        }
+        if (pitrovskiFScoreData.getChangeInCurrentRatio()>0){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[5] = 1;
+        }
+        if (pitrovskiFScoreData.getChangeInSharesIssues()<=0){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[6] = 1;
+        }
+
+        if (pitrovskiFScoreData.getChangeInGrossMargin()>0){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[7] = 1;
+        }
+
+        if (pitrovskiFScoreData.getChangeInAssetTurnover()>0){
+            pitrovskiFScoreData.getPitrovskiFScoreList()[8] = 1;
+        }
+        int sum=0;
+        for (int i = 0; i<pitrovskiFScoreData.getPitrovskiFScoreList().length;i++){
+            sum  += pitrovskiFScoreData.getPitrovskiFScoreList()[i];
+        }
+        pitrovskiFScoreData.setPitrovskiFScore(sum);
+
+
+
     }
 
 

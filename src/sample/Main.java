@@ -3,6 +3,7 @@ package sample;
 import Controllers.ClientManager;
 import Controllers.DataContainerManager;
 import Controllers.DataExtractor;
+import Controllers.KeyManager;
 import Data.FairValueAnalysisData;
 import Data.PitrovskiFScoreData;
 
@@ -22,14 +23,15 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("MSFT","capisamrah");
+            KeyManager keyManager = new KeyManager();
+            System.out.println(keyManager.getKey());
+            ClientManager ClientManager = new ClientManager("MCD",keyManager.getKey());
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
-            PitrovskiFScoreData pitrovskiFScoreData = new PitrovskiFScoreData(dataContainerManager);
 
 
-            System.out.println(dataContainerManager.getCompanyFundamentalData());
             System.out.println(dataContainerManager.getFairValueAnalysisData());
-            System.out.println(pitrovskiFScoreData);
+            System.out.println(dataContainerManager.getPitrovskiFScoreData());
+
 
 
 

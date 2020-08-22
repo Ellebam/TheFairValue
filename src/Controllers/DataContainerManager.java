@@ -3,6 +3,7 @@ package Controllers;
 import Data.CompanyFundamentalData;
 import Data.CompanyOverviewData;
 import Data.FairValueAnalysisData;
+import Data.PitrovskiFScoreData;
 
 public class DataContainerManager {
     private DataContainerManager dataContainerManager;
@@ -10,6 +11,7 @@ public class DataContainerManager {
     private CompanyOverviewData companyOverviewData;
     private CompanyFundamentalData companyFundamentalData;
     private FairValueAnalysisData fairValueAnalysisData;
+    private PitrovskiFScoreData pitrovskiFScoreData;
 
 
 
@@ -20,6 +22,8 @@ public class DataContainerManager {
         companyOverviewData = new CompanyOverviewData(clientManager);
         companyFundamentalData = new CompanyFundamentalData(clientManager,dataContainerManager);
         fairValueAnalysisData = new FairValueAnalysisData(dataContainerManager);
+        pitrovskiFScoreData = new PitrovskiFScoreData(dataContainerManager);
+        DataExtractor.calculatePitrovskiFScore(dataContainerManager);
 
 
 
@@ -46,5 +50,13 @@ public class DataContainerManager {
 
     public void setFairValueAnalysisData(FairValueAnalysisData fairValueAnalysisData) {
         this.fairValueAnalysisData = fairValueAnalysisData;
+    }
+
+    public PitrovskiFScoreData getPitrovskiFScoreData() {
+        return pitrovskiFScoreData;
+    }
+
+    public void setPitrovskiFScoreData(PitrovskiFScoreData pitrovskiFScoreData) {
+        this.pitrovskiFScoreData = pitrovskiFScoreData;
     }
 }
