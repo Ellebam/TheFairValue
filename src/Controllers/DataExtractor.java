@@ -447,17 +447,19 @@ public  class DataExtractor {
      * @return new DataList for subtracted values
      */
     public static ArrayList<FinancialDataObject> subtractTwoListValues(String valueName, ArrayList<FinancialDataObject> minuend,
-                                                                       ArrayList<FinancialDataObject> subtrahend) {
+                                                                       ArrayList<FinancialDataObject> subtrahend)
+    throws Exception{
         ArrayList<FinancialDataObject> difference = new ArrayList<>();
-        if (minuend.size() == subtrahend.size()) {
+        if (!(minuend.isEmpty())) {
             for (int i = 0; i < minuend.size(); i++) {
-                double value = minuend.get(i).getValue() - subtrahend.get(i).getValue();
+                double value = 0.0;
+                double minuendValue = minuend.get(i).getValue();
+                double subtrahendValue = extractMatchingValue(i,minuend,subtrahend);
+                value = minuendValue-subtrahendValue;
                 String date = minuend.get(i).getDate();
                 FinancialDataObject differenceObject = new FinancialDataObject(valueName, value, date);
                 difference.add(differenceObject);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Error!");
         }
         return difference;
 
@@ -468,25 +470,35 @@ public  class DataExtractor {
      * a new ArrayList containing Financial Data Objects containing the summed values with the dates taken from either one
      * of the lists.
      * @param valueName name of the value
-     * @param valueOne first list
-     * @param valueTwo second list
+     * @param listOne first list
+     * @param listTwo second list
      * @return ArrayList<FinancialDataObject> with summed values
      */
-    public static ArrayList<FinancialDataObject> addTwoListValues(String valueName, ArrayList<FinancialDataObject> valueOne,
-                                                                  ArrayList<FinancialDataObject> valueTwo) {
-        ArrayList<FinancialDataObject> sum = new ArrayList<>();
-        if (valueOne.size() == valueTwo.size()) {
-            for (int i = 0; i < valueOne.size(); i++) {
-                double value = valueOne.get(i).getValue() + valueTwo.get(i).getValue();
-                String date = valueOne.get(i).getDate();
+    public static ArrayList<FinancialDataObject> addTwoListValues(String valueName, ArrayList<FinancialDataObject> listOne,
+                                                                  ArrayList<FinancialDataObject> listTwo) throws Exception{
+        ArrayList<FinancialDataObject> sumList = new ArrayList<>();
+        if (!(listOne.isEmpty())) {
+            for (int i = 0; i < listOne.size(); i++) {
+                double value = 0.0;
+                double valueOne = listOne.get(i).getValue();
+                double valueTwo = extractMatchingValue(i,listOne,listTwo);
+                value = valueOne+valueTwo;
+                String date = listOne.get(i).getDate();
                 FinancialDataObject sumObject = new FinancialDataObject(valueName, value, date);
-                sum.add(sumObject);
+                sumList.add(sumObject);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Error!");
-        }
-        return sum;
 
+        }
+        return sumList;
+
+    }
+
+    public static double divideTwoValues (double valueOne, double valueTwo){
+        double endValue = 0.0;
+        if(!(valueOne==0.0)&&!(valueTwo==0.0)) {
+            endValue = valueOne / valueTwo;
+        }
+        return endValue;
     }
 
     /**
@@ -612,7 +624,8 @@ public  class DataExtractor {
      * @param ArrayListEntry point/date at which the fair value should be calculated
      * @return double containing the DCFFAirValue per share
      */
-    public static double calculateDCFFairValuePerShare(DataContainerManager dataContainerManager, int ArrayListEntry){
+    public static double calculateDCFFairValuePerShare(DataContainerManager dataContainerManager, int ArrayListEntry)
+    throws Exception{
         double DCFFairValuePerShare = 0.00;
         double lastDiscountedOperativeCashFlowValue = 0.00;
         double DCFSum = 0.00;
@@ -673,7 +686,8 @@ public  class DataExtractor {
      * @param dataContainerManager container for all data
      * @return ArrayList containing all new values
      */
-    public static ArrayList<FinancialDataObject> calculateHistoricalDCFFairValuePerShare (DataContainerManager dataContainerManager){
+    public static ArrayList<FinancialDataObject> calculateHistoricalDCFFairValuePerShare (DataContainerManager dataContainerManager)
+    throws Exception{
 
         ArrayList<FinancialDataObject> HistoricalDCFFairValuePerShare = new ArrayList<>();
         for (int i =0; i<dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().size();i++) {

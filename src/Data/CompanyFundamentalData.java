@@ -30,6 +30,8 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> totalAssets;
     private ArrayList<FinancialDataObject> totalLiabilities;
     private ArrayList<FinancialDataObject> workingCapital;
+    private ArrayList<FinancialDataObject> currentRatio;
+    private ArrayList<FinancialDataObject> assetTurnover;
     private ArrayList<FinancialDataObject> interestExpense;
     private ArrayList<FinancialDataObject> taxProvision;
     private ArrayList<FinancialDataObject> netInterestIncome;
@@ -87,6 +89,8 @@ public class CompanyFundamentalData {
     totalAssets = getDataFromBalanceSheet(clientManager,"totalAssets");
     totalLiabilities = getDataFromBalanceSheet(clientManager,"totalLiabilities");
     workingCapital = DataExtractor.subtractTwoListValues("workingCapital",totalAssets,totalLiabilities);
+    currentRatio = DataExtractor.calculateMargins("currentLiquidityRatio",totalAssets,totalLiabilities);
+    assetTurnover = DataExtractor.calculateMargins("assetTurnover",totalRevenue,totalAssets);
     operatingCashflow = getDataFromCashFlowStatement(clientManager,"operatingCashflow");
     interestExpense = getDataFromIncomeStatement(clientManager,"interestExpense");
     taxProvision = getDataFromIncomeStatement(clientManager,"taxProvision");
@@ -260,6 +264,22 @@ public class CompanyFundamentalData {
 
     public void setWorkingCapital(ArrayList<FinancialDataObject> workingCapital) {
         this.workingCapital = workingCapital;
+    }
+
+    public ArrayList<FinancialDataObject> getCurrentRatio() {
+        return currentRatio;
+    }
+
+    public void setCurrentRatio(ArrayList<FinancialDataObject> currentRatio) {
+        this.currentRatio = currentRatio;
+    }
+
+    public ArrayList<FinancialDataObject> getAssetTurnover() {
+        return assetTurnover;
+    }
+
+    public void setAssetTurnover(ArrayList<FinancialDataObject> assetTurnover) {
+        this.assetTurnover = assetTurnover;
     }
 
     public ArrayList<FinancialDataObject> getFreeCashFlow() {
@@ -495,6 +515,8 @@ public class CompanyFundamentalData {
                 ", totalAssets="+"\n" + totalAssets +"\n"+
                 ", totalLiabilities="+"\n" + totalLiabilities +"\n"+
                 ", workingCapital="+"\n" + workingCapital +"\n"+
+                ", currentRatio="+"\n" + currentRatio +"\n"+
+                ", assetTurnover="+"\n" + assetTurnover +"\n"+
                 ", interestExpense="+"\n" + interestExpense +"\n"+
                 ", taxProvision="+"\n" + taxProvision +"\n"+
                 ", netInterestIncome="+"\n" + netInterestIncome +"\n"+

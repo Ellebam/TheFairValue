@@ -4,6 +4,7 @@ import Controllers.ClientManager;
 import Controllers.DataContainerManager;
 import Controllers.DataExtractor;
 import Data.FairValueAnalysisData;
+import Data.PitrovskiFScoreData;
 
 
 public class Main /*extends Application */{
@@ -21,11 +22,14 @@ public class Main /*extends Application */{
        // launch(args);
 
         try {
-           ClientManager ClientManager = new ClientManager("UL","capisamrah");
+           ClientManager ClientManager = new ClientManager("MSFT","capisamrah");
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
+            PitrovskiFScoreData pitrovskiFScoreData = new PitrovskiFScoreData(dataContainerManager);
 
 
-            System.out.println(DataExtractor.calculateReturnOnAssets(0,dataContainerManager));
+            System.out.println(dataContainerManager.getCompanyFundamentalData());
+            System.out.println(dataContainerManager.getFairValueAnalysisData());
+            System.out.println(pitrovskiFScoreData);
 
 
 
