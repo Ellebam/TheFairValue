@@ -4,6 +4,7 @@ import Controllers.ClientManager;
 import Controllers.DataContainerManager;
 import Controllers.DataExtractor;
 import Controllers.KeyManager;
+import Data.EvaluationData;
 import Data.FairValueAnalysisData;
 import Data.PitrovskiFScoreData;
 
@@ -27,11 +28,10 @@ public class Main /*extends Application */{
             System.out.println(keyManager.getKey());
             ClientManager ClientManager = new ClientManager("FB",keyManager.getKey());
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
+            EvaluationData evaluationData = new EvaluationData(dataContainerManager);
 
 
-            System.out.println(dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0));
-            System.out.println(dataContainerManager.getFairValueAnalysisData());
-            System.out.println(dataContainerManager.getPitrovskiFScoreData());
+            System.out.println(evaluationData);
 
 
 

@@ -332,27 +332,63 @@ public  class DataExtractor {
      */
     public static double calculateMeanValueOverOneList (ArrayList<FinancialDataObject> dataList, int timeFrameInArrayListUnits ){
          double sum =0.0;
-         double average;
+         double average = 0.0;
          if(!dataList.isEmpty()){
              if (timeFrameInArrayListUnits==0){
              for(int i=0; i<dataList.size();i++){
                  double dataPoint =dataList.get(i).getValue();
-                 if (!(dataPoint == 0.00000)){
-                     sum +=  dataPoint;
-                 }
+                 sum +=  dataPoint;
              }
               average = sum/ dataList.size();
              } else {
                  for(int i=0; i<timeFrameInArrayListUnits;i++){
                      double dataPoint =dataList.get(i).getValue();
-                     if (!(dataPoint == 0.00000)){
-                         sum +=  dataPoint;
-                     }
+                     sum +=  dataPoint;
                  }
-                 average = sum/ dataList.size();
+                 if (!(sum==0)) {
+                     average = sum / dataList.size();
+                 }
              }
-         }else{average =0.0;}
+         }
          return average;
+    }
+
+    public static double calculateMarginForTwoValuesInPercent(double dataPointOne, double dataPointTwo){
+        double mean = 0.0;
+        if (!(dataPointOne==0.0)&&!(dataPointTwo==0.0)){
+            mean = dataPointOne/dataPointTwo*100;
+        }
+        return mean;
+    }
+
+    public static double calculateStandardDeviation (ArrayList<FinancialDataObject> dataList, int timeFrameInListUnits) throws Exception{
+        double sum = 0.0;
+        double average = calculateMeanValueOverOneList(dataList,timeFrameInListUnits);
+        double standardDeviation = 0.0;
+        if(!dataList.isEmpty()) {
+            if (timeFrameInListUnits == 0) {
+                for (int i = 0; i < dataList.size(); i++) {
+                    double dataPoint = dataList.get(i).getValue();
+                    double squaredDataPoint = Math.pow((dataPoint - average),2);
+                    sum += squaredDataPoint;
+                }
+                if (!(sum == 0.0)) {
+                    double variance = sum / dataList.size();
+                    standardDeviation = Math.pow(variance,0.5);
+                }
+            } else {
+                for (int i = 0; i < timeFrameInListUnits; i++) {
+                    double dataPoint = dataList.get(i).getValue();
+                    double squaredDataPoint = Math.pow((dataPoint - average),2);
+                    sum += squaredDataPoint;
+                }
+                if (!(sum == 0.0)) {
+                    double variance = sum / dataList.size();
+                    standardDeviation = Math.pow(variance,0.5);
+                }
+            }
+        }
+        return standardDeviation;
     }
 
 
