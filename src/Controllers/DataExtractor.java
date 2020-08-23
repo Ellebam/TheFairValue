@@ -262,6 +262,16 @@ public  class DataExtractor {
             }
         }  return matchingValue;
     }
+
+    public static double extractSumOfDataValues (ArrayList<FinancialDataObject> dataList, int timeFrameUnit){
+        double sumOfDataPoints = 0.0;
+        if (!(dataList.isEmpty())){
+            for (int i = 0; i<timeFrameUnit; i++){
+                sumOfDataPoints += dataList.get(i).getValue();
+            }
+        }
+        return sumOfDataPoints;
+    }
     /**
      * Method to calculate dividend Yield when given two ArrayLists containing dividendPerShare and historicalStockPrices
      * Since the two lists have different  Data Point Date-Modulation (quarterly vs daily) the method is designed to
@@ -389,6 +399,24 @@ public  class DataExtractor {
             }
         }
         return standardDeviation;
+    }
+
+    public static double calculateDivergence (double benchmarkValue, double actualValue){
+        double divergence = (benchmarkValue-actualValue)/benchmarkValue;
+        return divergence;
+
+    }
+
+    public static int calculatePoints (double pointsNumber, double benchmarkValue, double actualValue){
+        double divergence = calculateDivergence(benchmarkValue,actualValue);
+        int endPoints;
+        if (!(divergence<=0)){
+            endPoints =(int) Math.round (pointsNumber*divergence);
+
+        }else{
+            endPoints = (int) pointsNumber;
+        }
+        return endPoints;
     }
 
 
