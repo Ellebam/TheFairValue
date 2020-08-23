@@ -658,7 +658,11 @@ public  class DataExtractor {
         double CAGR = 0.00;
         if (!financialDataObjects.isEmpty()){
             double endingValue = financialDataObjects.get(0).getValue();
-            double beginningValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
+            double beginningValue;
+            if (financialDataObjects.size()<timeFrameInArrayListUnits){
+                 beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
+            }else{
+             beginningValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();}
             double numOfYears = timeFrameInArrayListUnits/365; //calculation differs here from the normal calculateCAGR() method
             CAGR = Math.pow((endingValue/beginningValue),1.0/numOfYears)-1;
         }return CAGR;
@@ -920,6 +924,18 @@ public  class DataExtractor {
             sum  += pitrovskiFScoreData.getPitrovskiFScoreList()[i];
         }
         pitrovskiFScoreData.setPitrovskiFScore(sum);
+    }
+
+    public static void calculateEvaluationPoints (DataContainerManager dataContainerManager) throws Exception{
+
+         int fairValue2StockPricePoints = DataExtractor.calculatePoints(
+                 25,dataContainerManager.getEvaluationData().getMeanHistoricalStockPrice(),
+                 dataContainerManager.getEvaluationData().getCurrentMeanFairValue());
+         dataContainerManager.getEvaluationData().setFairValue2StockPricePoints(fairValue2StockPricePoints);
+
+         int pitrovskiFScorePoints = DataExtractor.calculatePoints(25,9.0,
+                 dataContainerManager.getPitrovskiFScoreData().getPitrovskiFScore());
+         dataContainerManager.getEvaluationData().setPitrovskiFScorePoints(pitrovskiFScorePoints);
 
 
 

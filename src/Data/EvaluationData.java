@@ -33,7 +33,7 @@ public class EvaluationData {
                 dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),0);
 
         standardDeviation = DataExtractor.calculateStandardDeviation(
-                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),0);
+                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),365);
 
         stockPriceVolatility = DataExtractor.calculateMarginForTwoValuesInPercent(standardDeviation,meanHistoricalStockPrice);
 
@@ -46,7 +46,7 @@ public class EvaluationData {
         dividendYield = DataExtractor.extractSumOfDataValues(
                 dataContainerManager.getCompanyFundamentalData().getDividendYield(),4);
 
-        fairValue2StockPricePoints = DataExtractor.calculatePoints(25,meanHistoricalStockPrice,currentMeanFairValue);
+
 
 
 

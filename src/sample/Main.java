@@ -23,14 +23,14 @@ public class Main /*extends Application */{
         try {
             KeyManager keyManager = new KeyManager();
             System.out.println(keyManager.getKey());
-            ClientManager ClientManager = new ClientManager("JNJ",keyManager.getKey());
+            ClientManager ClientManager = new ClientManager("MSFT",keyManager.getKey());
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
-            EvaluationData evaluationData = new EvaluationData(dataContainerManager);
+
 
             System.out.println(dataContainerManager.getCompanyOverviewData());
             System.out.println(dataContainerManager.getCompanyFundamentalData());
             System.out.println(dataContainerManager.getFairValueAnalysisData());
-            System.out.println(evaluationData.getFairValue2StockPricePoints());
+            System.out.println(dataContainerManager.getEvaluationData());
 
 
 
