@@ -356,7 +356,7 @@ public  class DataExtractor {
                      sum +=  dataPoint;
                  }
                  if (!(sum==0)) {
-                     average = sum / dataList.size();
+                     average = sum / timeFrameInArrayListUnits;
                  }
              }
          }
@@ -656,14 +656,16 @@ public  class DataExtractor {
      */
     public static  double calculateCAGRFromDailyData (ArrayList<FinancialDataObject> financialDataObjects,int timeFrameInArrayListUnits){
         double CAGR = 0.00;
+        double numOfYears =1;
         if (!financialDataObjects.isEmpty()){
             double endingValue = financialDataObjects.get(0).getValue();
             double beginningValue;
             if (financialDataObjects.size()<timeFrameInArrayListUnits){
                  beginningValue = financialDataObjects.get(financialDataObjects.size()-1).getValue();
+                numOfYears = financialDataObjects.size()/365;
             }else{
-             beginningValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();}
-            double numOfYears = timeFrameInArrayListUnits/365; //calculation differs here from the normal calculateCAGR() method
+             beginningValue = financialDataObjects.get(timeFrameInArrayListUnits).getValue();
+             numOfYears = timeFrameInArrayListUnits/365;} //calculation differs here from the normal calculateCAGR() method
             CAGR = Math.pow((endingValue/beginningValue),1.0/numOfYears)-1;
         }return CAGR;
     }
@@ -928,14 +930,47 @@ public  class DataExtractor {
 
     public static void calculateEvaluationPoints (DataContainerManager dataContainerManager) throws Exception{
 
-         int fairValue2StockPricePoints = DataExtractor.calculatePoints(
-                 25,dataContainerManager.getEvaluationData().getMeanHistoricalStockPrice(),
+         int fairValue2StockPricePoints = calculatePoints(
+                 25,dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue(),
                  dataContainerManager.getEvaluationData().getCurrentMeanFairValue());
-         dataContainerManager.getEvaluationData().setFairValue2StockPricePoints(fairValue2StockPricePoints);
+         dataContainerManager.getEvaluationData().setFairValue2StockPricePoints(fairValue2StockPricePoints); //HERE TSLA!!
 
-         int pitrovskiFScorePoints = DataExtractor.calculatePoints(25,9.0,
+         int pitrovskiFScorePoints = calculatePoints(25,9.0,
                  dataContainerManager.getPitrovskiFScoreData().getPitrovskiFScore());
          dataContainerManager.getEvaluationData().setPitrovskiFScorePoints(pitrovskiFScorePoints);
+
+        /* in this line the calculatePoints() methods arguments benchmarkValue and actualValue are switched, since we
+        * want to measure a value that has to be lower than the benchmark*/
+         int volatilityPoints = calculatePoints(10,
+                 dataContainerManager.getEvaluationData().getStockPriceVolatility(),10);
+
+         int performancePoints = calculatePoints(
+                 15,0.3,dataContainerManager.getEvaluationData().getTenYearStockPriceCAGR());
+
+         int volatilityAndPerformancePoints = volatilityPoints+performancePoints;
+         dataContainerManager.getEvaluationData().setVolatilityAndPerformancePoints(volatilityAndPerformancePoints);
+
+         int dividendIsTruePoints =0;
+         if (dataContainerManager.getCompanyFundamentalData().getDividendsPerShare().get(0).getValue()>0){
+             dividendIsTruePoints = 4;
+         }
+
+         int dividendYieldPoints = calculatePoints(7,3,
+                 calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getDividendYield(),4));
+
+         int payoutRatioPoints = calculatePoints(7,
+                 calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getPayOutRatio(),4),0.1);
+
+         int dividendPayoutToFCFPoints = calculatePoints(7,
+                 (-calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getDividendPayout(),4)),
+                 (calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow(),4))/2);
+
+         int dividendFactorPoints = dividendIsTruePoints+dividendYieldPoints+payoutRatioPoints+dividendPayoutToFCFPoints;
+
+         dataContainerManager.getEvaluationData().setDividendFactorsPoints(dividendFactorPoints);
+
+         int evaluationPoints = fairValue2StockPricePoints+pitrovskiFScorePoints+volatilityAndPerformancePoints+dividendFactorPoints;
+         dataContainerManager.getEvaluationData().setSumOfEvaluationPoints(evaluationPoints);
 
 
 

@@ -30,15 +30,15 @@ public class EvaluationData {
 
 
         meanHistoricalStockPrice = DataExtractor.calculateMeanValueOverOneList(
-                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),0);
+                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),750); //here!!
 
         standardDeviation = DataExtractor.calculateStandardDeviation(
-                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),365);
+                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),750);
 
         stockPriceVolatility = DataExtractor.calculateMarginForTwoValuesInPercent(standardDeviation,meanHistoricalStockPrice);
 
         tenYearStockPriceCAGR = DataExtractor.calculateCAGRFromDailyData(
-                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),3650);
+                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),2000);
 
         dividendsPerShare = DataExtractor.extractSumOfDataValues(
                 dataContainerManager.getCompanyFundamentalData().getDividendsPerShare(),4);

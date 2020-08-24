@@ -23,7 +23,7 @@ public class Main /*extends Application */{
         try {
             KeyManager keyManager = new KeyManager();
             System.out.println(keyManager.getKey());
-            ClientManager ClientManager = new ClientManager("MSFT",keyManager.getKey());
+            ClientManager ClientManager = new ClientManager("TSLA",keyManager.getKey());
             DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
 
 
