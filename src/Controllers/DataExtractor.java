@@ -5,11 +5,15 @@ import Data.FinancialDataObject;
 import Data.PitrovskiFScoreData;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
-import javax.swing.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * This Class represents all methods for retrieving or calculating the various data used for all DataClasses. All methods
+ * are static so they can be used by all other DataClasses
+ */
 public  class DataExtractor {
 
     /**
@@ -246,6 +250,17 @@ public  class DataExtractor {
         return CommonSharesOutstandingDataList;
     }
 
+    /**
+     * Extraction of values from one ArrayList containing FinancialDataObjects if they match the date of the given base
+     * List containing similar objects. The method will iterate through the base list and check the dates of its objects
+     * and try to find the same date on the entries of the second list. It will only check for matching months and years
+     * since the days may vary
+     * @param listOnePosition integer which will be used for accessing a certain object on the baseList
+     * @param baseList list in which a certain value is taken for searching of the matching value on the second list
+     * @param list2Iterate second list in which the matching value is searched for
+     * @return double of the matching value
+     * @throws Exception
+     */
     private static double extractMatchingValue (int listOnePosition, ArrayList<FinancialDataObject> baseList,
                                                 ArrayList<FinancialDataObject> list2Iterate) throws Exception {
         double matchingValue = 0.0;
@@ -263,6 +278,13 @@ public  class DataExtractor {
         }  return matchingValue;
     }
 
+    /**
+     * method to determine the sum of the value of a given list. The scope is given by the timFrameUnit which will determine
+     * how far down the list this method needs to go
+     * @param dataList list in which the sum need to be calculated
+     * @param timeFrameUnit value used for determining how far the list iteration should go
+     * @return double containing the sum of all values iterated
+     */
     public static double extractSumOfDataValues (ArrayList<FinancialDataObject> dataList, int timeFrameUnit){
         double sumOfDataPoints = 0.0;
         if (!(dataList.isEmpty())){
@@ -338,6 +360,7 @@ public  class DataExtractor {
     /**
      * Calculation of mean values of an ArrayList containing Financial Data Objects.
      * @param dataList ArrayList containing all data values that need to be calculated as mean
+     * @param timeFrameInArrayListUnits used for determining how many values should be used for the calculation
      * @return mean value as a double
      */
     public static double calculateMeanValueOverOneList (ArrayList<FinancialDataObject> dataList, int timeFrameInArrayListUnits ){
@@ -363,12 +386,18 @@ public  class DataExtractor {
          return average;
     }
 
+    /**
+     * Calculation of simple margin of two values if those do not equal zero each
+     * @param dataPointOne  first data value
+     * @param dataPointTwo  second data value
+     * @return  margin of of two values as a double percentage
+     */
     public static double calculateMarginForTwoValuesInPercent(double dataPointOne, double dataPointTwo){
-        double mean = 0.0;
+        double margin = 0.0;
         if (!(dataPointOne==0.0)&&!(dataPointTwo==0.0)){
-            mean = dataPointOne/dataPointTwo*100;
+            margin = dataPointOne/dataPointTwo*100;
         }
-        return mean;
+        return margin;
     }
 
     public static double calculateStandardDeviation (ArrayList<FinancialDataObject> dataList, int timeFrameInListUnits) throws Exception{
@@ -407,7 +436,7 @@ public  class DataExtractor {
 
     }
 
-    public static int calculatePoints (double pointsNumber, double benchmarkValue, double actualValue){
+    public static int calculatePointsPositive(double pointsNumber, double benchmarkValue, double actualValue){
         double divergence = calculateDivergence(benchmarkValue,actualValue);
         int endPoints;
         if (!(divergence<=0)){
@@ -415,6 +444,19 @@ public  class DataExtractor {
 
         }else{
             endPoints = (int) pointsNumber;
+        }
+        return endPoints;
+    }
+
+    public static int calculatePointsNegative(double pointsNumber, double benchmarkValue, double actualValue){
+        double divergence = calculateDivergence(benchmarkValue,actualValue);
+        int endPoints;
+        if (divergence>0) {
+            endPoints = (int) Math.round(pointsNumber * divergence);
+        }else if (divergence == 0){
+            endPoints = (int)   Math.round(pointsNumber/1.6);
+        }else{
+            endPoints = 0;
         }
         return endPoints;
     }
@@ -930,44 +972,54 @@ public  class DataExtractor {
 
     public static void calculateEvaluationPoints (DataContainerManager dataContainerManager) throws Exception{
 
-         int fairValue2StockPricePoints = calculatePoints(
-                 25,dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue(),
-                 dataContainerManager.getEvaluationData().getCurrentMeanFairValue());
-         dataContainerManager.getEvaluationData().setFairValue2StockPricePoints(fairValue2StockPricePoints); //HERE TSLA!!
+         int fairValue2StockPricePoints = calculatePointsNegative(
+                 25, dataContainerManager.getEvaluationData().getCurrentMeanFairValue(),
+                 dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue());
+         dataContainerManager.getEvaluationData().setFairValue2StockPricePoints(fairValue2StockPricePoints);
 
-         int pitrovskiFScorePoints = calculatePoints(25,9.0,
+         if ((dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue()) <
+        dataContainerManager.getEvaluationData().getCurrentMeanFairValue()){
+        fairValue2StockPricePoints = 25;
+        dataContainerManager.getEvaluationData().setFairValue2StockPricePoints(fairValue2StockPricePoints);
+        }
+
+         int pitrovskiFScorePoints = calculatePointsPositive(25,9.0,
                  dataContainerManager.getPitrovskiFScoreData().getPitrovskiFScore());
          dataContainerManager.getEvaluationData().setPitrovskiFScorePoints(pitrovskiFScorePoints);
 
-        /* in this line the calculatePoints() methods arguments benchmarkValue and actualValue are switched, since we
-        * want to measure a value that has to be lower than the benchmark*/
-         int volatilityPoints = calculatePoints(10,
-                 dataContainerManager.getEvaluationData().getStockPriceVolatility(),10);
 
-         int performancePoints = calculatePoints(
+         int volatilityPoints = calculatePointsNegative(10,10,
+                 dataContainerManager.getEvaluationData().getStockPriceVolatility());
+
+         int performancePoints = calculatePointsPositive(
                  15,0.3,dataContainerManager.getEvaluationData().getTenYearStockPriceCAGR());
 
          int volatilityAndPerformancePoints = volatilityPoints+performancePoints;
          dataContainerManager.getEvaluationData().setVolatilityAndPerformancePoints(volatilityAndPerformancePoints);
 
          int dividendIsTruePoints =0;
-         if (dataContainerManager.getCompanyFundamentalData().getDividendsPerShare().get(0).getValue()>0){
+         int dividendFactorPoints =0;
+         if (dataContainerManager.getCompanyFundamentalData().getDividendsPerShare().get(0).getValue()>0) {
              dividendIsTruePoints = 4;
+
+             int dividendYieldPoints = calculatePointsPositive(7, 3,
+                     calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getDividendYield(), 4));
+
+             int payoutRatioPoints = calculatePointsNegative(7, 0.1,
+                     calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getPayOutRatio(), 4));
+
+             int dividendPayoutToFCFPoints = calculatePointsPositive(7,
+                     (-calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getDividendPayout(), 4)),
+                     (calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow(), 4)) / 2);
+
+             dividendFactorPoints = dividendIsTruePoints + dividendYieldPoints + payoutRatioPoints + dividendPayoutToFCFPoints;
+
+             dataContainerManager.getEvaluationData().setDividendFactorsPoints(dividendFactorPoints);
+         } else {
+             dividendFactorPoints = calculatePointsPositive(25,0.5,dataContainerManager.getEvaluationData().getTenYearStockPriceCAGR());
+             dataContainerManager.getEvaluationData().setDividendFactorsPoints(dividendFactorPoints);
          }
 
-         int dividendYieldPoints = calculatePoints(7,3,
-                 calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getDividendYield(),4));
-
-         int payoutRatioPoints = calculatePoints(7,
-                 calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getPayOutRatio(),4),0.1);
-
-         int dividendPayoutToFCFPoints = calculatePoints(7,
-                 (-calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getDividendPayout(),4)),
-                 (calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow(),4))/2);
-
-         int dividendFactorPoints = dividendIsTruePoints+dividendYieldPoints+payoutRatioPoints+dividendPayoutToFCFPoints;
-
-         dataContainerManager.getEvaluationData().setDividendFactorsPoints(dividendFactorPoints);
 
          int evaluationPoints = fairValue2StockPricePoints+pitrovskiFScorePoints+volatilityAndPerformancePoints+dividendFactorPoints;
          dataContainerManager.getEvaluationData().setSumOfEvaluationPoints(evaluationPoints);
