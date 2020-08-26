@@ -447,7 +447,18 @@ public  class DataExtractor {
         }
         return endPoints;
     }
-
+    public static int calculatePointsStockPrice(double pointsNumber, double benchmarkValue, double actualValue){
+        double divergence = divideTwoValues(benchmarkValue,actualValue);
+        int endPoints;
+        if (divergence>0) {
+            endPoints = (int) Math.round(pointsNumber * divergence);
+        }else if (divergence == 0){
+            endPoints = (int)   Math.round(pointsNumber/1.6);
+        }else{
+            endPoints = 0;
+        }
+        return endPoints;
+    }
     public static int calculatePointsNegative(double pointsNumber, double benchmarkValue, double actualValue){
         double divergence = calculateDivergence(benchmarkValue,actualValue);
         int endPoints;
@@ -972,7 +983,7 @@ public  class DataExtractor {
 
     public static void calculateEvaluationPoints (DataContainerManager dataContainerManager) throws Exception{
 
-         int fairValue2StockPricePoints = calculatePointsNegative(
+         int fairValue2StockPricePoints = calculatePointsStockPrice(
                  25, dataContainerManager.getEvaluationData().getCurrentMeanFairValue(),
                  dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue());
          dataContainerManager.getEvaluationData().setFairValue2StockPricePoints(fairValue2StockPricePoints);
