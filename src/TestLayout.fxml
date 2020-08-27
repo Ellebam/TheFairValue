@@ -7,7 +7,7 @@
 <?import javafx.scene.control.Button?>
 
 
-<VBox spacing="20" xmlns:fx="http://javafx.com/fxml">
+<VBox spacing="20" xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.FXMLController">
     <Label fx:id="label1" text = "Click for  Fair Value"/>
     <Button fx:id="button1" text="click me!" onAction="reactToClick()"/>
     <style>
