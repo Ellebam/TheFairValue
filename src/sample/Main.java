@@ -41,7 +41,7 @@ public class Main extends Application {
        tableView.getColumns().add(column1);
        tableView.getColumns().add(column2);
 
-       tableView.getItems().add(new FinancialDataObject("oida",50,"3"));
+       tableView.getItems().add(new FinancialDataObject("yeh",50,"3"));
 
 
 
