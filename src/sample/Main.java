@@ -1,9 +1,7 @@
 package sample;
 
-import Controllers.ClientManager;
-import Controllers.DataContainerManager;
-import Controllers.FXMLController;
-import Controllers.KeyManager;
+import Boxes.OpeningVBox;
+import Controllers.*;
 import Data.EvaluationData;
 import Data.FinancialDataObject;
 import javafx.application.Application;
@@ -24,51 +22,26 @@ import java.net.URL;
 
 
 public class Main extends Application {
+    SceneController sceneController = new SceneController();
+
+
 
    @Override
     public void start(Stage primaryStage) throws Exception{
-
-        primaryStage.setTitle("The Fair Value");
-
-        TableView tableView = new TableView();
-
-       TableColumn<String, FinancialDataObject> column1 = new TableColumn<>("value");
-       column1.setCellValueFactory(new PropertyValueFactory<>("value"));
-
-       TableColumn<String, FinancialDataObject>column2 = new TableColumn<>("date");
-       column2.setCellValueFactory(new PropertyValueFactory<>("date"));
-
-       tableView.getColumns().add(column1);
-       tableView.getColumns().add(column2);
-
-       tableView.getItems().add(new FinancialDataObject("yeh",50,"3"));
-
-
-
-       primaryStage.setX(100);
-       primaryStage.setY(100);
-       primaryStage.setWidth(600);
+       primaryStage.setTitle("The Fair Value");
        primaryStage.setHeight(600);
-       Button button1 = new Button("click me");
-
-       VBox vBox = new VBox(tableView);
-       VBox vbox = new VBox(button1);
-       vbox.getChildren().add(vBox);
-
-       button1.setLineSpacing(30);
-       Scene scene = new Scene(vbox);
-
-
-       primaryStage.setScene(scene);
-
-
-
-
-
+       primaryStage.setWidth(800);
+       sceneController.setStage(primaryStage);
+       sceneController.setSceneContent(new OpeningVBox());
 
        primaryStage.show();
+       primaryStage.centerOnScreen();
 
     }
+
+
+
+
 
 
     public static void main(String[] args) throws Exception {
@@ -89,6 +62,10 @@ public class Main extends Application {
         }catch (Exception ex){ex.printStackTrace();}*/
 
 
+
+    }
+
+    public static void changeStageScene (Scene scene){
 
     }
 
