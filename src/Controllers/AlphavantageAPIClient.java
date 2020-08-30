@@ -6,12 +6,14 @@ import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * The AlphavantageAPIClient Class builds a connection to the Database of Alpha Vantage to retrieve
  * real time market data for the various Data Classes. Its constructor needs the API-Function,
  * a ticker symbol of the desired stock (e.g. MCD) and the users APIKey.
  */
-public class AlphavantageAPIClient {
+public class AlphavantageAPIClient implements Serializable {
 
 
 

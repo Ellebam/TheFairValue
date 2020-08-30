@@ -1,6 +1,8 @@
 package Controllers;
 
-public class ClientManager {
+import java.io.Serializable;
+
+public class ClientManager implements Serializable {
     private String apiKey;
     private String symbol;
     private static final String apiFunctionOVERVIEW ="OVERVIEW";

@@ -1,12 +1,17 @@
-package Boxes;
+package GUIBoxes;
 
+import Controllers.ClientManager;
+import Controllers.DataContainerManager;
+import Controllers.KeyManager;
 import GUIElements.SearchBar;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import sample.Main;
 
 public class OpeningVBox extends VBox {
 
@@ -14,9 +19,10 @@ public class OpeningVBox extends VBox {
     Label HeaderLabel;
     SearchBar searchBar;
     Button demoButton;
+    DataContainerManager dataContainerManager;
 
 
-    public  OpeningVBox(){
+    public OpeningVBox() {
         openingVBox = this;
 
 
@@ -24,22 +30,21 @@ public class OpeningVBox extends VBox {
                 "Please enter a stock ticker symbol of the company that should be analyzed." +
                 "(e.g. MSFT for Microsoft Corp.)";
         Label HeaderLabel = new Label(labelText);
-        this.HeaderLabel=HeaderLabel;
+        this.HeaderLabel = HeaderLabel;
         HeaderLabel.setWrapText(true);
         HeaderLabel.setMaxWidth(600);
         HeaderLabel.setAlignment(Pos.CENTER);
         HeaderLabel.setTextAlignment(TextAlignment.CENTER);
-        Font labelFont = new Font("Amble.CN",20);
+        Font labelFont = new Font("Amble.CN", 20);
         HeaderLabel.setFont(labelFont);
 
         SearchBar searchBar = new SearchBar();
         searchBar.setAlignment(Pos.CENTER);
         this.searchBar = searchBar;
 
-        Button demoButton = new Button ("Try Demo");
+        Button demoButton = new Button("Try Demo");
         demoButton.setStyle("-fx-text-fill: #00BFFF; -fx-font-size: 18;");
         this.demoButton = demoButton;
-
 
 
         openingVBox.getChildren().add(HeaderLabel);
@@ -48,6 +53,23 @@ public class OpeningVBox extends VBox {
         openingVBox.setAlignment(Pos.CENTER);
         openingVBox.setSpacing(20);
 
+        loadData("JNJ");
+        System.out.println(dataContainerManager.getCompanyOverviewData());
 
+
+    }
+
+    public void loadData(String symbol) {
+        try {
+            KeyManager keyManager = new KeyManager();
+            System.out.println(keyManager.getKey());
+            ClientManager ClientManager = new ClientManager("JNJ", keyManager.getKey());
+            DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
+            this.dataContainerManager = dataContainerManager;
+        } catch (Exception ex) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error while loading Data!");
+            errorAlert.show();
+
+        }
     }
 }
