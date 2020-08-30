@@ -1,0 +1,17 @@
+
+
+
+.root{
+-fx-padding: 15;
+-fx:background-color: cornsilk;
+}
+
+#searchTextField{
+-fx-background-image: url(' WER-SEARCH-ICON.png');
+-fx-background-repeat: no-repeat;
+-fx-background-position: right center;
+-fx-font-size: 20;
+-fx-background-size: 36px 36px;
+
+}
+

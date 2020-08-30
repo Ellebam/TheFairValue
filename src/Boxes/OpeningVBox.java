@@ -14,6 +14,8 @@ public class OpeningVBox extends VBox {
 
     public  OpeningVBox(){
         openingVBox = this;
+
+
         String labelText = "Welcome to The Fair Value. " +
                 "Please enter a stock ticker symbol of the company that should be analyzed." +
                 "(e.g. MSFT for Microsoft Corp.)";
@@ -23,13 +25,20 @@ public class OpeningVBox extends VBox {
         HeaderLabel.setMaxWidth(600);
         HeaderLabel.setAlignment(Pos.CENTER);
         HeaderLabel.setTextAlignment(TextAlignment.CENTER);
-
-
-
-        Font labelFont = new Font("Arial",20);
+        Font labelFont = new Font("Amble.CN",20);
         HeaderLabel.setFont(labelFont);
+
+        SearchBar searchBar = new SearchBar();
+        searchBar.setAlignment(Pos.CENTER);
+
+
+
+
         openingVBox.getChildren().add(HeaderLabel);
+        openingVBox.getChildren().add(searchBar);
         openingVBox.setAlignment(Pos.CENTER);
+        openingVBox.setSpacing(20);
+
 
     }
 }
