@@ -37,9 +37,8 @@ public class OpeningVBox extends VBox {
         this.searchBar = searchBar;
 
         Button demoButton = new Button ("Try Demo");
-
         demoButton.setStyle("-fx-text-fill: #00BFFF; -fx-font-size: 18;");
-        //demoButton.setStyle("");
+        this.demoButton = demoButton;
 
 
 
