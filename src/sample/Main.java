@@ -22,11 +22,16 @@ public class Main extends Application {
    @Override
     public void start(Stage primaryStage) throws Exception{
        primaryStage.setTitle("The Fair Value");
-       primaryStage.setHeight(600);
-       primaryStage.setWidth(800);
+       primaryStage.setHeight(800);
+       primaryStage.setWidth(1000);
        sceneController.setStage(primaryStage);
-       sceneController.setSceneContent(new OpeningVBox());
 
+
+       ClientManager clientManager = new ClientManager("AAPL",new KeyManager().getKey());
+       DataContainerManager dataContainerManager = new DataContainerManager(clientManager);
+
+
+       sceneController.setSceneContent(new AnalysisVBox(new AnalysisTabPane(dataContainerManager)));
        primaryStage.show();
        primaryStage.centerOnScreen();
     }

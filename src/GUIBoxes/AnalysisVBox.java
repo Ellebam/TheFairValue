@@ -1,7 +1,6 @@
 package GUIBoxes;
 
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+
 import javafx.scene.layout.VBox;
 
 public class AnalysisVBox extends VBox {

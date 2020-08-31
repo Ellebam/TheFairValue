@@ -4,6 +4,7 @@ import Controllers.ClientManager;
 import Controllers.DataExtractor;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -16,18 +17,18 @@ public class CompanyOverviewData {
     private String Country;
     private String Currency;
     private String Description;
-    private String MarketCap;
-    private String EBITDA;
-    private String price2EarningsRatio;
-    private String earningsPerShare;
-    private String dividendsPerShare;
-    private String dividendYield;
-    private String payoutRatio;
-    private String fiftytwoWeekHigh;
-    private String fiftytwoWeekLow;
-    private String bookValue;
+    private FinancialDataObject MarketCap;
+    private FinancialDataObject EBITDA;
+    private FinancialDataObject price2EarningsRatio;
+    private FinancialDataObject earningsPerShare;
+    private FinancialDataObject dividendsPerShare;
+    private FinancialDataObject dividendYield;
+    private FinancialDataObject payoutRatio;
+    private FinancialDataObject fiftytwoWeekHigh;
+    private FinancialDataObject fiftytwoWeekLow;
+    private FinancialDataObject bookValue;
     private String Sector;
-    private String SharesOutstanding;
+    private FinancialDataObject SharesOutstanding;
     private ArrayList<FinancialDataObject> historicalStockPrice;
     private ClientManager clientManager;
 
@@ -41,10 +42,10 @@ public class CompanyOverviewData {
         companyOverviewData = this;
         this.clientManager = ClientManager;
 
-        Name = getData(ClientManager,"Name");
-        Country = getData(ClientManager,"Country");
-        Currency = getData(ClientManager,"Currency");
-        Description = getData(ClientManager,"Description");
+        Name = getDataString(ClientManager,"Name");
+        Country = getDataString(ClientManager,"Country");
+        Currency = getDataString(ClientManager,"Currency");
+        Description = getDataString(ClientManager,"Description");
         MarketCap = getData(ClientManager, "MarketCapitalization");
         EBITDA = getData(ClientManager, "EBITDA");
         price2EarningsRatio = getData(ClientManager,"PERatio");
@@ -55,7 +56,7 @@ public class CompanyOverviewData {
         fiftytwoWeekHigh = getData(ClientManager, "52WeekHigh");
         fiftytwoWeekLow = getData(ClientManager, "52WeekLow");
         bookValue = getData(ClientManager, "BookValue");
-        Sector = getData(ClientManager, "Sector");
+        Sector = getDataString(ClientManager, "Sector");
         SharesOutstanding = getData(clientManager,"SharesOutstanding");
 
 
@@ -65,104 +66,24 @@ public class CompanyOverviewData {
 
 
 
-    public String getData(ClientManager ClientManager, String variableName){
-        String variable =DataExtractor.extractOVERVIEWData(ClientManager,variableName);
-        return variable;
+    public FinancialDataObject getData(ClientManager ClientManager, String variableName){
+        double value = Double.parseDouble(DataExtractor.extractOVERVIEWData(ClientManager,variableName));
+         String date = LocalDate.now().toString();
+        FinancialDataObject financialDataObject = new FinancialDataObject(variableName,value,date);
+        return financialDataObject;
     }
+
+    public String getDataString (ClientManager ClientManager, String variableName){
+        String variable = DataExtractor.extractOVERVIEWData(ClientManager, variableName);
+        return  variable;
+    }
+
     public String getName() {
         return Name;
     }
 
     public void setName(String name) {
         Name = name;
-    }
-
-    public String getDescription() {
-        return Description;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
-    }
-
-    public String getMarketCap() {
-        return MarketCap;
-    }
-
-    public void setMarketCap(String marketCap) {
-        MarketCap = marketCap;
-    }
-
-    public String getEBITDA() {
-        return EBITDA;
-    }
-
-    public void setEBITDA(String EBITDA) {
-        this.EBITDA = EBITDA;
-    }
-
-    public String getPrice2EarningsRatio() {
-        return price2EarningsRatio;
-    }
-
-    public void setPrice2EarningsRatio(String price2EarningsRatio) {
-        this.price2EarningsRatio = price2EarningsRatio;
-    }
-
-    public String getEarningsPerShare() {
-        return earningsPerShare;
-    }
-
-    public void setEarningsPerShare(String earningsPerShare) {
-        this.earningsPerShare = earningsPerShare;
-    }
-
-    public String getDividendsPerShare() {
-        return dividendsPerShare;
-    }
-
-    public void setDividendsPerShare(String dividendsPerShare) {
-        this.dividendsPerShare = dividendsPerShare;
-    }
-
-    public String getDividendYield() {
-        return dividendYield;
-    }
-
-    public void setDividendYield(String dividendYield) {
-        this.dividendYield = dividendYield;
-    }
-
-    public String getPayoutRatio() {
-        return payoutRatio;
-    }
-
-    public void setPayoutRatio(String payoutRatio) {
-        this.payoutRatio = payoutRatio;
-    }
-
-    public String getFiftytwoWeekHigh() {
-        return fiftytwoWeekHigh;
-    }
-
-    public void setFiftytwoWeekHigh(String fiftytwoWeekHigh) {
-        this.fiftytwoWeekHigh = fiftytwoWeekHigh;
-    }
-
-    public String getFiftytwoWeekLow() {
-        return fiftytwoWeekLow;
-    }
-
-    public void setFiftytwoWeekLow(String fiftytwoWeekLow) {
-        this.fiftytwoWeekLow = fiftytwoWeekLow;
-    }
-
-    public String getBookValue() {
-        return bookValue;
-    }
-
-    public void setBookValue(String bookValue) {
-        this.bookValue = bookValue;
     }
 
     public String getCountry() {
@@ -181,19 +102,107 @@ public class CompanyOverviewData {
         Currency = currency;
     }
 
-    public String getSector() {
-        return Sector;
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
     }
 
     public void setSector(String sector) {
         Sector = sector;
     }
 
-    public String getSharesOutstanding() {
+    public FinancialDataObject getMarketCap() {
+        return MarketCap;
+    }
+
+    public void setMarketCap(FinancialDataObject marketCap) {
+        MarketCap = marketCap;
+    }
+
+    public FinancialDataObject getEBITDA() {
+        return EBITDA;
+    }
+
+    public void setEBITDA(FinancialDataObject EBITDA) {
+        this.EBITDA = EBITDA;
+    }
+
+    public FinancialDataObject getPrice2EarningsRatio() {
+        return price2EarningsRatio;
+    }
+
+    public void setPrice2EarningsRatio(FinancialDataObject price2EarningsRatio) {
+        this.price2EarningsRatio = price2EarningsRatio;
+    }
+
+    public FinancialDataObject getEarningsPerShare() {
+        return earningsPerShare;
+    }
+
+    public void setEarningsPerShare(FinancialDataObject earningsPerShare) {
+        this.earningsPerShare = earningsPerShare;
+    }
+
+    public FinancialDataObject getDividendsPerShare() {
+        return dividendsPerShare;
+    }
+
+    public void setDividendsPerShare(FinancialDataObject dividendsPerShare) {
+        this.dividendsPerShare = dividendsPerShare;
+    }
+
+    public FinancialDataObject getDividendYield() {
+        return dividendYield;
+    }
+
+    public void setDividendYield(FinancialDataObject dividendYield) {
+        this.dividendYield = dividendYield;
+    }
+
+    public FinancialDataObject getPayoutRatio() {
+        return payoutRatio;
+    }
+
+    public void setPayoutRatio(FinancialDataObject payoutRatio) {
+        this.payoutRatio = payoutRatio;
+    }
+
+    public FinancialDataObject getFiftytwoWeekHigh() {
+        return fiftytwoWeekHigh;
+    }
+
+    public void setFiftytwoWeekHigh(FinancialDataObject fiftytwoWeekHigh) {
+        this.fiftytwoWeekHigh = fiftytwoWeekHigh;
+    }
+
+    public FinancialDataObject getFiftytwoWeekLow() {
+        return fiftytwoWeekLow;
+    }
+
+    public void setFiftytwoWeekLow(FinancialDataObject fiftytwoWeekLow) {
+        this.fiftytwoWeekLow = fiftytwoWeekLow;
+    }
+
+    public FinancialDataObject getBookValue() {
+        return bookValue;
+    }
+
+    public void setBookValue(FinancialDataObject bookValue) {
+        this.bookValue = bookValue;
+    }
+
+    public String getSector() {
+        return Sector;
+    }
+
+    public FinancialDataObject getSharesOutstanding() {
         return SharesOutstanding;
     }
 
-    public void setSharesOutstanding(String sharesOutstanding) {
+    public void setSharesOutstanding(FinancialDataObject sharesOutstanding) {
         SharesOutstanding = sharesOutstanding;
     }
 

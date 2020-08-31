@@ -242,7 +242,7 @@ public  class DataExtractor {
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 CommonSharesOutstandingDataList.add(dataObject);
             }else{
-                double value = Double.parseDouble(dataContainerManager.getCompanyOverviewData().getSharesOutstanding());
+                double value = dataContainerManager.getCompanyOverviewData().getSharesOutstanding().getValue();
                 FinancialDataObject dataObject = new FinancialDataObject(keyName, value, date);
                 CommonSharesOutstandingDataList.add(dataObject);
             }

@@ -14,7 +14,7 @@ public class AnalysisTabPane extends TabPane {
     Tab equitiesTab;
     Tab evaluationTab;
 
-    public AnalysisTabPane (){
+    public AnalysisTabPane (DataContainerManager dataContainerManager){
         analysisTabPane = this;
 
         overviewTab = new Tab("Company Overview");
@@ -30,6 +30,12 @@ public class AnalysisTabPane extends TabPane {
         analysisTabPane.getTabs().add(evaluationTab);
         analysisTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         analysisTabPane.setStyle("-fx-font-size:18;");
+
+
+        CompanyOverviewHBox companyOverviewHBox = new CompanyOverviewHBox(dataContainerManager);
+
+
+        overviewTab.setContent(companyOverviewHBox);
 
     }
 

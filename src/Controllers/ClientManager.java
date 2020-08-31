@@ -2,7 +2,7 @@ package Controllers;
 
 import java.io.Serializable;
 
-public class ClientManager implements Serializable {
+public class ClientManager {
     private String apiKey;
     private String symbol;
     private static final String apiFunctionOVERVIEW ="OVERVIEW";
