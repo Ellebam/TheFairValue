@@ -1,7 +1,9 @@
 package GUIBoxes;
 
 import Controllers.DataContainerManager;
+import Controllers.DataExtractor;
 import Data.FinancialDataObject;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,12 +16,31 @@ public class CompanyOverviewTableView extends TableView {
         companyOverviewTableView = this;
         this.dataContainerManager = dataContainerManager;
 
-        TableColumn<String, FinancialDataObject> itemColumn = new TableColumn<>("Item");
+        TableColumn<FinancialDataObject, String> itemColumn = new TableColumn<>("Item");
         itemColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
 
-        TableColumn<Double,FinancialDataObject> valueColumn = new TableColumn<>("Value");
+
+
+        TableColumn<FinancialDataObject, Double> valueColumn = new TableColumn<>("Value");
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        valueColumn.setCellFactory(column ->{
+            return new TableCell<FinancialDataObject, Double>(){
+                @Override
+                protected void updateItem(Double value, boolean empty){
+                    super.updateItem(value,empty);
+
+                    if (value==null||empty) {
+                        setText(null);
+                        setStyle("");
+                    }else{
+                        setText(DataExtractor.formatNumbers(value));
+                    }
+                }
+            };
+
+        });
+
 
 
 

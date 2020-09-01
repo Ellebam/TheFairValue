@@ -7,8 +7,7 @@ import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * This Class represents all methods for retrieving or calculating the various data used for all DataClasses. All methods
@@ -1039,13 +1038,28 @@ public  class DataExtractor {
 
     }
 
-
-
-
-
-
-
-
-
+    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
+    static{
+        suffixes.put(1_000L, "k");
+        suffixes.put(1_000_000L, "M");
+        suffixes.put(1_000_000_000L, "B");
+        suffixes.put(1_000_000_000_000L,"T");
+        suffixes.put(1_000_000_000_000_000L, "Q");
     }
+
+    public static String formatNumbers(double value){
+        long longValue = (new Double(Math.round(value))).longValue();
+        if (longValue==Long.MIN_VALUE) return formatNumbers(Long.MIN_VALUE+1);
+        if (longValue<0) return "-" + formatNumbers(-value);
+        if (longValue<1000) return Long.toString(longValue);
+
+        Map.Entry<Long, String> e = suffixes.floorEntry(longValue);
+        Long divideBy = e.getKey();
+        String suffix = e.getValue();
+
+        long truncated = longValue / (divideBy/10);
+        boolean hasDecimal = truncated <100 && (truncated/10d)!= (truncated/10);
+        return hasDecimal ? (truncated/10d)+ suffix : (truncated/10)+suffix;
+    }
+}
 
