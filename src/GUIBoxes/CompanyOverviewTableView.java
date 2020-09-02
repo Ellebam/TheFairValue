@@ -12,7 +12,7 @@ public class CompanyOverviewTableView extends TableView {
     CompanyOverviewTableView companyOverviewTableView;
     DataContainerManager dataContainerManager;
 
-    public CompanyOverviewTableView (DataContainerManager dataContainerManager){
+    public CompanyOverviewTableView(DataContainerManager dataContainerManager){
         companyOverviewTableView = this;
         this.dataContainerManager = dataContainerManager;
 
@@ -48,7 +48,12 @@ public class CompanyOverviewTableView extends TableView {
         companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getMarketCap());
         companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getEBITDA());
         companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getPrice2EarningsRatio());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getSharesOutstanding());
         companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getEarningsPerShare());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getDividendsPerShare());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getDividendYield());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getFiftytwoWeekHigh());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getBookValue());
 
         companyOverviewTableView.getColumns().add(itemColumn);
         companyOverviewTableView.getColumns().add(valueColumn);

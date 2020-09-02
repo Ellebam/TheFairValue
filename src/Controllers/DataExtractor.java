@@ -1048,10 +1048,12 @@ public  class DataExtractor {
     }
 
     public static String formatNumbers(double value){
+        if(value<15 && value>-15) return Double.toString(value);
         long longValue = (new Double(Math.round(value))).longValue();
         if (longValue==Long.MIN_VALUE) return formatNumbers(Long.MIN_VALUE+1);
         if (longValue<0) return "-" + formatNumbers(-value);
         if (longValue<1000) return Long.toString(longValue);
+
 
         Map.Entry<Long, String> e = suffixes.floorEntry(longValue);
         Long divideBy = e.getKey();
