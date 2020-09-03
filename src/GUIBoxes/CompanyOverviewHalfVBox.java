@@ -1,15 +1,9 @@
 package GUIBoxes;
 
 import Controllers.DataContainerManager;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-
-import java.time.LocalDate;
 
 public class CompanyOverviewHalfVBox extends VBox {
     CompanyOverviewHalfVBox companyOverviewHalfVBox;
@@ -39,34 +33,13 @@ public class CompanyOverviewHalfVBox extends VBox {
         companyDescriptionLabel.setFont(new Font("Amble.CN",14));
 
 
-        final CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Date");
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Stock Price [$]");
-
-        LineChart<String,Number> lineChart = new LineChart<>(xAxis,yAxis);
-        XYChart.Series stockPriceDataSeries = new XYChart.Series();
-        stockPriceDataSeries.setName("Historical Stock Price");
-
-
-
-        for(int i = dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().size()-1; i>=0;i-=20){
-            stockPriceDataSeries.getData().add(new XYChart.Data(
-                            dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(i).getDate(),
-                    dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(i).getValue()));
-        }
-        stockPriceDataSeries.getData().add(new XYChart.Data(
-                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getDate(),
-                dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue()));
-
-
-
-        lineChart.getData().add(stockPriceDataSeries);
-
+        
+        HistoricalStockPriceTabPane historicalStockPriceTapPane = new HistoricalStockPriceTabPane(dataContainerManager);
 
         companyOverviewHalfVBox.getChildren().add(companyNameLabel);
         companyOverviewHalfVBox.getChildren().add(companySectorLabel);
         companyOverviewHalfVBox.getChildren().add(companyDescriptionLabel);
-        companyOverviewHalfVBox.getChildren().add(lineChart);
+        companyOverviewHalfVBox.getChildren().add(historicalStockPriceTapPane);
+
     }
 }
