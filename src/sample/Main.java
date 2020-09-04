@@ -27,8 +27,9 @@ public class Main extends Application {
        sceneController.setStage(primaryStage);
 
 
-       ClientManager clientManager = new ClientManager("DIS",new KeyManager().getKey());
+       ClientManager clientManager = new ClientManager("PAYX",new KeyManager().getKey());
        DataContainerManager dataContainerManager = new DataContainerManager(clientManager);
+
 
 
        sceneController.setSceneContent(new AnalysisVBox(new AnalysisTabPane(dataContainerManager)));

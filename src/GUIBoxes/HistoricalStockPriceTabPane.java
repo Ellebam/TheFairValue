@@ -3,6 +3,7 @@ package GUIBoxes;
 import Controllers.DataContainerManager;
 import Controllers.GraphBuilder;
 import Data.FinancialDataObject;
+import javafx.geometry.Side;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -39,6 +40,8 @@ public class HistoricalStockPriceTabPane extends TabPane {
 
         historicalStockPriceTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         historicalStockPriceTabPane.setStyle("-fx-font-size:12;");
+
+
 
         historicalStockPriceTabPane.getTabs().add(fiveDayStockPrice);
         historicalStockPriceTabPane.getTabs().add(thirtyDayStockPrice);
