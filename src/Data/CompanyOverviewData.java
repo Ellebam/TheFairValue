@@ -27,7 +27,11 @@ public class CompanyOverviewData {
     private FinancialDataObject fiftytwoWeekHigh;
     private FinancialDataObject fiftytwoWeekLow;
     private FinancialDataObject bookValue;
-    private String Sector;
+    private FinancialDataObject AnalystTargetPrice;
+    private FinancialDataObject PriceToBookRatio;
+    private FinancialDataObject PercentInsiders;
+    private FinancialDataObject PercentInstitutions;
+    private String Industry;
     private FinancialDataObject SharesOutstanding;
     private ArrayList<FinancialDataObject> historicalStockPrice;
     private ClientManager clientManager;
@@ -56,8 +60,13 @@ public class CompanyOverviewData {
         fiftytwoWeekHigh = getData(ClientManager, "52WeekHigh");
         fiftytwoWeekLow = getData(ClientManager, "52WeekLow");
         bookValue = getData(ClientManager, "BookValue");
-        Sector = getDataString(ClientManager, "Sector");
+        Industry = getDataString(ClientManager, "Industry");
         SharesOutstanding = getData(clientManager,"SharesOutstanding");
+        AnalystTargetPrice = getData(clientManager,"AnalystTargetPrice");
+        PriceToBookRatio = getData(clientManager,"PriceToBookRatio");
+        PercentInsiders = getData(clientManager,"PercentInsiders");
+        PercentInstitutions = getData(clientManager,"PercentInstitutions");
+
 
 
         historicalStockPrice = DataExtractor.extractHistoricalStockPrices(ClientManager);
@@ -110,8 +119,8 @@ public class CompanyOverviewData {
         Description = description;
     }
 
-    public void setSector(String sector) {
-        Sector = sector;
+    public void setIndustry(String industry) {
+        Industry = industry;
     }
 
     public FinancialDataObject getMarketCap() {
@@ -194,8 +203,8 @@ public class CompanyOverviewData {
         this.bookValue = bookValue;
     }
 
-    public String getSector() {
-        return Sector;
+    public String getIndustry() {
+        return Industry;
     }
 
     public FinancialDataObject getSharesOutstanding() {
@@ -233,7 +242,7 @@ public class CompanyOverviewData {
                 ", fiftytwoWeekHigh='" + fiftytwoWeekHigh + '\'' +"\n"+
                 ", fiftytwoWeekLow='" + fiftytwoWeekLow + '\'' +"\n"+
                 ", bookValue='" + bookValue + '\'' +"\n"+
-                ", Sector='" + Sector + '\'' +"\n"+
+                ", Sector='" + Industry + '\'' +"\n"+
                 '}'+ historicalStockPrice+"\n";
     }
 

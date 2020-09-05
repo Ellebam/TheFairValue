@@ -20,7 +20,7 @@ public class CompanyOverviewHalfVBox extends VBox {
         Label companyNameLabel = new Label(companyName);
         companyNameLabel.setFont(new Font("Verdana",20));
 
-        companySector = "Industry: "+dataContainerManager.getCompanyOverviewData().getSector();
+        companySector = "Industry: "+dataContainerManager.getCompanyOverviewData().getIndustry();
         Label companySectorLabel = new Label(companySector);
         companySectorLabel.setFont(new Font("Verdana",16));
 
@@ -29,27 +29,30 @@ public class CompanyOverviewHalfVBox extends VBox {
 
         companyDescription = dataContainerManager.getCompanyOverviewData().getDescription();
         Label companyDescriptionLabel = new Label(companyDescription);
-        companyDescriptionLabel.setMaxWidth(700);
+
 
         companyDescriptionLabel.setWrapText(true);
         companyDescriptionLabel.setFont(new Font("Verdana",14));
+
         ScrollPane descriptionScrollPane = new ScrollPane();
         descriptionScrollPane.setContent(companyDescriptionLabel);
         descriptionScrollPane.pannableProperty().set(true);
         descriptionScrollPane.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.NEVER);
         descriptionScrollPane.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        descriptionScrollPane.setMaxWidth(750);
-        descriptionScrollPane.setMinHeight(200);
+        descriptionScrollPane.setPrefHeight(200);
+        descriptionScrollPane.setFitToWidth(true);
+
 
 
 
         
         HistoricalStockPriceTabPane historicalStockPriceTapPane = new HistoricalStockPriceTabPane(dataContainerManager);
-
+        companyOverviewHalfVBox.getLocalToSceneTransform();
         companyOverviewHalfVBox.getChildren().add(companyNameLabel);
         companyOverviewHalfVBox.getChildren().add(companySectorLabel);
         companyOverviewHalfVBox.getChildren().add(descriptionScrollPane);
         companyOverviewHalfVBox.getChildren().add(historicalStockPriceTapPane);
+
 
     }
 }

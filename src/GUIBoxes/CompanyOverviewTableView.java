@@ -59,6 +59,9 @@ public class CompanyOverviewTableView extends TableView {
         companyOverviewTableView.getColumns().add(valueColumn);
 
         companyOverviewTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        companyOverviewTableView.setMinWidth(200);
+
+
 
     }
 }
