@@ -8,6 +8,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.net.URL;
+
 public class CompanyOverviewTableView extends TableView {
     CompanyOverviewTableView companyOverviewTableView;
     DataContainerManager dataContainerManager;
@@ -53,13 +55,20 @@ public class CompanyOverviewTableView extends TableView {
         companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getDividendsPerShare());
         companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getDividendYield());
         companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getFiftytwoWeekHigh());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getFiftytwoWeekLow());
         companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getBookValue());
-
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getAnalystTargetPrice());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getPrice2EarningsRatio());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getPercentInsiders());
+        companyOverviewTableView.getItems().add(dataContainerManager.getCompanyOverviewData().getPercentInstitutions());
         companyOverviewTableView.getColumns().add(itemColumn);
         companyOverviewTableView.getColumns().add(valueColumn);
 
-        companyOverviewTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        companyOverviewTableView.setMinWidth(200);
+
+        companyOverviewTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        companyOverviewTableView.setMinWidth(250);
+        companyOverviewTableView.setPrefHeight(800);
+
 
 
 

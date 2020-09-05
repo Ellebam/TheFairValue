@@ -1,0 +1,4 @@
+.table-row-cell{
+-fx-font-family: verdana;
+-fx-font-size:40;
+}

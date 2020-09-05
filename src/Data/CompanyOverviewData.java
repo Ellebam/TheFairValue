@@ -219,9 +219,44 @@ public class CompanyOverviewData {
         return historicalStockPrice;
     }
 
+
+    public FinancialDataObject getAnalystTargetPrice() {
+        return AnalystTargetPrice;
+    }
+
+    public void setAnalystTargetPrice(FinancialDataObject analystTargetPrice) {
+        AnalystTargetPrice = analystTargetPrice;
+    }
+
+    public FinancialDataObject getPriceToBookRatio() {
+        return PriceToBookRatio;
+    }
+
+    public void setPriceToBookRatio(FinancialDataObject priceToBookRatio) {
+        PriceToBookRatio = priceToBookRatio;
+    }
+
+    public FinancialDataObject getPercentInsiders() {
+        return PercentInsiders;
+    }
+
+    public void setPercentInsiders(FinancialDataObject percentInsiders) {
+        PercentInsiders = percentInsiders;
+    }
+
+    public FinancialDataObject getPercentInstitutions() {
+        return PercentInstitutions;
+    }
+
+    public void setPercentInstitutions(FinancialDataObject percentInstitutions) {
+        PercentInstitutions = percentInstitutions;
+    }
+
     public void setHistoricalStockPrice(ArrayList<FinancialDataObject> historicalStockPrice) {
         this.historicalStockPrice = historicalStockPrice;
     }
+
+
 
 
 

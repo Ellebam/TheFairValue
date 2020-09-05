@@ -53,8 +53,7 @@ public class OpeningVBox extends VBox {
         openingVBox.setAlignment(Pos.CENTER);
         openingVBox.setSpacing(20);
 
-        loadData("JNJ");
-        System.out.println(dataContainerManager.getCompanyOverviewData());
+      
 
 
     }

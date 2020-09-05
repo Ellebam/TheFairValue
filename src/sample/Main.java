@@ -24,6 +24,7 @@ public class Main extends Application {
        primaryStage.setTitle("The Fair Value");
        primaryStage.setHeight(800);
        primaryStage.setWidth(1000);
+       primaryStage.setFullScreen(true);
        sceneController.setStage(primaryStage);
 
 
@@ -32,7 +33,7 @@ public class Main extends Application {
 
 
 
-       sceneController.setSceneContent(new AnalysisVBox(new AnalysisTabPane(dataContainerManager)));
+       sceneController.setSceneContent(new OpeningVBox());
        primaryStage.show();
        primaryStage.centerOnScreen();
     }

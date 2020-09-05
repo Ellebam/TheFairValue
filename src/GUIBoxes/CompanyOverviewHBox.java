@@ -1,6 +1,7 @@
 package GUIBoxes;
 
 import Controllers.DataContainerManager;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -23,6 +24,8 @@ public class CompanyOverviewHBox extends HBox {
         companyOverviewHBox.getChildren().add(companyOverviewTableView);
         companyOverviewHalfVBox.setFillWidth(true);
         companyOverviewHBox.setHgrow(companyOverviewHalfVBox, Priority.ALWAYS);
+        companyOverviewHBox.setPadding(new Insets(10));
+        companyOverviewHBox.setSpacing(10);
 
 
         companyOverviewHBox.setAlignment(Pos.BASELINE_CENTER);
