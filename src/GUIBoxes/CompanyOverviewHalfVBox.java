@@ -6,12 +6,22 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+
+/**
+ * This class represents the left side of the CompanyOverview-Display.
+ */
 public class CompanyOverviewHalfVBox extends VBox {
     CompanyOverviewHalfVBox companyOverviewHalfVBox;
     String companyName;
     String companyDescription;
     String companySector;
 
+    /**
+     * Constructor for CompanyOverviewHalfVBox. It will build all GUI components while getting the
+     * needed Data from its dataContainerManaer object. It will also build new HistoricalStockPriceTabPane
+     * showing historical stock prices.
+     * @param dataContainerManager Object containing all data
+     */
     public CompanyOverviewHalfVBox (DataContainerManager dataContainerManager){
         companyOverviewHalfVBox = this;
 
@@ -47,6 +57,7 @@ public class CompanyOverviewHalfVBox extends VBox {
 
         
         HistoricalStockPriceTabPane historicalStockPriceTapPane = new HistoricalStockPriceTabPane(dataContainerManager);
+
         companyOverviewHalfVBox.getLocalToSceneTransform();
         companyOverviewHalfVBox.getChildren().add(companyNameLabel);
         companyOverviewHalfVBox.getChildren().add(companySectorLabel);

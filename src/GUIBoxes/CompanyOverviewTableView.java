@@ -8,12 +8,21 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.net.URL;
 
+/**
+ * This Class represents the right side of the Company Overview display showing important key figures
+ * in bullet point style.
+ */
 public class CompanyOverviewTableView extends TableView {
     CompanyOverviewTableView companyOverviewTableView;
     DataContainerManager dataContainerManager;
 
+    /**
+     * This Constructor will build the TableView of the Company Overview by selecting certain instance variables
+     * of the CompanyOverviewData Object inside the given DataContainerManager object and rendering them.
+     * All of the key values are rendered in a formatted state.
+     * @param dataContainerManager Object containing all data
+     */
     public CompanyOverviewTableView(DataContainerManager dataContainerManager){
         companyOverviewTableView = this;
         this.dataContainerManager = dataContainerManager;
@@ -36,6 +45,8 @@ public class CompanyOverviewTableView extends TableView {
                         setText(null);
                         setStyle("");
                     }else{
+                        /* the rendered Text is formatted by the DataExtractors method formatNumbers.
+                        * This will ensure, that values over 1000 are shown abbreviated (e.g. 1k instead of 1000 */
                         setText(DataExtractor.formatNumbers(value));
                     }
                 }

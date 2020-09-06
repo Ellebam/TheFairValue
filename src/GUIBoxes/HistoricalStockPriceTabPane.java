@@ -9,6 +9,10 @@ import javafx.scene.control.TabPane;
 
 import java.util.ArrayList;
 
+
+/**
+ * Class representing the Graphs showing historical stock prices for several date ranges
+ */
 public class HistoricalStockPriceTabPane extends TabPane {
     HistoricalStockPriceTabPane historicalStockPriceTabPane;
     DataContainerManager dataContainerManager;
@@ -20,8 +24,14 @@ public class HistoricalStockPriceTabPane extends TabPane {
     Tab fiveYearsStockPrice;
     Tab allTimeStockPrice;
 
+    /**
+     * Constructor for the HistoricalStockPriceTabPane. It will construct a new TabPane with different
+     * date ranges and matching new line charts built by the GraphBuilder Class.
+     * @param dataContainerManager Object containing all data
+     */
     public HistoricalStockPriceTabPane(DataContainerManager dataContainerManager){
         historicalStockPriceTabPane = this;
+        this.dataContainerManager = dataContainerManager;
 
         fiveDayStockPrice = new Tab("5 Days");
         thirtyDayStockPrice = new Tab("30 Days");
@@ -31,6 +41,7 @@ public class HistoricalStockPriceTabPane extends TabPane {
         fiveYearsStockPrice = new Tab ("5 Years");
         allTimeStockPrice = new Tab ("All");
 
+        //Graph building variables
         ArrayList<FinancialDataObject> valueList = dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice();
         String seriesName = "Historical Stock Price";
         String xAxisName = "Date";

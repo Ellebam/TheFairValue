@@ -5,17 +5,28 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.StackPane;
-
-import javax.tools.Tool;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
+
+/**
+ * This Class contains methods for building several different graphs (e.g. line charts, stacked area charts, etc.)
+ */
 public class GraphBuilder {
 
+    /**
+     * Constructor for building a line chart. It's data base is an ArrayList containing FinancialDataObjects. The method
+     * will determine how many data points will be used for rendering of the chart. This constructor is designed to set
+     * the first items in the ArrayList as the last in the finished graph. Depending on the lists length, it will omit
+     * a certain number of values to ensure optimization of the performance and the design of the graph.
+     * @param seriesName name of the series shown in the graph
+     * @param xAxisName name of the graphs x axis
+     * @param yAxisName name of the graphs y axis
+     * @param valueList list used as data base
+     * @param graphRange Integer used for determining how many data points shall be taken
+     * @return LineChart showing the built graph
+     */
     public static LineChart buildLineChart (String seriesName, String xAxisName, String yAxisName, ArrayList<FinancialDataObject> valueList, int graphRange){
 
         final CategoryAxis xAxis = new CategoryAxis();
@@ -28,7 +39,7 @@ public class GraphBuilder {
         XYChart.Series<String , Number> dataSeries = new XYChart.Series();
         dataSeries.setName(seriesName);
 
-
+        //If the given database contains too many values, some will be omitted
         if (graphRange == 0 || graphRange >= valueList.size() || graphRange>1300) {
             for (int i = valueList.size() - 1; i >= 0; i -= 90) {
                 dataSeries.getData().add(new XYChart.Data(
@@ -70,6 +81,7 @@ public class GraphBuilder {
 
         lineChart.getData().add(dataSeries);
 
+        //this part adds tooltips to every data point in the dataseries containing the y and x value of the datapoint
                 for (XYChart.Data<String, Number> entry : dataSeries.getData()) {
                     Tooltip tooltip = new Tooltip("Price: " +entry.getYValue().toString()+" $"+"\n"+"Date: "+entry.getXValue());
                     Tooltip.install(entry.getNode(), tooltip);
