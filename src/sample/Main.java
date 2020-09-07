@@ -33,7 +33,7 @@ public class Main extends Application {
 
 
 
-       sceneController.setSceneContent(new OpeningVBox());
+       sceneController.setSceneContent(new AnalysisVBox(dataContainerManager));
        primaryStage.show();
        primaryStage.centerOnScreen();
     }

@@ -1,10 +1,7 @@
 package Controllers;
 
 import Data.FinancialDataObject;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Tooltip;
 import java.net.URL;
 import java.util.ArrayList;
@@ -92,14 +89,35 @@ public class GraphBuilder {
                 }
 
 
-
         URL url = GraphBuilder.class.getResource("/GUIElements/chartStyle");
         lineChart.getStylesheets().add(url.toString());
 
-
-
-
         return lineChart;
+    }
+
+    public static AreaChart buildStackedAreaChart(String xAxisName, String yAxisName, ArrayList<ArrayList<FinancialDataObject>> dataBase){
+        final CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel(xAxisName);
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel(yAxisName);
+        yAxis.setForceZeroInRange(false);
+        yAxis.setAutoRanging(true);
+
+      AreaChart<String,Number> stackedAreaChart = new AreaChart<>(xAxis,yAxis);
+
+        for (ArrayList<FinancialDataObject> dataList : dataBase){
+            XYChart.Series dataSeries = new XYChart.Series();
+            dataSeries.setName(dataList.get(0).getName());
+            for (FinancialDataObject dataPoint : dataList){
+                dataSeries.getData().add(new XYChart.Data(dataPoint.getDate(), dataPoint.getValue()));
+        }
+            stackedAreaChart.getData().add(dataSeries);
+            }
+
+
+
+
+        return stackedAreaChart;
     }
 
 

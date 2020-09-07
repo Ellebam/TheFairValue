@@ -36,4 +36,20 @@ public class CompanyOverviewHBox extends HBox {
         companyOverviewHBox.setSpacing(10);
         companyOverviewHBox.setAlignment(Pos.BASELINE_CENTER);
     }
+
+    public CompanyOverviewHalfVBox getCompanyOverviewHalfVBox() {
+        return companyOverviewHalfVBox;
+    }
+
+    public void setCompanyOverviewHalfVBox(CompanyOverviewHalfVBox companyOverviewHalfVBox) {
+        this.companyOverviewHalfVBox = companyOverviewHalfVBox;
+    }
+
+    public CompanyOverviewTableView getCompanyOverviewTableView() {
+        return companyOverviewTableView;
+    }
+
+    public void setCompanyOverviewTableView(CompanyOverviewTableView companyOverviewTableView) {
+        this.companyOverviewTableView = companyOverviewTableView;
+    }
 }

@@ -41,9 +41,11 @@ public class AnalysisTabPane extends TabPane {
 
 
         CompanyOverviewHBox companyOverviewHBox = new CompanyOverviewHBox(dataContainerManager);
+        FundamentalsVBox fundamentalsVBox = new FundamentalsVBox(dataContainerManager);
 
 
         overviewTab.setContent(companyOverviewHBox);
+        fundamentalTab.setContent(fundamentalsVBox);
 
     }
 
