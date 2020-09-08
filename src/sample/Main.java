@@ -1,10 +1,10 @@
 package sample;
 
-import GUIBoxes.AnalysisTabPane;
+
 import GUIBoxes.AnalysisVBox;
 
 import Controllers.*;
-import GUIBoxes.OpeningVBox;
+
 import javafx.application.Application;
 
 import javafx.stage.Stage;
@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-    SceneController sceneController = new SceneController();
+    static SceneController sceneController = new SceneController();
 
 
 
@@ -24,11 +24,11 @@ public class Main extends Application {
        primaryStage.setTitle("The Fair Value");
        primaryStage.setHeight(800);
        primaryStage.setWidth(1000);
-       primaryStage.setFullScreen(true);
+
        sceneController.setStage(primaryStage);
 
 
-       ClientManager clientManager = new ClientManager("PAYX",new KeyManager().getKey());
+       ClientManager clientManager = new ClientManager("MSFT",new KeyManager().getKey());
        DataContainerManager dataContainerManager = new DataContainerManager(clientManager);
 
 
@@ -45,11 +45,8 @@ public class Main extends Application {
 
     }
 
-
-
-
-
-
-
+    public static SceneController getSceneController() {
+        return sceneController;
     }
+}
 

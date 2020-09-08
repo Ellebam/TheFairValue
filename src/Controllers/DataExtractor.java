@@ -178,7 +178,7 @@ public  class DataExtractor {
             double sampleProfitDataPoint = sampleProfit.get(i).getValue();
             double sampleRevenueDataPoint = extractMatchingValue(i,sampleProfit,sampleRevenue);
             if (!(sampleRevenueDataPoint==0.00000)) {
-                value = sampleProfitDataPoint / sampleRevenueDataPoint;
+                value = sampleProfitDataPoint / sampleRevenueDataPoint *100;
                 String date = sampleProfit.get(i).getDate();
                 FinancialDataObject marginObject = new FinancialDataObject(marginName, value, date);
                 marginList.add(marginObject);

@@ -95,7 +95,7 @@ public class GraphBuilder {
         return lineChart;
     }
 
-    public static AreaChart buildStackedAreaChart(String xAxisName, String yAxisName, ArrayList<ArrayList<FinancialDataObject>> dataBase){
+    public static AreaChart buildAreaChart(String xAxisName, String yAxisName, ArrayList<ArrayList<FinancialDataObject>> dataBase){
         final CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel(xAxisName);
         NumberAxis yAxis = new NumberAxis();

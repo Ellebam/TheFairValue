@@ -81,7 +81,7 @@ public class CompanyFundamentalData {
     ebit = getDataFromIncomeStatement(clientManager,"ebit");
     grossMargin = DataExtractor.calculateMargins_IN_PERCENT("grossMargin",grossProfit,totalRevenue);
     operatingIncome = getDataFromIncomeStatement(clientManager,"operatingIncome");
-    operatingMargin = DataExtractor.calculateMargins_IN_PERCENT("operatingMargin",operatingIncome,netIncome);
+    operatingMargin = DataExtractor.calculateMargins_IN_PERCENT("operatingMargin",operatingIncome,totalRevenue);
     netMargin = DataExtractor.calculateMargins_IN_PERCENT("netMargin",netIncome,totalRevenue);
     depreciation = getDataFromCashFlowStatement(clientManager,"depreciation");
     EBITDA = DataExtractor.addTwoListValues("EBITDA",operatingIncome,depreciation);
