@@ -277,6 +277,17 @@ public  class DataExtractor {
         }  return matchingValue;
     }
 
+    public static ArrayList<FinancialDataObject> reverseListSign (ArrayList<FinancialDataObject> baseList){
+        ArrayList<FinancialDataObject> changedList = new ArrayList<>();
+        if(!(baseList.isEmpty())) {
+            for (FinancialDataObject dataPoint : baseList) {
+                FinancialDataObject changedDataPoint = new FinancialDataObject(dataPoint.getName(),-(dataPoint.getValue()),dataPoint.getDate());
+                changedList.add(changedDataPoint);
+            }
+        }
+        return  changedList;
+    }
+
     /**
      * method to determine the sum of the value of a given list. The scope is given by the timFrameUnit which will determine
      * how far down the list this method needs to go

@@ -1,8 +1,11 @@
 package Controllers;
 
 import Data.FinancialDataObject;
+import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.StackPane;
+
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -103,22 +106,23 @@ public class GraphBuilder {
         yAxis.setForceZeroInRange(false);
         yAxis.setAutoRanging(true);
 
-      AreaChart<String,Number> stackedAreaChart = new AreaChart<>(xAxis,yAxis);
+      AreaChart<String,Number> areaChart = new AreaChart<>(xAxis,yAxis);
 
         for (ArrayList<FinancialDataObject> dataList : dataBase){
             XYChart.Series dataSeries = new XYChart.Series();
             dataSeries.setName(dataList.get(0).getName());
-            for (FinancialDataObject dataPoint : dataList){
-                dataSeries.getData().add(new XYChart.Data(dataPoint.getDate(), dataPoint.getValue()));
+            for (int i = dataList.size()-1; i>=0;i--) {
+                dataSeries.getData().add(new XYChart.Data(dataList.get(i).getDate(), dataList.get(i).getValue()));
         }
-            stackedAreaChart.getData().add(dataSeries);
+            areaChart.getData().add(dataSeries);
             }
 
 
 
 
-        return stackedAreaChart;
+        return areaChart;
     }
+
 
 
 

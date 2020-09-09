@@ -39,6 +39,7 @@ public class CompanyFundamentalData {
     private ArrayList<FinancialDataObject> incomeTaxExpense;
     private ArrayList<FinancialDataObject> freeCashFlow;
     private ArrayList<FinancialDataObject> dividendPayout;
+    private ArrayList<FinancialDataObject>  reversedSignDividendPayout;
     private ArrayList<FinancialDataObject> commonStockSharesOutstanding;
     private ArrayList<FinancialDataObject> bookValue;
     private ArrayList<FinancialDataObject> bookValuePerShare;
@@ -99,6 +100,7 @@ public class CompanyFundamentalData {
     incomeTaxExpense = getDataFromIncomeStatement(clientManager,"incomeTaxExpense");
     freeCashFlow = DataExtractor.subtractTwoListValues("freeCashFlow",operatingCashflow,capitalExpenditures);
     dividendPayout = getDataFromCashFlowStatement(clientManager,"dividendPayout");
+    reversedSignDividendPayout = DataExtractor.reverseListSign(dividendPayout);
     commonStockSharesOutstanding = DataExtractor.extractCommonSharesOutstandingData(clientManager,"commonStockSharesOutstanding",dataContainerManager);
     bookValue = DataExtractor.extractBalanceSheetData("totalShareholderEquity",clientManager);
     bookValuePerShare = DataExtractor.calculateMargins("bookValuePerShare",bookValue,commonStockSharesOutstanding);
@@ -497,6 +499,10 @@ public class CompanyFundamentalData {
 
     public void setBookValuePerShare(ArrayList<FinancialDataObject> bookValuePerShare) {
         this.bookValuePerShare = bookValuePerShare;
+    }
+
+    public ArrayList<FinancialDataObject> getReversedSignDividendPayout() {
+        return reversedSignDividendPayout;
     }
 
     @Override
