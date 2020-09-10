@@ -1,10 +1,13 @@
 package GUIBoxes;
 
 import Controllers.DataContainerManager;
+import Controllers.TableViewBuilder;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+
 
 /**
  * This Class combines all components for the building of the Company Overview display.
@@ -12,7 +15,7 @@ import javafx.scene.layout.Priority;
 public class CompanyOverviewHBox extends HBox {
     CompanyOverviewHBox companyOverviewHBox;
     CompanyOverviewHalfVBox companyOverviewHalfVBox;
-    CompanyOverviewTableView companyOverviewTableView;
+    TableView companyOverviewTableView;
 
 
     /**
@@ -27,7 +30,7 @@ public class CompanyOverviewHBox extends HBox {
         companyOverviewHalfVBox.setFillWidth(true);
 
         //right part of the whole display
-        companyOverviewTableView = new CompanyOverviewTableView(dataContainerManager);
+        companyOverviewTableView = TableViewBuilder.buildCompanyOverviewTableview(dataContainerManager);
 
         companyOverviewHBox.getChildren().add(companyOverviewHalfVBox);
         companyOverviewHBox.getChildren().add(companyOverviewTableView);
@@ -45,11 +48,11 @@ public class CompanyOverviewHBox extends HBox {
         this.companyOverviewHalfVBox = companyOverviewHalfVBox;
     }
 
-    public CompanyOverviewTableView getCompanyOverviewTableView() {
+    public TableView getCompanyOverviewTableView() {
         return companyOverviewTableView;
     }
 
-    public void setCompanyOverviewTableView(CompanyOverviewTableView companyOverviewTableView) {
+    public void setCompanyOverviewTableView(TableView companyOverviewTableView) {
         this.companyOverviewTableView = companyOverviewTableView;
     }
 }
