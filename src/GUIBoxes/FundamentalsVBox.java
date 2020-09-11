@@ -34,7 +34,7 @@ public class FundamentalsVBox extends VBox {
         incomeValuesList.add(dataContainerManager.getCompanyFundamentalData().getTotalRevenue());
         incomeValuesList.add(dataContainerManager.getCompanyFundamentalData().getOperatingIncome());
         incomeValuesList.add(dataContainerManager.getCompanyFundamentalData().getNetIncome());
-        AreaChart IncomesChart = GraphBuilder.buildAreaChart("Date","Dollars",incomeValuesList);
+        AreaChart IncomesChart = GraphBuilder.buildAreaChart("","$",incomeValuesList);
         IncomesChart.prefWidthProperty().bind(fundamentalsContentVBox.widthProperty());
         HBox incomeTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(incomeValuesList);
 
@@ -44,23 +44,22 @@ public class FundamentalsVBox extends VBox {
         marginsValueList.add(dataContainerManager.getCompanyFundamentalData().getGrossMargin());
         marginsValueList.add(dataContainerManager.getCompanyFundamentalData().getOperatingMargin());
         marginsValueList.add(dataContainerManager.getCompanyFundamentalData().getNetMargin());
-        AreaChart marginsChart = GraphBuilder.buildAreaChart("Date","Percent",marginsValueList);
+        AreaChart marginsChart = GraphBuilder.buildAreaChart("","%",marginsValueList);
         marginsChart.prefWidthProperty().bind(IncomesChart.widthProperty());
         HBox marginsTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(marginsValueList);
 
 
 
         ArrayList<ArrayList<FinancialDataObject>> FCFAndPayoutList = new ArrayList<>();
-
         FCFAndPayoutList.add(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow());
         FCFAndPayoutList.add(dataContainerManager.getCompanyFundamentalData().getReversedSignDividendPayout());
-        AreaChart FCFAndPayoutChart = GraphBuilder.buildAreaChart("Date","Dollars",FCFAndPayoutList);
+        AreaChart FCFAndPayoutChart = GraphBuilder.buildAreaChart("","$",FCFAndPayoutList);
         HBox FCFAndPayoutTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(FCFAndPayoutList);
 
 
         ArrayList<ArrayList<FinancialDataObject>> payoutRatioList = new ArrayList<>();
         payoutRatioList.add(dataContainerManager.getCompanyFundamentalData().getPayOutRatio());
-        AreaChart payoutRatioAreaChart = GraphBuilder.buildAreaChart("Date", "Percent",payoutRatioList);
+        AreaChart payoutRatioAreaChart = GraphBuilder.buildAreaChart("", "%",payoutRatioList);
         HBox payoutRatioTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(payoutRatioList);
 
 

@@ -28,7 +28,7 @@ public class Main extends Application {
        sceneController.setStage(primaryStage);
 
 
-       ClientManager clientManager = new ClientManager("MSFT",new KeyManager().getKey());
+       ClientManager clientManager = new ClientManager("JNJ",new KeyManager().getKey());
        DataContainerManager dataContainerManager = new DataContainerManager(clientManager);
 
 
