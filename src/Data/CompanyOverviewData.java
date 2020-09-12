@@ -76,7 +76,10 @@ public class CompanyOverviewData {
 
 
     public FinancialDataObject getData(ClientManager ClientManager, String variableName){
-        double value = Double.parseDouble(DataExtractor.extractOVERVIEWData(ClientManager,variableName));
+        double value = 0.00;
+        try {
+            value = Double.parseDouble(DataExtractor.extractOVERVIEWData(ClientManager, variableName));
+        }catch (Exception ex){ex.printStackTrace();}
          String date = LocalDate.now().toString();
         FinancialDataObject financialDataObject = new FinancialDataObject(variableName,value,date);
         return financialDataObject;

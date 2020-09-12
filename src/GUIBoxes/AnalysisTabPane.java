@@ -27,13 +27,11 @@ public class AnalysisTabPane extends TabPane {
 
         overviewTab = new Tab("Company Overview");
         fundamentalTab = new Tab("Fundamentals");
-        fairValueTab = new Tab("Fair Value");
         equitiesTab = new Tab("Equities Analysis");
         evaluationTab = new Tab("Evaluation");
 
         analysisTabPane.getTabs().add(overviewTab);
         analysisTabPane.getTabs().add(fundamentalTab);
-        analysisTabPane.getTabs().add(fairValueTab);
         analysisTabPane.getTabs().add(equitiesTab);
         analysisTabPane.getTabs().add(evaluationTab);
         analysisTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -43,11 +41,13 @@ public class AnalysisTabPane extends TabPane {
         CompanyOverviewHBox companyOverviewHBox = new CompanyOverviewHBox(dataContainerManager);
         FundamentalsVBox fundamentalsVBox = new FundamentalsVBox(dataContainerManager);
         EquitiesVBox equitiesVBox = new EquitiesVBox(dataContainerManager);
+        EvaluationVBox evaluationVBox = new EvaluationVBox(dataContainerManager);
 
 
         overviewTab.setContent(companyOverviewHBox);
         fundamentalTab.setContent(fundamentalsVBox);
         equitiesTab.setContent(equitiesVBox);
+        evaluationTab.setContent(evaluationVBox);
 
     }
 

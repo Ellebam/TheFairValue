@@ -60,6 +60,10 @@ public class GraphBuilder {
                         valueList.get(i).getDate(),
                         valueList.get(i).getValue()));
             }
+            dataSeries.getData().add(new XYChart.Data<>(
+                    valueList.get(0).getDate(),
+                    valueList.get(0).getValue()));
+
         }
         else if (graphRange<260 && graphRange>70){
             for (int i = graphRange-1 ; i >= 0; i -= 5) {
@@ -67,6 +71,9 @@ public class GraphBuilder {
                         valueList.get(i).getDate(),
                         valueList.get(i).getValue()));
             }
+            dataSeries.getData().add(new XYChart.Data<>(
+                    valueList.get(0).getDate(),
+                    valueList.get(0).getValue()));
         }
         else {
             for (int i = graphRange - 1; i >= 0; i--) {

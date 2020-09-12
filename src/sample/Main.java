@@ -28,8 +28,9 @@ public class Main extends Application {
        sceneController.setStage(primaryStage);
 
 
-       ClientManager clientManager = new ClientManager("JNJ",new KeyManager().getKey());
+       ClientManager clientManager = new ClientManager("SNAP",new KeyManager().getKey());
        DataContainerManager dataContainerManager = new DataContainerManager(clientManager);
+       System.out.println(dataContainerManager.getFairValueAnalysisData());
 
 
 

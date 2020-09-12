@@ -288,6 +288,26 @@ public  class DataExtractor {
         return  changedList;
     }
 
+    public static ArrayList<FinancialDataObject> fiveYearPseudoQuarterlyStockPrice (
+            ArrayList<FinancialDataObject> targetList, ArrayList<FinancialDataObject> referenceList){
+
+        ArrayList<FinancialDataObject> reworkedList = new ArrayList<>();
+
+        for (int i = 0; i < referenceList.size()-1;i++){
+            String name = "StockPrice";
+            String date = referenceList.get(i).getDate();
+            double value = 0.00;
+            try {
+                value = DataExtractor.extractMatchingValue(i, referenceList, targetList);
+            }catch(Exception ex){ex.printStackTrace();}
+
+            FinancialDataObject stockPriceDataPoint = new FinancialDataObject(name,value,date);
+            reworkedList.add(stockPriceDataPoint);
+        }
+
+        return reworkedList;
+    }
+
     /**
      * method to determine the sum of the value of a given list. The scope is given by the timFrameUnit which will determine
      * how far down the list this method needs to go
@@ -838,6 +858,10 @@ public  class DataExtractor {
         DCFFairValuePerShare = totalFairValue/outstandingShares/4;
 
 
+
+        if(Double.isInfinite(DCFFairValuePerShare)|| Double.isNaN(DCFFairValuePerShare)){
+            DCFFairValuePerShare =0.00;
+        }
         return DCFFairValuePerShare;
 
 
@@ -855,7 +879,7 @@ public  class DataExtractor {
 
         ArrayList<FinancialDataObject> HistoricalDCFFairValuePerShare = new ArrayList<>();
         for (int i =0; i<dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().size();i++) {
-            String name = "DCFFairValuePerShare";
+            String name = "DCFFairValue";
             String date = dataContainerManager.getCompanyFundamentalData().getFreeCashFlow().get(i).getDate();
             double value = DataExtractor.calculateDCFFairValuePerShare(dataContainerManager,i);
             FinancialDataObject DCFFairValuePerShareDataPoint = new FinancialDataObject(name,value,date);
@@ -1059,7 +1083,7 @@ public  class DataExtractor {
     }
 
     public static String formatNumbers(double value){
-        if(value<15 && value>-15) return Double.toString(value);
+        if(value<15 && value>-15) return String.format("%.2f", value);
         long longValue = (new Double(Math.round(value))).longValue();
         if (longValue==Long.MIN_VALUE) return formatNumbers(Long.MIN_VALUE+1);
         if (longValue<0) return "-" + formatNumbers(-value);
