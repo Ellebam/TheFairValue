@@ -35,7 +35,7 @@ public class OpeningVBox extends VBox {
         HeaderLabel.setMaxWidth(600);
         HeaderLabel.setAlignment(Pos.CENTER);
         HeaderLabel.setTextAlignment(TextAlignment.CENTER);
-        Font labelFont = new Font("Amble.CN", 20);
+        Font labelFont = new Font("Verdana", 20);
         HeaderLabel.setFont(labelFont);
 
         SearchBar searchBar = new SearchBar();

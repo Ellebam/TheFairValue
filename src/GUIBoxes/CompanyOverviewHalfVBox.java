@@ -1,8 +1,10 @@
 package GUIBoxes;
 
 import Controllers.DataContainerManager;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -58,10 +60,15 @@ public class CompanyOverviewHalfVBox extends VBox {
         
         HistoricalStockPriceTabPane historicalStockPriceTapPane = new HistoricalStockPriceTabPane(dataContainerManager);
 
+
+
+
         companyOverviewHalfVBox.getLocalToSceneTransform();
         companyOverviewHalfVBox.getChildren().add(companyNameLabel);
         companyOverviewHalfVBox.getChildren().add(companySectorLabel);
         companyOverviewHalfVBox.getChildren().add(descriptionScrollPane);
+        companyOverviewHalfVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
+
         companyOverviewHalfVBox.getChildren().add(historicalStockPriceTapPane);
 
 

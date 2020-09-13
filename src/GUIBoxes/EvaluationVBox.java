@@ -5,8 +5,10 @@ import Controllers.DataExtractor;
 import Controllers.GraphBuilder;
 import Controllers.TableViewBuilder;
 import Data.FinancialDataObject;
+import Labels.AreaLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
@@ -39,12 +41,16 @@ public class EvaluationVBox extends VBox {
         AreaChart fairValueChart = GraphBuilder.buildAreaChart("","Stock Price $",fairValueList);
         fairValueChart.prefWidthProperty().bind(fairValueContentVBox.widthProperty());
         HBox fairValueTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(fairValueList);
+        AreaLabel fairValueLabel = new AreaLabel("Fair Value");
 
 
 
+        fairValueContentVBox.getChildren().add(fairValueLabel);
         fairValueContentVBox.getChildren().add(fairValueChart);
         fairValueContentVBox.getChildren().add(fairValueTableViewBox);
         fairValueContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
+        fairValueContentVBox.getChildren().add(new PitrovskiFScoreVBox(dataContainerManager));
+        fairValueContentVBox.setAlignment(Pos.CENTER);
 
         scrollPane.setContent(fairValueContentVBox);
         fairValueContentVBox.prefWidthProperty().bind(Main.getSceneController().getStage().widthProperty());
