@@ -45,9 +45,20 @@ public class EvaluationVBox extends VBox {
         AreaLabel fairValueLabel = new AreaLabel("Fair Value");
 
         HBox pitrovskiEvaluationHBox = new HBox();
-        pitrovskiEvaluationHBox.getChildren().add(new PitrovskiFScoreVBox(dataContainerManager));
-        pitrovskiEvaluationHBox.getChildren().add(EvaluationPointsLabel.buildEndPointsLabel(
-                "Endscore",9,dataContainerManager.getPitrovskiFScoreData().getPitrovskiFScore()));
+        pitrovskiEvaluationHBox.setSpacing(20);
+        PitrovskiFScoreVBox pitrovskiFScoreVBox =new PitrovskiFScoreVBox(dataContainerManager);
+        pitrovskiEvaluationHBox.getChildren().add(pitrovskiFScoreVBox);
+        EvaluationPointsLabel PitrovskiPointsLabel = EvaluationPointsLabel.buildEndPointsLabel(
+                "Endscore",9,dataContainerManager.getPitrovskiFScoreData().getPitrovskiFScore());
+        PitrovskiPointsLabel.setMaxHeight(150);
+        PitrovskiPointsLabel.setPrefWidth(200);
+
+        PitrovskiPointsLabel.setAlignment(Pos.CENTER);
+        pitrovskiEvaluationHBox.getChildren().add(PitrovskiPointsLabel);
+        pitrovskiEvaluationHBox.setAlignment(Pos.CENTER);
+
+
+
 
 
 

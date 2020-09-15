@@ -5,6 +5,7 @@ import Controllers.DataExtractor;
 import Labels.AreaLabel;
 import Labels.EvaluationPointsLabel;
 import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -12,6 +13,7 @@ import javafx.scene.layout.VBox;
 
 public class PitrovskiFScoreVBox extends VBox {
     PitrovskiFScoreVBox pitrovskiFScoreVBox;
+    GridPane gridpane;
 
     public PitrovskiFScoreVBox (DataContainerManager dataContainerManager){
         pitrovskiFScoreVBox = this;
@@ -20,7 +22,7 @@ public class PitrovskiFScoreVBox extends VBox {
 
 
 
-        GridPane gridpane = new GridPane();
+        gridpane = new GridPane();
 
         EvaluationPointsLabel C0R0 = new EvaluationPointsLabel("Return on assets");
         EvaluationPointsLabel C0R1 = new EvaluationPointsLabel("Cash flow return on assets");
@@ -146,8 +148,7 @@ public class PitrovskiFScoreVBox extends VBox {
                     dataContainerManager.getPitrovskiFScoreData().getChangeInAssetTurnover())+"% , Asset turnover not increased  ");
         }
 
-        EvaluationPointsLabel C3R4 = new EvaluationPointsLabel("End points");
-        C3R4 = EvaluationPointsLabel.buildEndPointsLabel("Endscore",9,dataContainerManager.getPitrovskiFScoreData().getPitrovskiFScore());
+
 
 
 
@@ -198,5 +199,9 @@ public class PitrovskiFScoreVBox extends VBox {
         pitrovskiFScoreVBox.getChildren().add(headerLabel);
         pitrovskiFScoreVBox.getChildren().add(gridpane);
         pitrovskiFScoreVBox.setAlignment(Pos.CENTER);
+    }
+
+    public GridPane getGridpane() {
+        return gridpane;
     }
 }
