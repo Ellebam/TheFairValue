@@ -14,4 +14,6 @@ public class AreaLabel extends Label  {
         areaLabel.setFont(new Font("Verdana",25));
         areaLabel.setAlignment(Pos.BASELINE_CENTER);
     }
+
+
 }

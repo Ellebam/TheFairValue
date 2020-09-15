@@ -6,6 +6,7 @@ import Controllers.GraphBuilder;
 import Controllers.TableViewBuilder;
 import Data.FinancialDataObject;
 import Labels.AreaLabel;
+import Labels.EvaluationPointsLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -43,13 +44,18 @@ public class EvaluationVBox extends VBox {
         HBox fairValueTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(fairValueList);
         AreaLabel fairValueLabel = new AreaLabel("Fair Value");
 
+        HBox pitrovskiEvaluationHBox = new HBox();
+        pitrovskiEvaluationHBox.getChildren().add(new PitrovskiFScoreVBox(dataContainerManager));
+        pitrovskiEvaluationHBox.getChildren().add(EvaluationPointsLabel.buildEndPointsLabel(
+                "Endscore",9,dataContainerManager.getPitrovskiFScoreData().getPitrovskiFScore()));
+
 
 
         fairValueContentVBox.getChildren().add(fairValueLabel);
         fairValueContentVBox.getChildren().add(fairValueChart);
         fairValueContentVBox.getChildren().add(fairValueTableViewBox);
         fairValueContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
-        fairValueContentVBox.getChildren().add(new PitrovskiFScoreVBox(dataContainerManager));
+        fairValueContentVBox.getChildren().add(pitrovskiEvaluationHBox);
         fairValueContentVBox.setAlignment(Pos.CENTER);
 
         scrollPane.setContent(fairValueContentVBox);
