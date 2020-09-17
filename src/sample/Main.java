@@ -28,7 +28,7 @@ public class Main extends Application {
        sceneController.setStage(primaryStage);
 
 
-       ClientManager clientManager = new ClientManager("AAPL",new KeyManager().getKey());
+       ClientManager clientManager = new ClientManager("MSFT",new KeyManager().getKey());
        DataContainerManager dataContainerManager = new DataContainerManager(clientManager);
        System.out.println(dataContainerManager.getFairValueAnalysisData());
 

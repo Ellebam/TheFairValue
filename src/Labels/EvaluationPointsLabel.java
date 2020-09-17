@@ -53,9 +53,10 @@ public class EvaluationPointsLabel extends Label {
             endPointLabel.setStyle("-fx-background-color: limegreen;-fx-text-fill:whitesmoke; " +
                     "-fx-border-radius: 5 5 5 5;-fx-background-radius: 5 5 5 5;");
         }
-        Font font = Font.font("Verdana", FontWeight.EXTRA_BOLD,18);
+        Font font = Font.font("Verdana", FontWeight.SEMI_BOLD,18);
         endPointLabel.setFont(font);
         endPointLabel.setTextAlignment(TextAlignment.CENTER);
+        endPointLabel.setWrapText(true);
 
 
 

@@ -470,13 +470,15 @@ public  class DataExtractor {
         double divergence = calculateDivergence(benchmarkValue,actualValue);
         int endPoints;
         if (!(divergence<=0)){
-            endPoints =(int) Math.round (pointsNumber*divergence);
+            endPoints =(int) Math.round (pointsNumber*(1-divergence));
 
         }else{
             endPoints = (int) pointsNumber;
         }
         return endPoints;
     }
+
+
     public static int calculatePointsStockPrice(double pointsNumber, double benchmarkValue, double actualValue){
         double divergence = divideTwoValues(benchmarkValue,actualValue);
         int endPoints;

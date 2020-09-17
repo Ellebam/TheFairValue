@@ -26,7 +26,7 @@ public class EvaluationVBox extends VBox {
     public EvaluationVBox(DataContainerManager dataContainerManager){
         evaluationVBox = this;
         scrollPane = new ScrollPane();
-        VBox fairValueContentVBox = new VBox();
+        VBox evaluationContentVBox = new VBox();
 
 
 
@@ -40,7 +40,7 @@ public class EvaluationVBox extends VBox {
         fairValueList.add(dataContainerManager.getFairValueAnalysisData().getGrahamNumber());
         fairValueList.add(dataContainerManager.getFairValueAnalysisData().getMeanFairValue());
         AreaChart fairValueChart = GraphBuilder.buildAreaChart("","Stock Price $",fairValueList);
-        fairValueChart.prefWidthProperty().bind(fairValueContentVBox.widthProperty());
+        fairValueChart.prefWidthProperty().bind(evaluationContentVBox.widthProperty());
         HBox fairValueTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(fairValueList);
         AreaLabel fairValueLabel = new AreaLabel("Fair Value");
 
@@ -57,22 +57,24 @@ public class EvaluationVBox extends VBox {
         pitrovskiEvaluationHBox.getChildren().add(PitrovskiPointsLabel);
         pitrovskiEvaluationHBox.setAlignment(Pos.CENTER);
 
+        EvaluationPointsVBox evaluationPointsVBox = new EvaluationPointsVBox(dataContainerManager);
 
 
 
 
+        evaluationContentVBox.getChildren().add(fairValueLabel);
+        evaluationContentVBox.getChildren().add(fairValueChart);
+        evaluationContentVBox.getChildren().add(fairValueTableViewBox);
+        evaluationContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
+        evaluationContentVBox.getChildren().add(pitrovskiEvaluationHBox);
+        evaluationContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
+        evaluationContentVBox.getChildren().add(evaluationPointsVBox);
+        evaluationContentVBox.setAlignment(Pos.CENTER);
 
-        fairValueContentVBox.getChildren().add(fairValueLabel);
-        fairValueContentVBox.getChildren().add(fairValueChart);
-        fairValueContentVBox.getChildren().add(fairValueTableViewBox);
-        fairValueContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
-        fairValueContentVBox.getChildren().add(pitrovskiEvaluationHBox);
-        fairValueContentVBox.setAlignment(Pos.CENTER);
-
-        scrollPane.setContent(fairValueContentVBox);
-        fairValueContentVBox.prefWidthProperty().bind(Main.getSceneController().getStage().widthProperty());
-        fairValueContentVBox.setPadding(new Insets(15));
-        fairValueContentVBox.setSpacing(10);
+        scrollPane.setContent(evaluationContentVBox);
+        evaluationContentVBox.prefWidthProperty().bind(Main.getSceneController().getStage().widthProperty());
+        evaluationContentVBox.setPadding(new Insets(15));
+        evaluationContentVBox.setSpacing(10);
 
         evaluationVBox.getChildren().add(scrollPane);
         evaluationVBox.setPadding(new Insets(1));

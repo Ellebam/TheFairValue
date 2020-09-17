@@ -5,7 +5,6 @@ import Controllers.DataExtractor;
 import Labels.AreaLabel;
 import Labels.EvaluationPointsLabel;
 import javafx.geometry.Pos;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
