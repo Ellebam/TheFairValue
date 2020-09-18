@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.AreaChart;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
@@ -33,35 +34,35 @@ public class EquitiesVBox extends VBox {
         equitiesList.add(dataContainerManager.getCompanyFundamentalData().getShortTermInvestments());
         equitiesList.add(dataContainerManager.getCompanyFundamentalData().getCash());
         AreaChart equitiesChart = GraphBuilder.buildAreaChart("", "$",equitiesList);
-        HBox equitiesTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(equitiesList);
         AreaLabel assetsLabel = new AreaLabel("Assets & Liabilities");
+        Accordion equitiesTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(equitiesList,assetsLabel.getText());
 
         ArrayList<ArrayList<FinancialDataObject>> debtAndInvestmentsList = new ArrayList<>();
         debtAndInvestmentsList.add(dataContainerManager.getCompanyFundamentalData().getLongTermDebt());
         debtAndInvestmentsList.add(dataContainerManager.getCompanyFundamentalData().getLongTermInvestments());
         debtAndInvestmentsList.add(dataContainerManager.getCompanyFundamentalData().getShortTermDebt());
         AreaChart debtAndInvestementsChart = GraphBuilder.buildAreaChart("","$",debtAndInvestmentsList);
-        HBox debtAndInvestmentsTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(debtAndInvestmentsList);
         AreaLabel debtLabel = new AreaLabel("Debt & Investements");
+        Accordion debtAndInvestmentsTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(debtAndInvestmentsList, debtLabel.getText());
 
         ArrayList<ArrayList<FinancialDataObject>> debtRatiosList = new ArrayList<>();
         debtRatiosList.add(dataContainerManager.getCompanyFundamentalData().getDebtRatio());
         debtRatiosList.add(dataContainerManager.getCompanyFundamentalData().getLongDebtToInvestmentsRatio());
         AreaChart debtRatiosChart = GraphBuilder.buildAreaChart("","%",debtRatiosList);
-        HBox debtRatiosTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(debtRatiosList);
         AreaLabel debtRatiosLabel = new AreaLabel("Debt Ratios");
+        Accordion debtRatiosTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(debtRatiosList, debtRatiosLabel.getText());
 
         equitiesContentVBox.getChildren().add(assetsLabel);
         equitiesContentVBox.getChildren().add(equitiesChart);
-        equitiesContentVBox.getChildren().add(equitiesTableViewBox);
+        equitiesContentVBox.getChildren().add(equitiesTableViewAccordion);
         equitiesContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
         equitiesContentVBox.getChildren().add(debtLabel);
         equitiesContentVBox.getChildren().add(debtAndInvestementsChart);
-        equitiesContentVBox.getChildren().add(debtAndInvestmentsTableViewBox);
+        equitiesContentVBox.getChildren().add(debtAndInvestmentsTableViewAccordion);
         equitiesContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
         equitiesContentVBox.getChildren().add(debtRatiosLabel);
         equitiesContentVBox.getChildren().add(debtRatiosChart);
-        equitiesContentVBox.getChildren().add(debtRatiosTableViewBox);
+        equitiesContentVBox.getChildren().add(debtRatiosTableViewAccordion);
         equitiesContentVBox.setAlignment(Pos.CENTER);
 
         scrollPane.setContent(equitiesContentVBox);

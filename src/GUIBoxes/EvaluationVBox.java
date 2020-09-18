@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.AreaChart;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
@@ -41,8 +42,8 @@ public class EvaluationVBox extends VBox {
         fairValueList.add(dataContainerManager.getFairValueAnalysisData().getMeanFairValue());
         AreaChart fairValueChart = GraphBuilder.buildAreaChart("","Stock Price $",fairValueList);
         fairValueChart.prefWidthProperty().bind(evaluationContentVBox.widthProperty());
-        HBox fairValueTableViewBox = TableViewBuilder.buildAnalysisTableViewBox(fairValueList);
         AreaLabel fairValueLabel = new AreaLabel("Fair Value");
+        Accordion fairValueTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(fairValueList,fairValueLabel.getText());
 
         HBox pitrovskiEvaluationHBox = new HBox();
         pitrovskiEvaluationHBox.setSpacing(20);
@@ -64,7 +65,7 @@ public class EvaluationVBox extends VBox {
 
         evaluationContentVBox.getChildren().add(fairValueLabel);
         evaluationContentVBox.getChildren().add(fairValueChart);
-        evaluationContentVBox.getChildren().add(fairValueTableViewBox);
+        evaluationContentVBox.getChildren().add(fairValueTableViewAccordion);
         evaluationContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
         evaluationContentVBox.getChildren().add(pitrovskiEvaluationHBox);
         evaluationContentVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));

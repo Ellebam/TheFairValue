@@ -3,8 +3,10 @@ package GUIBoxes;
 import Controllers.DataContainerManager;
 import Labels.AreaLabel;
 import Labels.EvaluationPointsLabel;
+import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class EvaluationPointsVBox extends VBox {
     EvaluationPointsVBox evaluationPointsVBox;
@@ -12,6 +14,7 @@ public class EvaluationPointsVBox extends VBox {
     public EvaluationPointsVBox(DataContainerManager dataContainerManager){
         evaluationPointsVBox = this;
         AreaLabel headerLabel = new AreaLabel("Evaluation Points");
+        evaluationPointsVBox.setAlignment(Pos.CENTER);
 
        HBox evaluationPointsContentHBox = new HBox();
 
@@ -30,11 +33,14 @@ public class EvaluationPointsVBox extends VBox {
 
         EvaluationPointsLabel summedUpPoints =  EvaluationPointsLabel.buildEndPointsLabel(" Evaluation ",100,
                 dataContainerManager.getEvaluationData().getSumOfEvaluationPoints());
+        summedUpPoints.setFont(new Font("Verdana",24));
 
         evaluationPointsContentHBox.getChildren().add(fairValue2PricePoints);
         evaluationPointsContentHBox.getChildren().add(PFScorePoints);
         evaluationPointsContentHBox.getChildren().add(VolatilityAndPerformancePoints);
         evaluationPointsContentHBox.getChildren().add(DividendsPoints);
+        evaluationPointsContentHBox.setAlignment(Pos.CENTER);
+        evaluationPointsContentHBox.prefWidthProperty().bind(summedUpPoints.widthProperty());
 
         evaluationPointsContentHBox.setSpacing(5);
         evaluationPointsContentHBox.setMinHeight(100);

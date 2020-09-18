@@ -198,6 +198,7 @@ public class PitrovskiFScoreVBox extends VBox {
         pitrovskiFScoreVBox.getChildren().add(headerLabel);
         pitrovskiFScoreVBox.getChildren().add(gridpane);
         pitrovskiFScoreVBox.setAlignment(Pos.CENTER);
+        pitrovskiFScoreVBox.setSpacing(10);
     }
 
     public GridPane getGridpane() {

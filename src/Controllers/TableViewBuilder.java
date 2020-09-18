@@ -3,9 +3,7 @@ package Controllers;
 import Data.FinancialDataObject;
 import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import javafx.geometry.Pos;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
@@ -82,7 +80,8 @@ public class TableViewBuilder {
 
     }
 
-    public static HBox  buildAnalysisTableViewBox (ArrayList<ArrayList<FinancialDataObject>> baseList){
+    public static Accordion buildAnalysisTableViewBox (ArrayList<ArrayList<FinancialDataObject>> baseList, String name){
+        Accordion tableViewAccordion = new Accordion();
         HBox tableViewBox = new HBox();
 
         for (ArrayList<FinancialDataObject> dataList :baseList){
@@ -135,6 +134,9 @@ public class TableViewBuilder {
 
 
     tableViewBox.setAlignment(Pos.BASELINE_CENTER);
-    return tableViewBox;
+        TitledPane tableViewPane = new TitledPane(name+" data",tableViewBox);
+        tableViewAccordion.getPanes().add(tableViewPane);
+
+    return tableViewAccordion;
     }
 }

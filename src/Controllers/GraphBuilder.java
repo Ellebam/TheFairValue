@@ -101,6 +101,8 @@ public class GraphBuilder {
 
         URL url = GraphBuilder.class.getResource("/GUIElements/chartStyle");
         lineChart.getStylesheets().add(url.toString());
+        lineChart.setHorizontalGridLinesVisible(false);
+        lineChart.setVerticalGridLinesVisible(false);
 
         return lineChart;
     }
@@ -123,6 +125,8 @@ public class GraphBuilder {
         }
             areaChart.getData().add(dataSeries);
             }
+        areaChart.setHorizontalGridLinesVisible(false);
+        areaChart.setVerticalGridLinesVisible(false);
 
 
 
