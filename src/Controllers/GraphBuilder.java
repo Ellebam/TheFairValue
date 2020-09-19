@@ -5,6 +5,7 @@ import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
+import sample.Main;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -91,6 +92,7 @@ public class GraphBuilder {
         //this part adds tooltips to every data point in the dataseries containing the y and x value of the datapoint
                 for (XYChart.Data<String, Number> entry : dataSeries.getData()) {
                     Tooltip tooltip = new Tooltip("Price: " +entry.getYValue().toString()+" $"+"\n"+"Date: "+entry.getXValue());
+                    Main.fastenTooltipStartTiming(tooltip);
                     Tooltip.install(entry.getNode(), tooltip);
                     URL url = GraphBuilder.class.getResource("/GUIElements/chartStyle");
                     entry.getNode().setOnMouseEntered(event->entry.getNode().getStyleClass().add(url.toString()));
