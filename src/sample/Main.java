@@ -32,9 +32,9 @@ public class Main extends Application {
        sceneController.setStage(primaryStage);
 
 
-       ClientManager clientManager = new ClientManager("MMM",new KeyManager().getKey());
+       ClientManager clientManager = new ClientManager("AMZN",new KeyManager().getKey());
        DataContainerManager dataContainerManager = new DataContainerManager(clientManager);
-       System.out.println(dataContainerManager.getFairValueAnalysisData());
+
 
 
 

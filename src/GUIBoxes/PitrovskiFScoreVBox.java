@@ -16,7 +16,11 @@ public class PitrovskiFScoreVBox extends VBox {
 
     public PitrovskiFScoreVBox (DataContainerManager dataContainerManager){
         pitrovskiFScoreVBox = this;
-        AreaLabel headerLabel = new AreaLabel("Pitrovski F Score");
+        String headerLabelTooltipText = "Calculation of the Pitrovski F Score: "+"\n"+"\n"+ "" +
+                " - Pitrovski F Score: Piotroski F-score is a number between 0 and 9 which is used to assess strength of " +
+                "company's financial position. The score is used by financial investors in order to find the best value stocks " +
+                "(nine being the best). The score is named after Stanford accounting professor Joseph Piotroski.";
+        AreaLabel headerLabel = new AreaLabel("Pitrovski F Score",headerLabelTooltipText);
 
 
 

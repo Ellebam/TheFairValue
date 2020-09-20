@@ -13,7 +13,14 @@ public class EvaluationPointsVBox extends VBox {
 
     public EvaluationPointsVBox(DataContainerManager dataContainerManager){
         evaluationPointsVBox = this;
-        AreaLabel headerLabel = new AreaLabel("Evaluation Points");
+        String headerLabelTooltipText = "Evaluation of the profitability of an stock investment based on a companies business" +
+                " metrics. Four areas are explored where a maximum of 25 points per area can be achieved: "+"\n"+"\n"+
+                " - Mean fair value: Comparison of calculated mean fari value with the current stock price"+"\n"+"\n"+
+                " - Pitrovski F Score: Valuation based on Pitrovski F Score"+"\n"+"\n"+
+                " - Volatility & Performance: Highest points achievable for stocks with a high performance and low stock price volatility"+"\n"+"\n"+
+                " - Dividend factors: Valuation of a companies dividend payout quality through different metrics. If no dividend is paid out to" +
+                "shareholders a multiple of the stocks perfomrance will be used for valuation";
+        AreaLabel headerLabel = new AreaLabel("Evaluation Points",headerLabelTooltipText);
         evaluationPointsVBox.setAlignment(Pos.CENTER);
 
        HBox evaluationPointsContentHBox = new HBox();

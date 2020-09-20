@@ -42,7 +42,13 @@ public class EvaluationVBox extends VBox {
         fairValueList.add(dataContainerManager.getFairValueAnalysisData().getMeanFairValue());
         AreaChart fairValueChart = GraphBuilder.buildAreaChart("","Stock Price $",fairValueList);
         fairValueChart.prefWidthProperty().bind(evaluationContentVBox.widthProperty());
-        AreaLabel fairValueLabel = new AreaLabel("Fair Value");
+        String fairValueLabelTooltipText = "Comparison of a companies fair value calculated by different formulas:"+"\n"+"\n"+" " +
+                " - Stock price: Price of ashare issue. "+"\n"+"\n"+
+                " - DCF Fair value: Fair value calculated by the discounted cash flow valuation model."+"\n"+"\n"+
+                " - Peter Lynch fair value: Fair value calculated by Peter Lynchs P/E valuation model." +"\n"+"\n"+
+                " - Graham number: Fair value calculated with Graham valuation approach."+"\n"+"\n"+
+                " - Mean fair value: Mean value of calculated fair values for comparison to current stock price.";
+        AreaLabel fairValueLabel = new AreaLabel("Fair Value",fairValueLabelTooltipText);
         Accordion fairValueTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(fairValueList,fairValueLabel.getText());
 
         HBox pitrovskiEvaluationHBox = new HBox();
