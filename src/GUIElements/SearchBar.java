@@ -52,4 +52,12 @@ public class SearchBar extends HBox{
 
 
     }
+
+    public TextField getSearchTextField() {
+        return searchTextField;
+    }
+
+    public Button getSubmitButton() {
+        return submitButton;
+    }
 }

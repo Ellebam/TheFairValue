@@ -1,10 +1,12 @@
 package sample;
 
 
+import GUIBoxes.AnalysisStackpane;
 import GUIBoxes.AnalysisVBox;
 
 import Controllers.*;
 
+import GUIBoxes.OpeningVBox;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -32,13 +34,12 @@ public class Main extends Application {
        sceneController.setStage(primaryStage);
 
 
-       ClientManager clientManager = new ClientManager("AMZN",new KeyManager().getKey());
-       DataContainerManager dataContainerManager = new DataContainerManager(clientManager);
 
 
 
 
-       sceneController.setSceneContent(new AnalysisVBox(dataContainerManager));
+
+       sceneController.setSceneContent(new OpeningVBox());
        primaryStage.show();
        primaryStage.centerOnScreen();
     }

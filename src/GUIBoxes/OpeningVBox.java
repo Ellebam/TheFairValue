@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import sample.Main;
 
 
 public class OpeningVBox extends VBox {
@@ -28,7 +29,7 @@ public class OpeningVBox extends VBox {
 
         String labelText = "Welcome to The Fair Value. " +
                 "Please enter a stock ticker symbol of the company that should be analyzed." +
-                "(e.g. MSFT for Microsoft Corp.)";
+                "\n"+"(e.g. MSFT for Microsoft Corp.)";
         Label HeaderLabel = new Label(labelText);
         this.HeaderLabel = HeaderLabel;
         HeaderLabel.setWrapText(true);
@@ -41,10 +42,19 @@ public class OpeningVBox extends VBox {
         SearchBar searchBar = new SearchBar();
         searchBar.setAlignment(Pos.CENTER);
         this.searchBar = searchBar;
+        searchBar.getSubmitButton().setOnAction(value->{
+            loadData(searchBar.getSearchTextField().getText());
+            Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
+        });
 
         Button demoButton = new Button("Try Demo");
         demoButton.setStyle("-fx-text-fill: #00BFFF; -fx-font-size: 18;");
         this.demoButton = demoButton;
+        demoButton.setOnAction(value ->{
+            loadDemoData();
+            Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
+
+        });
 
 
         openingVBox.getChildren().add(HeaderLabel);
@@ -59,6 +69,20 @@ public class OpeningVBox extends VBox {
     }
 
     public void loadData(String symbol) {
+        try {
+            KeyManager keyManager = new KeyManager();
+            System.out.println(keyManager.getKey());
+            ClientManager ClientManager = new ClientManager(symbol, keyManager.getKey());
+            DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
+            this.dataContainerManager = dataContainerManager;
+        } catch (Exception ex) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error while loading Data!");
+            errorAlert.show();
+
+        }
+    }
+
+    public void loadDemoData() {
         try {
             KeyManager keyManager = new KeyManager();
             System.out.println(keyManager.getKey());

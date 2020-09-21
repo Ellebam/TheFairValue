@@ -12,7 +12,6 @@ public class AnalysisTabPane extends TabPane {
     DataContainerManager dataContainerManager;
     Tab overviewTab;
     Tab fundamentalTab;
-    Tab fairValueTab;
     Tab equitiesTab;
     Tab evaluationTab;
 

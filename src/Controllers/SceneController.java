@@ -1,12 +1,13 @@
 package Controllers;
 
+
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class SceneController {
     Stage stage;
-    VBox vBox;
+    Parent contentBox;
 
     public  void setStage(Stage stage){
         this.stage = stage;
@@ -14,10 +15,10 @@ public class SceneController {
 
 
 
-    public void setSceneContent(VBox vBox){
-        Scene scene = new Scene(vBox);
+    public void setSceneContent(Parent contentBox){
+        Scene scene = new Scene(contentBox);
         stage.setScene(scene);
-        this.vBox = vBox;
+        this.contentBox = contentBox;
 
 
     }
@@ -26,7 +27,7 @@ public class SceneController {
         return stage;
     }
 
-    public VBox getvBox() {
-        return vBox;
+    public Parent getContentBox() {
+        return contentBox;
     }
 }

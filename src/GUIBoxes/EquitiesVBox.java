@@ -12,7 +12,6 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import sample.Main;
 
