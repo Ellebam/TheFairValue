@@ -1,6 +1,14 @@
 package Controllers;
 
 import Data.*;
+import javafx.beans.InvalidationListener;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class DataContainerManager {
     private DataContainerManager dataContainerManager;
@@ -10,6 +18,7 @@ public class DataContainerManager {
     private FairValueAnalysisData fairValueAnalysisData;
     private PitrovskiFScoreData pitrovskiFScoreData;
     private EvaluationData evaluationData;
+    private int loadingCounter;
 
 
 
@@ -17,13 +26,23 @@ public class DataContainerManager {
     public DataContainerManager (ClientManager clientManager)throws Exception{
         dataContainerManager = this;
         this.clientManager = clientManager;
+        loadingCounter = 0;
+
         companyOverviewData = new CompanyOverviewData(clientManager);
+        loadingCounter++;
         companyFundamentalData = new CompanyFundamentalData(clientManager,dataContainerManager);
+        loadingCounter++;
         fairValueAnalysisData = new FairValueAnalysisData(dataContainerManager);
+        loadingCounter++;
         pitrovskiFScoreData = new PitrovskiFScoreData(dataContainerManager);
+        loadingCounter++;
         DataExtractor.calculatePitrovskiFScore(dataContainerManager);
         evaluationData = new EvaluationData(dataContainerManager);
+        loadingCounter++;
         DataExtractor.calculateEvaluationPoints(dataContainerManager);
+        loadingCounter++;
+
+        System.out.println(loadingCounter);
 
 
 
@@ -67,5 +86,9 @@ public class DataContainerManager {
 
     public void setEvaluationData(EvaluationData evaluationData) {
         this.evaluationData = evaluationData;
+    }
+
+    public int getLoadingCounter() {
+        return loadingCounter;
     }
 }

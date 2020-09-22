@@ -3,7 +3,7 @@
 
 .root{
 -fx-padding: 15;
--fx:background-color: cornsilk;
+-fx-background-color: cornsilk;
 }
 
 #searchTextField{

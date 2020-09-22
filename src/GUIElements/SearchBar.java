@@ -1,6 +1,7 @@
 package GUIElements;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,6 +15,7 @@ public class SearchBar extends HBox{
     SearchBar searchBar;
     TextField searchTextField;
     Button submitButton;
+
 
     public SearchBar() {
         searchBar = this;
@@ -46,6 +48,7 @@ public class SearchBar extends HBox{
         this.submitButton = submitButton;
 
 
+
         searchBar.getChildren().add(layout);
         searchBar.getChildren().add(submitButton);
         searchBar.setSpacing(10);
@@ -60,4 +63,6 @@ public class SearchBar extends HBox{
     public Button getSubmitButton() {
         return submitButton;
     }
+
+
 }

@@ -4,14 +4,22 @@ import Controllers.ClientManager;
 import Controllers.DataContainerManager;
 import Controllers.KeyManager;
 import GUIElements.SearchBar;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import sample.Main;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 
 
 public class OpeningVBox extends VBox {
@@ -21,6 +29,9 @@ public class OpeningVBox extends VBox {
     SearchBar searchBar;
     Button demoButton;
     DataContainerManager dataContainerManager;
+    Label progressLabel;
+
+
 
 
     public OpeningVBox() {
@@ -47,19 +58,62 @@ public class OpeningVBox extends VBox {
             Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
         });
 
+        try {
+            Image image = new Image(getClass().getResourceAsStream("/GUIElements/Rolling-1s-200px.gif"));
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(25);
+            imageView.setFitWidth(25);
+            progressLabel = new Label("Loading data..",imageView);
+            progressLabel.setVisible(false);
+        }catch (Exception ex){ex.printStackTrace();}
+
+
         Button demoButton = new Button("Try Demo");
         demoButton.setStyle("-fx-text-fill: #00BFFF; -fx-font-size: 18;");
         this.demoButton = demoButton;
+
+
+
         demoButton.setOnAction(value ->{
-            loadDemoData();
-            Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
+        Task task1 = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                progressLabel.setVisible(true);
+                Thread.sleep(20000);
+
+
+                Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
+                Main.getSceneController().getStage().show();
+
+
+
+                return null;
+            }
+        };
+
+        Task task2 = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                loadDemoData();
+
+                return null;
+            }
+        };
+
+        Thread thread1 = new Thread(task1);
+        Thread thread2 = new Thread (task2);
+
+        thread1.start();
+        thread2.start();
+
 
         });
 
 
-        openingVBox.getChildren().add(HeaderLabel);
-        openingVBox.getChildren().add(searchBar);
-        openingVBox.getChildren().add(demoButton);
+
+
+        openingVBox.getChildren().addAll(HeaderLabel,searchBar,progressLabel,demoButton);
+
         openingVBox.setAlignment(Pos.CENTER);
         openingVBox.setSpacing(20);
 
@@ -95,4 +149,6 @@ public class OpeningVBox extends VBox {
 
         }
     }
+
+
 }

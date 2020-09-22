@@ -11,6 +11,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -19,7 +20,7 @@ import java.lang.reflect.Field;
 
 
 public class Main extends Application {
-    static SceneController sceneController = new SceneController();
+    public static SceneController sceneController = new SceneController();
 
 
 
@@ -80,5 +81,8 @@ public class Main extends Application {
            e.printStackTrace();
        }
     }
+
+
+
 }
 
