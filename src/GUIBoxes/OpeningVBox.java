@@ -4,10 +4,8 @@ import Controllers.ClientManager;
 import Controllers.DataContainerManager;
 import Controllers.KeyManager;
 import GUIElements.SearchBar;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -17,9 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import sample.Main;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
+
 
 
 public class OpeningVBox extends VBox {
@@ -54,8 +50,34 @@ public class OpeningVBox extends VBox {
         searchBar.setAlignment(Pos.CENTER);
         this.searchBar = searchBar;
         searchBar.getSubmitButton().setOnAction(value->{
-            loadData(searchBar.getSearchTextField().getText());
-            Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
+            progressLabel.setVisible(true);
+
+            new Thread() {
+                public void run() {
+                    try {
+                        loadData(searchBar.getSearchTextField().getText());
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
+                            }
+                        });
+
+                    }catch (Exception ex){
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ex.printStackTrace();
+
+                                Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error while loading Data!");
+                                errorAlert.show();
+                                progressLabel.setVisible(false);
+                            }
+                        });
+                    }
+                }
+            }.start();
         });
 
         try {
@@ -74,41 +96,40 @@ public class OpeningVBox extends VBox {
 
 
 
-        demoButton.setOnAction(value ->{
-        Task task1 = new Task() {
-            @Override
-            protected Object call() throws Exception {
-                progressLabel.setVisible(true);
-                Thread.sleep(20000);
+        demoButton.setOnAction(value -> {
+
+            progressLabel.setVisible(true);
+
+            new Thread() {
+                public void run() {
+                    try {
+                        loadDemoData();
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
+
+                            }
+                        });
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error while loading Data!");
+                                errorAlert.show();
+                                progressLabel.setVisible(false);
+                            }
+                        });
+
+                    }
 
 
-                Main.getSceneController().setSceneContent(new AnalysisStackpane(dataContainerManager));
-                Main.getSceneController().getStage().show();
 
-
-
-                return null;
-            }
-        };
-
-        Task task2 = new Task() {
-            @Override
-            protected Object call() throws Exception {
-                loadDemoData();
-
-                return null;
-            }
-        };
-
-        Thread thread1 = new Thread(task1);
-        Thread thread2 = new Thread (task2);
-
-        thread1.start();
-        thread2.start();
-
-
+                }
+            }.start();
         });
-
 
 
 
@@ -117,38 +138,33 @@ public class OpeningVBox extends VBox {
         openingVBox.setAlignment(Pos.CENTER);
         openingVBox.setSpacing(20);
 
-      
+
 
 
     }
 
-    public void loadData(String symbol) {
-        try {
-            KeyManager keyManager = new KeyManager();
-            System.out.println(keyManager.getKey());
-            ClientManager ClientManager = new ClientManager(symbol, keyManager.getKey());
-            DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
-            this.dataContainerManager = dataContainerManager;
-        } catch (Exception ex) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error while loading Data!");
-            errorAlert.show();
+    public void loadData(String symbol) throws Exception {
 
-        }
+        KeyManager keyManager = new KeyManager();
+        System.out.println(keyManager.getKey());
+        ClientManager ClientManager = new ClientManager(symbol, keyManager.getKey());
+        DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
+        this.dataContainerManager = dataContainerManager;
+
     }
 
-    public void loadDemoData() {
-        try {
-            KeyManager keyManager = new KeyManager();
-            System.out.println(keyManager.getKey());
-            ClientManager ClientManager = new ClientManager("JNJ", keyManager.getKey());
-            DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
-            this.dataContainerManager = dataContainerManager;
-        } catch (Exception ex) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error while loading Data!");
-            errorAlert.show();
+    public void loadDemoData() throws Exception {
 
-        }
+        KeyManager keyManager = new KeyManager();
+        System.out.println(keyManager.getKey());
+        ClientManager ClientManager = new ClientManager("JNJ", keyManager.getKey());
+        DataContainerManager dataContainerManager = new DataContainerManager(ClientManager);
+        this.dataContainerManager = dataContainerManager;
+
+
+
     }
-
-
 }
+
+
+

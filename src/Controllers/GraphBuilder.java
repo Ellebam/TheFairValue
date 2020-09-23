@@ -124,6 +124,7 @@ public class GraphBuilder {
             dataSeries.setName(dataList.get(0).getName());
             for (int i = dataList.size()-1; i>=0;i--) {
                 dataSeries.getData().add(new XYChart.Data(dataList.get(i).getDate(), dataList.get(i).getValue()));
+
         }
             areaChart.getData().add(dataSeries);
             }

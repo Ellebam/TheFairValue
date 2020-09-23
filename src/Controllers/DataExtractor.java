@@ -293,7 +293,7 @@ public  class DataExtractor {
 
         ArrayList<FinancialDataObject> reworkedList = new ArrayList<>();
 
-        for (int i = 0; i < referenceList.size()-1;i++){
+        for (int i = 0; i < referenceList.size();i++){
             String name = "StockPrice";
             String date = referenceList.get(i).getDate();
             double value = 0.00;
