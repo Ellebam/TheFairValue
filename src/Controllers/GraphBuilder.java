@@ -109,6 +109,15 @@ public class GraphBuilder {
         return lineChart;
     }
 
+    /**
+     * Constructor for area chart with the possibility of multiple graphs. The method will extract ArrayLists containing
+     * Financial Data Objects from the given container ArrayList. For every singular ArrayList an own graph will be
+     * constructed and added to the area chart.
+     * @param xAxisName name of the x axis
+     * @param yAxisName name of the y axis
+     * @param dataBase data container used as reference
+     * @return
+     */
     public static AreaChart buildAreaChart(String xAxisName, String yAxisName, ArrayList<ArrayList<FinancialDataObject>> dataBase){
         final CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel(xAxisName);
@@ -130,8 +139,6 @@ public class GraphBuilder {
             }
         areaChart.setHorizontalGridLinesVisible(false);
         areaChart.setVerticalGridLinesVisible(false);
-
-
 
 
         return areaChart;

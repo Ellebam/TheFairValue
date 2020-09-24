@@ -33,7 +33,7 @@ public class EvaluationVBox extends VBox {
 
 
         ArrayList<ArrayList<FinancialDataObject>> fairValueList = new ArrayList<>();
-        fairValueList.add(DataExtractor.fiveYearPseudoQuarterlyStockPrice(
+        fairValueList.add(DataExtractor.pseudoQUarterlyStockprice(
                 dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice(),
                 dataContainerManager.getFairValueAnalysisData().getHistoricalDCFFairValuePerShare()));
         fairValueList.add(dataContainerManager.getFairValueAnalysisData().getHistoricalDCFFairValuePerShare());

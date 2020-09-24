@@ -277,6 +277,14 @@ public  class DataExtractor {
         }  return matchingValue;
     }
 
+
+    /**
+     * This method will create a copy of the given ArrayList with reversed mathematical signs for every value object
+     * inside all its FinancialDataObjects (e.g. a list with only positive values will have them turn negative)
+     * @param baseList list which values should be reworked
+     * @return list with changed mathematical signs
+     *
+     */
     public static ArrayList<FinancialDataObject> reverseListSign (ArrayList<FinancialDataObject> baseList){
         ArrayList<FinancialDataObject> changedList = new ArrayList<>();
         if(!(baseList.isEmpty())) {
@@ -288,7 +296,17 @@ public  class DataExtractor {
         return  changedList;
     }
 
-    public static ArrayList<FinancialDataObject> fiveYearPseudoQuarterlyStockPrice (
+
+    /**
+     * Method for creation of an ArrayList containing FinancialDataObjects of a companies stock price. It will take
+     * a target list containing the data base and a reference list. Based on the reference lists entries  it will pick
+     * the FInancialDataObjects with matching dates from the targetList and create a new list wih these entries.
+     *
+     * @param targetList list to choose objects from
+     * @param referenceList list used as reference for desired objects of targetList
+     * @return new list with chosen objects
+     */
+    public static ArrayList<FinancialDataObject> pseudoQUarterlyStockprice(
             ArrayList<FinancialDataObject> targetList, ArrayList<FinancialDataObject> referenceList){
 
         ArrayList<FinancialDataObject> reworkedList = new ArrayList<>();
@@ -430,6 +448,17 @@ public  class DataExtractor {
         return margin;
     }
 
+
+    /**
+     * This method is used to calculate the standard deviation of the values of an ArrayList containing FinancialDataObjects.
+     * It will use a control variable as parameter to determine how far it should go through the list for calculation.
+     * @param dataList list to calculate values standard deviation from
+     * @param timeFrameInListUnits control variable used to set the scope of the calculation. If "0" is selected,
+     *                             all values are used for the data retrieval. Otherwise the value of the variable is
+     *                             used to determine at what point the data list should start
+     * @return new list containing desired values
+     * @throws Exception
+     */
     public static double calculateStandardDeviation (ArrayList<FinancialDataObject> dataList, int timeFrameInListUnits) throws Exception{
         double sum = 0.0;
         double average = calculateMeanValueOverOneList(dataList,timeFrameInListUnits);
@@ -460,12 +489,27 @@ public  class DataExtractor {
         return standardDeviation;
     }
 
+
+    /**
+     * Method to calculate the divergence between two values (doubles)
+     * @param benchmarkValue benchmark
+     * @param actualValue input value
+     * @return divergence as double
+     */
     public static double calculateDivergence (double benchmarkValue, double actualValue){
         double divergence = (benchmarkValue-actualValue)/benchmarkValue;
         return divergence;
 
     }
 
+    /**
+     * Calculation of evaluation points based on divergence. Higher points are attributed if actualValue is higher than
+     * benchmarkValue. The maximum points are defined by the pointsNumber parameter.
+     * @param pointsNumber maximum points to achieve
+     * @param benchmarkValue benchmark
+     * @param actualValue input value
+     * @return point number as int
+     */
     public static int calculatePointsPositive(double pointsNumber, double benchmarkValue, double actualValue){
         double divergence = calculateDivergence(benchmarkValue,actualValue);
         int endPoints;
@@ -478,19 +522,37 @@ public  class DataExtractor {
         return endPoints;
     }
 
-
+    /**
+     * This method is specifically used to calculate evaluation points for the comparison of the actual stock price with
+     * the mean fair value. Here the divergence is calculated by dividing both values so it can be used for an easier
+     * point calculation. If both values are exactly the same, 90% of the points are given
+     * @param pointsNumber maximum number of points achievable
+     * @param benchmarkValue benchmark
+     * @param actualValue input value
+     * @return end points value as an int
+     */
     public static int calculatePointsStockPrice(double pointsNumber, double benchmarkValue, double actualValue){
         double divergence = divideTwoValues(benchmarkValue,actualValue);
         int endPoints;
         if (divergence>0) {
             endPoints = (int) Math.round(pointsNumber * divergence);
-        }else if (divergence == 0){
-            endPoints = (int)   Math.round(pointsNumber/1.6);
+        }else if (divergence == 1){
+            endPoints = (int)   Math.round(pointsNumber/0.9);
         }else{
             endPoints = 0;
         }
         return endPoints;
     }
+
+
+    /**
+     * Calculation of evaluation points based on divergence. Higher points are attributed if actualValue is lower than
+     * benchmarkValue. The maximum points are defined by the pointsNumber parameter.
+     * @param pointsNumber maximum points to achieve
+     * @param benchmarkValue benchmark
+     * @param actualValue input value
+     * @return point number as int
+     */
     public static int calculatePointsNegative(double pointsNumber, double benchmarkValue, double actualValue){
         double divergence = calculateDivergence(benchmarkValue,actualValue);
         int endPoints;
@@ -655,6 +717,12 @@ public  class DataExtractor {
 
     }
 
+    /**
+     * Method for dividing two values with a check whether one or both of them are zero.
+     * @param valueOne first value
+     * @param valueTwo second value
+     * @return
+     */
     public static double divideTwoValues (double valueOne, double valueTwo){
         double endValue = 0.0;
         if(!(valueOne==0.0)&&!(valueTwo==0.0)) {
@@ -891,6 +959,14 @@ public  class DataExtractor {
     }
 
 
+    /**
+     * Calculation of the Peter Lynch Fair Value. All variables needed for the function are calculated in it
+     * (netIncomeCAGR, PEGRatio, EBITDACAGR, etc.) by other methods. If one of those equals 0 they are set to 1 so they
+     * are not relevant for the last calculation.
+     * @param dataContainerManager Data object used as reference
+     * @return ArrayList containing FinancialDataObjects with the Peter Lynch fair value
+     * @throws Exception
+     */
     public static ArrayList<FinancialDataObject> calculatePeterLynchFairValue (DataContainerManager dataContainerManager)
     throws Exception{
         ArrayList<FinancialDataObject> PeterLynchFairValue = new ArrayList<>();
@@ -916,7 +992,7 @@ public  class DataExtractor {
                 value = ((growthFactor) / 2) * earningsPerShareDataPoint * 4;
             }else if (growthFactor>50) {
                 growthFactor = 25;
-                value = growthFactor * earningsPerShareDataPoint * 4;
+                value = growthFactor * earningsPerShareDataPoint * 4; //multiplication by 4 to simulate yearly EPS
 
             }else {
                 value =earningsPerShareDataPoint*4;
@@ -933,8 +1009,17 @@ public  class DataExtractor {
         return PeterLynchFairValue;
     }
 
+
+    /**
+     * Calculation of the Graham Number (fair value). All variables needed for the function are extracted from the
+     * data container manager and multiplied by 4 to simulate a yearly value.
+     * @param dataContainerManager Data object used as reference
+     * @return ArrayList containing FinancialDataObjects with the Graham Number fair value
+     * @throws Exception
+     */
     public static ArrayList<FinancialDataObject> calculateGrahamNumber (DataContainerManager dataContainerManager)
         throws Exception{
+
         ArrayList<FinancialDataObject> GrahamNumber = new ArrayList<>();
         ArrayList<FinancialDataObject> earningsPerShare = dataContainerManager.getCompanyFundamentalData().getEarningsPerShare();
         ArrayList<FinancialDataObject> bookValuePerShare = dataContainerManager.getCompanyFundamentalData().getBookValuePerShare();
@@ -956,6 +1041,14 @@ public  class DataExtractor {
     }
 
 
+    /**
+     * Method used to calculate the return on assets from two ArrayLists containing Financial Data Objects at a certain
+     * point.
+     * @param timeFactor variable used to determine which position of the values in the lists are used
+     * @param dataContainerManager data container reference
+     * @return return on assets value as double
+     * @throws Exception
+     */
     public static double calculateReturnOnAssets (int timeFactor, DataContainerManager dataContainerManager)throws Exception{
         double returnOnAssets = 0.0;
         double netIncome = dataContainerManager.getCompanyFundamentalData().getNetIncome().get(timeFactor).getValue();
@@ -967,6 +1060,12 @@ public  class DataExtractor {
         return  returnOnAssets;
     }
 
+    /**
+     * Calculation of Cash flow return on assets if the used variables are not zero. Otherwise a zero value will be returned.
+     * @param dataContainerManager data reference
+     * @return cashflor return on assets as double
+     * @throws Exception
+     */
     public static double calculateCashflowReturnOnAssets (DataContainerManager dataContainerManager)throws Exception{
         double returnOnAssets = 0.0;
         double operatingCashflow = dataContainerManager.getCompanyFundamentalData().getOperatingCashflow().get(0).getValue();
@@ -978,6 +1077,14 @@ public  class DataExtractor {
         return  returnOnAssets;
     }
 
+    /**
+     * Calculation of the Pitrovski F Score by manipulating the corresponding data in the given DataContainerManager object.
+     * The method will check for all 9 conditions of the Pirovski F Score. The points are represented by an int Array containing
+     * zeros. If a certain condition is met the corresponding value at its position is set to 1 (+1 point). At the end
+     * of the method all points are summed up and update in the DataContainerManager( PitrovskiFScoreData object)
+     * @param dataContainerManager data reference
+     * @throws Exception
+     */
     public static void calculatePitrovskiFScore (DataContainerManager dataContainerManager) throws Exception{
         PitrovskiFScoreData pitrovskiFScoreData = dataContainerManager.getPitrovskiFScoreData();
 
@@ -1017,8 +1124,15 @@ public  class DataExtractor {
         pitrovskiFScoreData.setPitrovskiFScore(sum);
     }
 
+    /**
+     * Method to calculate the evaluation points used in the EvaluationData object. See code lines for more information.
+     * @param dataContainerManager data reference
+     * @throws Exception
+     */
     public static void calculateEvaluationPoints (DataContainerManager dataContainerManager) throws Exception{
 
+
+        //calculation of fair value points. If the fair value is higher than the actual stock price, full points are given.
          int fairValue2StockPricePoints = calculatePointsStockPrice(
                  25, dataContainerManager.getEvaluationData().getCurrentMeanFairValue(),
                  dataContainerManager.getCompanyOverviewData().getHistoricalStockPrice().get(0).getValue());
@@ -1030,9 +1144,11 @@ public  class DataExtractor {
         dataContainerManager.getEvaluationData().setFairValue2StockPricePoints(fairValue2StockPricePoints);
         }
 
+
          int pitrovskiFScorePoints = calculatePointsPositive(25,9.0,
                  dataContainerManager.getPitrovskiFScoreData().getPitrovskiFScore());
          dataContainerManager.getEvaluationData().setPitrovskiFScorePoints(pitrovskiFScorePoints);
+
 
 
          int volatilityPoints = calculatePointsNegative(10,10,
@@ -1044,6 +1160,12 @@ public  class DataExtractor {
          int volatilityAndPerformancePoints = volatilityPoints+performancePoints;
          dataContainerManager.getEvaluationData().setVolatilityAndPerformancePoints(volatilityAndPerformancePoints);
 
+
+         /*
+         Dividend factor points are calculated by different values used to determine dividend payout quality. If no
+         dividend is paid the performance is used to give points. Max points given if ten years stock price CAGR is
+         50% or higher.
+          */
          int dividendIsTruePoints =0;
          int dividendFactorPoints =0;
          if (dataContainerManager.getCompanyFundamentalData().getDividendsPerShare().get(0).getValue()>0) {
@@ -1068,6 +1190,7 @@ public  class DataExtractor {
          }
 
 
+         // sum of all single point values to evaluation points
          int evaluationPoints = fairValue2StockPricePoints+pitrovskiFScorePoints+volatilityAndPerformancePoints+dividendFactorPoints;
          dataContainerManager.getEvaluationData().setSumOfEvaluationPoints(evaluationPoints);
 
@@ -1084,6 +1207,12 @@ public  class DataExtractor {
         suffixes.put(1_000_000_000_000_000L, "Q");
     }
 
+    /**
+     * Method to format doubles for different sizes to make reading easier. Only values smaller than 15 or greater than -15 are
+     * formatted to show decimals places.
+     * @param value
+     * @return
+     */
     public static String formatNumbers(double value){
         if(value<15 && value>-15) return String.format("%.2f", value);
         long longValue = (new Double(Math.round(value))).longValue();

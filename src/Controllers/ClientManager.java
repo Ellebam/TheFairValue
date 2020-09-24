@@ -1,7 +1,10 @@
 package Controllers;
 
-import java.io.Serializable;
 
+/**
+ * ClientManager represents the container object for all needed connections built by the AlphavantageAPIClient Class.
+ * The final instance variables are named after the API endpoints.
+ */
 public class ClientManager {
     private String apiKey;
     private String symbol;
@@ -18,6 +21,14 @@ public class ClientManager {
     private AlphavantageAPIClient cashFlowClient;
 
 
+    /**
+     * The Constructor will build 5 different clientobjects which will be used for data retrieval by the DataExtractor class.
+     * This process is run through for every request a user places through text input.
+     * @param symbol stock ticker symbol of the searched company
+     * @param apiKey key for API-Database
+     * @throws Exception will be caught at UI level when no ClientManager can be built (network problems or maximum number
+     * of user requests per minute exceeded
+     */
     public ClientManager(String symbol, String apiKey) throws Exception{
         this.symbol = symbol;
         this.apiKey = apiKey;
