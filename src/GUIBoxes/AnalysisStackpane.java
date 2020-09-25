@@ -11,6 +11,11 @@ import sample.Main;
 
 import java.io.FileInputStream;
 
+/**
+ * This class is used to combine the AnalysisTabPane object used for analysis content management with a simple home button
+ * to return to the OpeningVBox content-scene (Home pane of the application). This is possible through a simple button
+ * added to the AnalysisVBox through the Stackpane.
+ */
 public class AnalysisStackpane extends StackPane {
     AnalysisStackpane analysisStackpane;
     AnalysisVBox analysisVBox;

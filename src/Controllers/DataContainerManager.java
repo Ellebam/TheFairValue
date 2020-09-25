@@ -19,9 +19,10 @@ public class DataContainerManager {
 
     /**
      * The  constructor takes a ClientManager object and builds the data classes one after another and bundles them in a
-     * newly created DataContainerManager object. After this all data for display and evaluation has been finished
+     * newly created DataContainerManager object. The object is this DataContainerManager which is updated step after step.
+     * After this all data for display and evaluation has been finished and can be used for the UI.
      * @param clientManager object used for API-Connection
-     * @throws Exception is thrown when object couldn't instantiate properly => data may be corupted
+     * @throws Exception is thrown when object couldn't instantiate properly => data may be corrupted
      */
     public DataContainerManager (ClientManager clientManager)throws Exception{
         dataContainerManager = this;

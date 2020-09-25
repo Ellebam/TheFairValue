@@ -5,6 +5,9 @@ import Controllers.DataExtractor;
 
 import java.util.ArrayList;
 
+/**
+ * Class combining and bundling all Fair value data sets for a given company through DataContainerManager.
+ */
 public class FairValueAnalysisData {
 
     private FairValueAnalysisData fairValueAnalysisData;
@@ -14,7 +17,12 @@ public class FairValueAnalysisData {
     private ArrayList<FinancialDataObject> GrahamNumber;
     private ArrayList<FinancialDataObject> meanFairValue;
 
-
+    /**
+     * Constructor for FairValueAnalysisData  will take a DataContainerManager object and use its Data to calculate several
+     * different fair value  indicators with the help of DataExtractor.
+     * @param dataContainerManager Data object used as reference
+     * @throws Exception
+     */
     public FairValueAnalysisData (DataContainerManager dataContainerManager) throws Exception{
         fairValueAnalysisData = this;
 

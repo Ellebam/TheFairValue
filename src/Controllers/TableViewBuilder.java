@@ -80,6 +80,15 @@ public class TableViewBuilder {
 
     }
 
+    /**
+     * This constructor takes the same input as the buildAreaChart() method in the GraphBuilder Class. It will create
+     * a own TableView for each data set in the baseList (ArrayList containing FinancialDataObjects). Tableviews are built
+     * by 2 columns including every single FinancialDataObjects Date and Value. All created tableviews are added to a
+     * single Accordion and returned.
+     * @param baseList
+     * @param name
+     * @return
+     */
     public static Accordion buildAnalysisTableViewBox (ArrayList<ArrayList<FinancialDataObject>> baseList, String name){
         Accordion tableViewAccordion = new Accordion();
         HBox tableViewBox = new HBox();
@@ -125,12 +134,6 @@ public class TableViewBuilder {
             analysisTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
         }
-
-
-
-
-
-
 
 
     tableViewBox.setAlignment(Pos.BASELINE_CENTER);

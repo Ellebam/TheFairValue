@@ -115,8 +115,8 @@ public class GraphBuilder {
      * constructed and added to the area chart.
      * @param xAxisName name of the x axis
      * @param yAxisName name of the y axis
-     * @param dataBase data container used as reference
-     * @return
+     * @param dataBase data container used as reference for all single graphs
+     * @return AreaChart with added graphs
      */
     public static AreaChart buildAreaChart(String xAxisName, String yAxisName, ArrayList<ArrayList<FinancialDataObject>> dataBase){
         final CategoryAxis xAxis = new CategoryAxis();

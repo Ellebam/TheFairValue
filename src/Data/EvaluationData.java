@@ -3,6 +3,10 @@ package Data;
 import Controllers.DataContainerManager;
 import Controllers.DataExtractor;
 
+
+/**
+ * This Class represents the Data container with all Data used for the final evaluation of a company.
+ */
 public class EvaluationData {
 
     private EvaluationData evaluationData;
@@ -21,6 +25,12 @@ public class EvaluationData {
     private int sumOfEvaluationPoints;
 
 
+    /**
+     * Constructor for EvaluationData  will take a DataContainerManager object and use its Data to calculate several
+     * different key performance indicators with the help of DataExtractor.
+     * @param dataContainerManager Data object used as reference
+     * @throws Exception
+     */
     public EvaluationData (DataContainerManager dataContainerManager) throws Exception {
         evaluationData = this;
         currentMeanFairValue = DataExtractor.calculateMeanValueOverOneList

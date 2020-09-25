@@ -557,7 +557,7 @@ public  class DataExtractor {
         double divergence = calculateDivergence(benchmarkValue,actualValue);
         int endPoints;
         if (divergence>0) {
-            endPoints = (int) Math.round(pointsNumber * divergence);
+            endPoints = (int) Math.round(pointsNumber * 1-divergence);
         }else if (divergence == 0){
             endPoints = (int)   Math.round(pointsNumber/1.6);
         }else{
@@ -1153,9 +1153,11 @@ public  class DataExtractor {
 
          int volatilityPoints = calculatePointsNegative(10,10,
                  dataContainerManager.getEvaluationData().getStockPriceVolatility());
+         if (volatilityPoints <0){volatilityPoints = 0;}
 
          int performancePoints = calculatePointsPositive(
                  15,0.3,dataContainerManager.getEvaluationData().getTenYearStockPriceCAGR());
+         if (performancePoints <0){performancePoints =0;}
 
          int volatilityAndPerformancePoints = volatilityPoints+performancePoints;
          dataContainerManager.getEvaluationData().setVolatilityAndPerformancePoints(volatilityAndPerformancePoints);
@@ -1176,6 +1178,7 @@ public  class DataExtractor {
 
              int payoutRatioPoints = calculatePointsNegative(7, 0.1,
                      calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getPayOutRatio(), 4));
+             if (payoutRatioPoints <0){payoutRatioPoints = 0;}
 
              int dividendPayoutToFCFPoints = calculatePointsPositive(7,
                      (-calculateMeanValueOverOneList(dataContainerManager.getCompanyFundamentalData().getDividendPayout(), 4)),

@@ -14,19 +14,31 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 import sample.Main;
-
 import java.util.ArrayList;
 
+
+/**
+ * Class representing the Equities content box of the AnalysisTabPane object. Similar to the other content boxes every
+ * key data overview is set up of an AreaChart plus TableViews with added listed values form the DataContainerManager.
+ *
+ */
 public class EquitiesVBox extends VBox {
 
     EquitiesVBox equitiesVBox;
     ScrollPane scrollPane;
 
+    /**
+     * The Constructor will get its predefined data sets from the DataContainerManager (defined inside constructor) and
+     * build several different AreaCharts with corresponding explanation Tooltips and TableViews (inside Accordions) and
+     * add them to the UI (AnalysisTabPane inside AnalysisStackPane).
+     * @param dataContainerManager Data reference object
+     */
     public EquitiesVBox(DataContainerManager dataContainerManager){
         equitiesVBox = this;
         scrollPane = new ScrollPane();
         VBox equitiesContentVBox = new VBox();
 
+        //Building Equities data visualization
         ArrayList<ArrayList<FinancialDataObject>> equitiesList = new ArrayList<>();
         equitiesList.add(dataContainerManager.getCompanyFundamentalData().getTotalAssets());
         equitiesList.add(dataContainerManager.getCompanyFundamentalData().getTotalLiabilities());
@@ -43,6 +55,8 @@ public class EquitiesVBox extends VBox {
         AreaLabel assetsLabel = new AreaLabel("Assets & Liabilities",assetsLabelTooltipText);
         Accordion equitiesTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(equitiesList,assetsLabel.getText());
 
+
+        //Building debt & investments data visualization
         ArrayList<ArrayList<FinancialDataObject>> debtAndInvestmentsList = new ArrayList<>();
         debtAndInvestmentsList.add(dataContainerManager.getCompanyFundamentalData().getLongTermDebt());
         debtAndInvestmentsList.add(dataContainerManager.getCompanyFundamentalData().getLongTermInvestments());
@@ -57,6 +71,8 @@ public class EquitiesVBox extends VBox {
         AreaLabel debtLabel = new AreaLabel("Debt & Investements",debtLabelTooltipText);
         Accordion debtAndInvestmentsTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(debtAndInvestmentsList, debtLabel.getText());
 
+
+        //Building debt ratio data visualization
         ArrayList<ArrayList<FinancialDataObject>> debtRatioList = new ArrayList<>();
         debtRatioList.add(dataContainerManager.getCompanyFundamentalData().getDebtRatio());
         AreaChart debtRatioChart = GraphBuilder.buildAreaChart("","%",debtRatioList);
@@ -68,10 +84,12 @@ public class EquitiesVBox extends VBox {
                 "In other words, the company has more liabilities than assets. A high ratio also indicates that a company " +
                 "may be putting itself at a risk of default on its loans if interest rates were to rise suddenly. " +
                 "A ratio below 100 translates to the fact that a greater portion of a company's assets is funded by equity."+"\n"+"\n";
-
         AreaLabel debtRatioLabel = new AreaLabel("Debt Ratio",debtRatioLabelTooltipText);
         Accordion debtRatioTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(debtRatioList, debtRatioLabel.getText());
 
+
+
+        //Adding all nodes to parent content box
         equitiesContentVBox.getChildren().add(assetsLabel);
         equitiesContentVBox.getChildren().add(equitiesChart);
         equitiesContentVBox.getChildren().add(equitiesTableViewAccordion);

@@ -7,13 +7,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import sample.Main;
-
 import java.io.FileInputStream;
-import java.net.URL;
 
+
+/**
+ * Class representing the Labels used for all data set visualizations.
+ */
 public class AreaLabel extends Label  {
     AreaLabel areaLabel;
 
+
+    /**
+     * The Constructor for AreaLabel sets up the labeltext and the tool tip text through the given parameters. Tool tip
+     * is bound to the attached information icon
+     * @param labelText String used for setting up the labels text
+     * @param tooltipText String used for setting up the tool tips text
+     */
     public AreaLabel (String labelText, String tooltipText){
 
         areaLabel = this;

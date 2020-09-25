@@ -10,21 +10,29 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.control.Accordion;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import sample.Main;
 import java.util.ArrayList;
 
 
-
+/**
+ * Class representing the Fundamentals content box of the AnalysisTabPane object. Similar to the other content boxes every
+ * key data overview is set up of an AreaChart plus TableViews with added listed values form the DataContainerManager.
+ *
+ */
 public class FundamentalsVBox extends VBox {
     FundamentalsVBox fundamentalsVBox;
     ScrollPane scrollPane;
 
+
+    /**
+     * The Constructor will get its predefined data sets from the DataContainerManager (defined inside constructor) and
+     * build several different AreaCharts with corresponding explanation Tooltips and TableViews (inside Accordions) and
+     * add them to the UI (AnalysisTabPane inside AnalysisStackPane).
+     * @param dataContainerManager Data reference object
+     */
     public FundamentalsVBox (DataContainerManager dataContainerManager){
         fundamentalsVBox = this;
 
@@ -33,7 +41,7 @@ public class FundamentalsVBox extends VBox {
 
 
 
-        // Creation of Areachart of several income values.
+        //building income data visualization
         ArrayList<ArrayList<FinancialDataObject>> incomeValuesList = new ArrayList<>();
 
         incomeValuesList.add(dataContainerManager.getCompanyFundamentalData().getTotalRevenue());
@@ -54,9 +62,7 @@ public class FundamentalsVBox extends VBox {
         AreaLabel incomesLabel = new AreaLabel("Revenue & Income",incomesLabelTooltipText);
         Accordion incomeTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(incomeValuesList, incomesLabel.getText());
 
-
-
-
+        //building profit margins data visualization
         ArrayList<ArrayList<FinancialDataObject>> marginsValueList = new ArrayList<>();
         marginsValueList.add(dataContainerManager.getCompanyFundamentalData().getGrossMargin());
         marginsValueList.add(dataContainerManager.getCompanyFundamentalData().getOperatingMargin());
@@ -74,8 +80,7 @@ public class FundamentalsVBox extends VBox {
         AreaLabel marginsLabel = new AreaLabel("Profit Margins",marginsLabelTooltipText);
         Accordion marginsTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(marginsValueList, marginsLabel.getText());
 
-
-
+        //building free cash flow and payout data visualization
         ArrayList<ArrayList<FinancialDataObject>> FCFAndPayoutList = new ArrayList<>();
         FCFAndPayoutList.add(dataContainerManager.getCompanyFundamentalData().getFreeCashFlow());
         FCFAndPayoutList.add(dataContainerManager.getCompanyFundamentalData().getOperatingCashflow());
@@ -91,7 +96,7 @@ public class FundamentalsVBox extends VBox {
         AreaLabel FCFLabel = new AreaLabel("Cash Flows",FCFLabelTooltipText);
         Accordion FCFAndPayoutTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(FCFAndPayoutList, FCFLabel.getText());
 
-
+        //building payout ratio visualization
         ArrayList<ArrayList<FinancialDataObject>> payoutRatioList = new ArrayList<>();
         payoutRatioList.add(dataContainerManager.getCompanyFundamentalData().getPayOutRatio());
         AreaChart payoutRatioAreaChart = GraphBuilder.buildAreaChart("", "%",payoutRatioList);
@@ -106,9 +111,7 @@ public class FundamentalsVBox extends VBox {
         Accordion payoutRatioTableViewAccordion  = TableViewBuilder.buildAnalysisTableViewBox(payoutRatioList, payoutRatioLabel.getText());
 
 
-
-
-
+        //Adding all nodes to parent content box
         fundamentalsContentVBox.getChildren().add(incomesLabel);
         fundamentalsContentVBox.getChildren().add(IncomesChart);
         fundamentalsContentVBox.getChildren().add(incomeTableViewAccordion);

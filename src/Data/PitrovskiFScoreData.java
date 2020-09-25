@@ -5,6 +5,9 @@ import Controllers.DataExtractor;
 
 import java.util.Arrays;
 
+/**
+ * Class representing the data set for the Pitrovski F Score evaluation object.
+ */
 public class PitrovskiFScoreData {
 
     private PitrovskiFScoreData pitrovskiFScoreData;
@@ -33,11 +36,19 @@ public class PitrovskiFScoreData {
     private double currentAssetTurnover;
     private double lastYearAssetTurnover;
     private double changeInAssetTurnover;
-    private int[] PitrovskiFScoreList = new int[9];
-    private int PitrovskiFScore = 0;
+    private int[] PitrovskiFScoreList = new int[9]; //Array for storing single point positions
+    private int PitrovskiFScore = 0; //int for updating sum of all points
 
 
-public PitrovskiFScoreData (DataContainerManager dataContainerManager) throws Exception {
+    /**
+     * The Constructor for PitrovskiFScoreData also uses a DataContainerManager object as a reference for calculating the
+     * various instance variables used for determination of the Pitrovski F Score. Even though the single variables are
+     * calculated the end score is not calculated by this object. That part is triggered before the UI is built by the
+     * EvaluationVBox Class constructor.
+     * @param dataContainerManager data reference object
+     * @throws Exception
+     */
+    public PitrovskiFScoreData (DataContainerManager dataContainerManager) throws Exception {
     pitrovskiFScoreData = this;
     returnOnAssetsCurrentYear = DataExtractor.calculateReturnOnAssets(0,dataContainerManager);
     returnOnAssetsLastYear = DataExtractor.calculateReturnOnAssets(3,dataContainerManager);

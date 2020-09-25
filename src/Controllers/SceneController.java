@@ -5,6 +5,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
+/**
+ * Class to control and to set the Main Applications stage and scene.
+ */
 public class SceneController {
     Stage stage;
     Parent contentBox;

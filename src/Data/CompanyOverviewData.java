@@ -38,8 +38,9 @@ public class CompanyOverviewData {
 
 
     /**
-     * The Constructor will repeatedly call the extractData2String() method from DataExtractor to
-     * update all its instance variables with the values found in the given API Function
+     * The Constructor will repeatedly call the getDataString()  or the getData() method which will call the
+     * extractOVERVIEWData() from DataExtractor to update all its instance variables with the values found
+     * in the given API Function
      * @throws Exception
      */
     public CompanyOverviewData(ClientManager ClientManager) throws Exception{
@@ -74,7 +75,13 @@ public class CompanyOverviewData {
     }
 
 
-
+    /**
+     * Constructor to fetch Data from the DataExtractor with a given ClientManager object as connector. The Data is used
+     * to build a new FinancialDataObject.
+     * @param ClientManager Object used to connect to DataBase-API
+     * @param variableName String used to determine which value should be chosen from the given JSON-File in database
+     * @return FinancialDataObject with found value, date and given variableName
+     */
     public FinancialDataObject getData(ClientManager ClientManager, String variableName){
         double value = 0.00;
         try {
@@ -85,6 +92,13 @@ public class CompanyOverviewData {
         return financialDataObject;
     }
 
+    /**
+     * Constructor to fetch Data from the DataExtractor with a given ClientManager object as connector. The Data is used
+     * to build a String representing the fetched value.
+     * @param ClientManager Object used to connect to DataBase-API
+     * @param variableName String used to determine which value should be chosen from the given JSON-File in database
+     * @return String representing fetched value
+     */
     public String getDataString (ClientManager ClientManager, String variableName){
         String variable = DataExtractor.extractOVERVIEWData(ClientManager, variableName);
         return  variable;

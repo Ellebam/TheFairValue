@@ -10,10 +10,21 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+
+/**
+ * Class representing the content box showing the achieved Pitrovski F Score points after data evaluation and calculation.
+ */
 public class PitrovskiFScoreVBox extends VBox {
     PitrovskiFScoreVBox pitrovskiFScoreVBox;
     GridPane gridpane;
 
+    /**
+     * The constructor will builda  container box consisting of a GridPane with several labels showing a description of
+     * the points conditions and coloured indicators (labels) showing wether the corresponding points have been achieved
+     * or not. The GridPane is joined by an EvaluationPointsLabel showing the sum of the achieved points. The formatting
+     * of the labels inside the GridPane is tied to the achievement of points.
+     * @param dataContainerManager
+     */
     public PitrovskiFScoreVBox (DataContainerManager dataContainerManager){
         pitrovskiFScoreVBox = this;
         String headerLabelTooltipText = "Calculation of the Pitrovski F Score: "+"\n"+"\n"+ "" +

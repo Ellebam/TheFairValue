@@ -51,6 +51,8 @@ public class EvaluationVBox extends VBox {
         AreaLabel fairValueLabel = new AreaLabel("Fair Value",fairValueLabelTooltipText);
         Accordion fairValueTableViewAccordion = TableViewBuilder.buildAnalysisTableViewBox(fairValueList,fairValueLabel.getText());
 
+
+        //Pitrovski F Score Calculation is triggered at this point
         HBox pitrovskiEvaluationHBox = new HBox();
         pitrovskiEvaluationHBox.setSpacing(20);
         PitrovskiFScoreVBox pitrovskiFScoreVBox =new PitrovskiFScoreVBox(dataContainerManager);
