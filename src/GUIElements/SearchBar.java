@@ -47,8 +47,8 @@ public class SearchBar extends HBox{
 
         Button submitButton;
         try {
-            FileInputStream arrowIconInput = new FileInputStream("src/GUIElements/blue-and-white-arrow-logo-png-clip-art-thumbnail.jpg");
-            Image arrowIconImage = new Image(arrowIconInput);
+
+            Image arrowIconImage = new Image(getClass().getResourceAsStream("/GUIElements/blue-and-white-arrow-logo-png-clip-art-thumbnail.jpg"));
             ImageView arrowImageView = new ImageView(arrowIconImage);
             arrowImageView.fitHeightProperty().setValue(30);
             arrowImageView.fitWidthProperty().setValue(26);

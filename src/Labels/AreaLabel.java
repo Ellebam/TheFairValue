@@ -30,8 +30,8 @@ public class AreaLabel extends Label  {
 
 
         try {
-            FileInputStream input = new FileInputStream("src/GUIElements/information-icon.jpeg");
-            Image image = new Image(input);
+
+            Image image = new Image(getClass().getResourceAsStream("/GUIElements/information-icon.jpeg"));
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(25);
             imageView.setFitWidth(25);
