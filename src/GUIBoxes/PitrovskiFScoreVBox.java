@@ -65,7 +65,7 @@ public class PitrovskiFScoreVBox extends VBox {
 
         EvaluationPointsLabel C1R1 = new EvaluationPointsLabel("Cash flow return on assets");
         EvaluationPointsLabel C2R1 = EvaluationPointsLabel.buildPointsLabel(false);
-        if (dataContainerManager.getPitrovskiFScoreData().getReturnOnAssetsCurrentYear()>0){
+        if (dataContainerManager.getPitrovskiFScoreData().getCashFlowReturnOnAssets()>0){
             C1R1.setText(" = " + DataExtractor.formatNumbers(
                     dataContainerManager.getPitrovskiFScoreData().getCashFlowReturnOnAssets())+"% , CFROA positive  " );
             C2R1= EvaluationPointsLabel.buildPointsLabel(true);
